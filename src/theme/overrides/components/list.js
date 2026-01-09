@@ -1,0 +1,43 @@
+// ----------------------------------------------------------------------
+
+export default function List(theme) {
+  return {
+    MuiListItemIcon: {
+      styleOverrides: {
+        root: {
+          color: 'inherit',
+          minWidth: 'auto',
+          marginRight: theme.spacing(1.4),
+          alignItems: 'center'
+        },
+      },
+    },
+    MuiListItemAvatar: {
+      styleOverrides: {
+        root: {
+          minWidth: 'auto',
+          marginRight: theme.spacing(2),
+        },
+      },
+    },
+    MuiListItemText: {
+      defaultProps: {
+        primaryTypographyProps: {
+          typography: 'subtitle2',
+        },
+        secondaryTypographyProps: {
+          component: 'span',
+        },
+      },
+
+      styleOverrides: {
+        root: {
+          margin: 0,
+        },
+        multiline: {
+          margin: 0,
+        },
+      },
+    },
+  };
+}
