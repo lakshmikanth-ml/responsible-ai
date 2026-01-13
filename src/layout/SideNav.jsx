@@ -27,7 +27,6 @@ import {
   Database,
   LayersIcon,
   ChartNoAxesColumnIncreasing,
-  Users,
   CreditCard
 } from "lucide-react";
 import { FolderKanban, BookImage, Calculator } from "lucide-react";
@@ -36,6 +35,16 @@ import LogoFineTuningdark from "../assets/GenAIFoundry inverted Logo final.svg";
 import LogoFineTuninglight from "../assets/enkefalos_logo.png";
 import LogoShort from '../components/logo/logo-short';
 import { Icon } from "@iconify/react";
+import {
+  Eye,
+  Scale,
+  ShieldCheck,
+  ClipboardCheck,
+  ShieldAlert,
+  Users,
+  Leaf
+} from "lucide-react";
+
 
 // import icon from "../assets/logo.png"
 
@@ -72,46 +81,43 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 const menuItems = [
-  // { to: ['/app/roi'], Icon: Calculator,
-  //   label: 'Roi Calculator' },
   {
-    to: ['/app/transparencyexplainability'],
-    Icon: Calculator,
-    label: 'Transparency Explainability'
+    to: ["/app/transparencyexplainability"],
+    Icon: Eye,
+    label: "Transparency & Explainability",
   },
   {
-    to: ['/app/fairnessandondiscrimination'],
-    Icon: Calculator,
-    label: `Fairness &
-     Non-Discrimination`
+    to: ["/app/fairnessandondiscrimination"],
+    Icon: Scale,
+    label: "Fairness & Non-Discrimination",
   },
   {
-    to: ['/app/privacyanddatasecurity'],
-    Icon: CreditCard,
-    label: 'Privacy & Data Security'
+    to: ["/app/privacyanddatasecurity"],
+    Icon: ShieldCheck,
+    label: "Privacy & Data Security",
   },
   {
-    to: ['/app/accountability'],
-    Icon: Database,
-    label: 'Accountability'
-  },
-
-  {
-    to: ['/app/safetyandreliability'],
-    Icon: Database,
-    label: 'Safety & Reliability'
+    to: ["/app/accountability"],
+    Icon: ClipboardCheck,
+    label: "Accountability",
   },
   {
-    to: ['/app/inclusiveness'],
-    Icon: Database,
-    label: 'Inclusiveness'
+    to: ["/app/safetyandreliability"],
+    Icon: ShieldAlert,
+    label: "Safety & Reliability",
   },
   {
-    to: ['/app/environmentsustainability'],
-    Icon: Database,
-    label: 'Environment & Sustainability'
-  }
+    to: ["/app/inclusiveness"],
+    Icon: Users,
+    label: "Inclusiveness",
+  },
+  {
+    to: ["/app/environmentsustainability"],
+    Icon: Leaf,
+    label: "Environment & Sustainability",
+  },
 ];
+
 
 export default function SideNav({
   mobileOpen,
