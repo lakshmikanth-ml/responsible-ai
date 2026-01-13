@@ -12,6 +12,14 @@ import {
     FormControlLabel,
     Divider,
 } from "@mui/material";
+import { useState } from "react";
+
+const PURPOSES = [
+    { label: "Audit defensibility", value: "audit_defensibility" },
+    { label: "Customer disputes", value: "customer_dispute" },
+    { label: "Regulatory reporting", value: "regulatory_reporting" },
+    { label: "Internal controls", value: "internal_control" },
+];
 
 const RISK_GROUPS = [
     {
@@ -29,154 +37,206 @@ const RISK_GROUPS = [
 ];
 
 export default function TabAObjective() {
+    const [purpose, setPurpose] = useState(null);
+    const [jurisdiction, setJurisdiction] = useState("");
+    const [owner, setOwner] = useState("");
+    const [useCase, setUseCase] = useState("");
+    const [failure, setFailure] = useState("");
+    const [contract, setContract] = useState("");
+    const [risks, setRisks] = useState({});
+
+    const toggleRisk = (key) =>
+        setRisks((p) => ({ ...p, [key]: !p[key] }));
+
+    const loadSampleObjective = () => {
+        setPurpose(PURPOSES[0]);
+        setJurisdiction("US – multi-state, CA/NY focus");
+        setOwner("Head of Data Science");
+        setUseCase(
+            "AI assists claim triage by recommending next actions based on historical claims."
+        );
+        setFailure(
+            "A recommendation without source citation or explanation understandable by a business user."
+        );
+        setContract(
+            "All outputs must include citations and plain-English reasoning. Low confidence routes to SME."
+        );
+        setRisks({
+            "Audit / Regulator-Required evidence": true,
+            "Audit / Regulator-Traceability": true,
+            "Operational Risk-SLA impact": true,
+        });
+    };
+
+    const canSave =
+        purpose && jurisdiction && owner && useCase && failure;
+
     return (
+        <Card className="tabPanel" variant="outlined">
+            <CardContent>
+                {/* HEADER */}
+                <Stack
+                    direction={{ xs: "column", md: "row" }}
+                    justifyContent="space-between"
+                    spacing={2}
+                >
+                    <Box>
+                        <Typography variant="h6" fontWeight={700}>
+                            A. Objective & Risk Intent
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" mt={0.5}>
+                            Define why explainability is required, what failure looks like,
+                            and who is accountable. Missing objectives can block training for
+                            decision-influencing use cases.
+                        </Typography>
+                    </Box>
 
-        <>
-            {/* Header */}
-            <Stack
-                direction={{ xs: "column", md: "row" }}
-                justifyContent="space-between"
-                alignItems={{ xs: "flex-start", md: "center" }}
-                spacing={2}
-            >
-                <Box>
-                    <Typography variant="h6" fontWeight={700}>
-                        A. Objective & Risk Intent
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" mt={0.5} maxWidth={720}>
-                        Define why explainability is required, what failure looks like, and who is accountable.
-                        Missing objectives can block training for decision-influencing use cases.
-                    </Typography>
-                </Box>
+                    <Stack direction="column" alignItems={"baseline"} rowGap={1}>
+                        <Button variant="outlined" onClick={loadSampleObjective}>
+                            Load Sample
+                        </Button>
+                        <Button variant="outlined" disabled={!canSave}>
+                            Save A
+                        </Button>
+                    </Stack>
+                </Stack>
 
+                <Divider sx={{ my: 2 }} />
 
-            </Stack>
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={1} mt={2}>
-                <Button variant="outlined">Load Sample</Button>
-                <Button variant="contained">Save A</Button>
-            </Stack>
+                {/* GRID 3 */}
+                <Grid container spacing={2}>
+                    <Grid size={{ xs: 12, md: 4 }}>
+                        <Autocomplete
+                            options={PURPOSES}
+                            value={purpose}
+                            onChange={(_, v) => setPurpose(v)}
+                            renderInput={(p) => (
+                                <TextField {...p} size="small" label="Primary Purpose" />
+                            )}
+                        />
+                    </Grid>
 
-            <Divider sx={{ my: 2 }} />
+                    <Grid size={{ xs: 12, md: 4 }}>
+                        <TextField
+                            size="small"
+                            fullWidth
+                            label="Jurisdiction / Market"
+                            value={jurisdiction}
+                            onChange={(e) => setJurisdiction(e.target.value)}
+                            placeholder="e.g., US – multi-state, CA/NY focus"
+                        />
+                    </Grid>
 
-            {/* Grid 3 */}
-            <Grid container spacing={2}>
-                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                    <Autocomplete
-                        size="small"
-                        options={[
-                            "Audit defensibility",
-                            "Customer disputes",
-                            "Regulatory reporting",
-                            "Internal controls",
-                        ]}
-                        renderInput={(params) => (
-                            <TextField {...params} label="Primary Purpose" fullWidth />
-                        )}
-                    />
+                    <Grid size={{ xs: 12, md: 4 }}>
+                        <TextField
+                            size="small"
+                            fullWidth
+                            label="Explainability Owner (Accountable)"
+                            value={owner}
+                            onChange={(e) => setOwner(e.target.value)}
+                            placeholder="e.g., Head of Data Science"
+                        />
+                    </Grid>
                 </Grid>
 
-                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                    <TextField
-                        size="small"
-                        fullWidth
-                        label="Jurisdiction / Market"
-                        placeholder="e.g., US – multi-state, CA/NY focus"
-                    />
+                {/* GRID 2 – TEXTAREAS */}
+                <Grid container spacing={2} mt={2}>
+                    <Grid size={{ xs: 12, md: 6 }}>
+                        <TextField
+                            size="small"
+                            fullWidth
+                            multiline
+                            minRows={4}
+                            label="Use Case Narrative (Plain English)"
+                            value={useCase}
+                            onChange={(e) => setUseCase(e.target.value)}
+                        />
+                    </Grid>
+
+                    <Grid size={{ xs: 12, md: 6 }}>
+                        <TextField
+                            size="small"
+                            fullWidth
+                            multiline
+                            minRows={4}
+                            label="What is Unacceptable (Failure Definition)"
+                            value={failure}
+                            onChange={(e) => setFailure(e.target.value)}
+                        />
+                    </Grid>
                 </Grid>
 
-                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                    <TextField
-                        size="small"
-                        fullWidth
-                        label="Explainability Owner (Accountable)"
-                        placeholder="e.g., Head of Data Science"
-                    />
-                </Grid>
-            </Grid>
-
-            {/* Grid 2 - Textareas */}
-            <Grid container spacing={2} mt={2}>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                        size="small"
-                        fullWidth
-                        multiline
-                        minRows={4}
-                        label="Use Case Narrative (Plain English)"
-                        placeholder="Describe what the AI does and where it is used."
-                    />
-                </Grid>
-
-                <Grid size={{ xs: 12, sm: 6, }}>
-                    <TextField
-                        size="small"
-                        fullWidth
-                        multiline
-                        minRows={4}
-                        label="What is Unacceptable (Failure Definition)"
-                        placeholder="Example: A claim triage recommendation without a source citation or an explanation that a business user cannot understand."
-                    />
-                </Grid>
-            </Grid>
-
-            {/* Grid 2 - Risk Drivers (Pill Cards) */}
-            <Grid container spacing={2} mt={2}>
-                <Grid size={{ xs: 12, }}>
-                    <Typography variant="subtitle2" color="black">
+                {/* RISK DRIVERS */}
+                <Box mt={2}>
+                    <Typography variant="subtitle2" mb={1}>
                         Risk Drivers (Check all that apply)
                     </Typography>
-                </Grid>
 
-                {RISK_GROUPS.map((group) => (
-                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={group.title}>
-                        <Card
-                            variant="outlined"
-                            sx={{
-                                p: 1.5,
-                                height: "100%",
-                            }}
-                        >
-                            <Typography variant="subtitle2" mb={0.5}>
-                                {group.title}
-                            </Typography>
-                            <Stack >
-                                {group.items.map((item) => (
-                                    <FormControlLabel
-                                        key={item}
-                                        control={<Checkbox size="small" />}
-                                        label={item}
-                                    />
-                                ))}
-                            </Stack>
-                        </Card>
+                    <Grid container spacing={2}>
+                        {RISK_GROUPS.map((g) => (
+                            <Grid key={g.title} size={{ xs: 12, md: 4 }}>
+                                <Card
+                                    variant="outlined"
+                                    sx={{
+                                        p: 1.5,
+                                        borderRadius: "14px",
+                                        height: "100%",
+                                    }}
+                                >
+                                    <Typography fontWeight={600} mb={0.5}>
+                                        {g.title}
+                                    </Typography>
+
+                                    {g.items.map((i) => {
+                                        const key = `${g.title}-${i}`;
+                                        return (
+                                            <FormControlLabel
+                                                key={key}
+                                                control={
+                                                    <Checkbox
+                                                        size="small"
+                                                        checked={!!risks[key]}
+                                                        onChange={() => toggleRisk(key)}
+                                                    />
+                                                }
+                                                label={i}
+                                            />
+                                        );
+                                    })}
+                                </Card>
+                            </Grid>
+                        ))}
                     </Grid>
-                ))}
+                </Box>
 
-
-
-                <Grid size={{ xs: 12 }}>
+                {/* CONTRACT */}
+                <Box mt={2}>
                     <TextField
                         fullWidth
                         multiline
                         minRows={4}
                         label="Minimum Explanation Standard (Contract Summary)"
-                        placeholder="Example: Mandatory outputs must include citations + business-readable reasoning. If confidence is low, system must route to SME review."
+                        value={contract}
+                        onChange={(e) => setContract(e.target.value)}
                     />
-                    <Box sx={{
-                        marginTop: "12px",
-                        padding: "12px",
-                        borderRadius: "14px",
-                        background: "#f8fafc",
-                        border: "1px solid lightgray",
-                        borderLeft: "4px solid #184ea4"
-                    }}>
-                        <Typography variant="body2" color="black" mt={0.5} display="block">
-                            This becomes the Explainability Contract for the model version. It is used in the gates and in the Guardian policy pack.
+
+                    <Box
+                        sx={{
+                            mt: 1.5,
+                            p: 1.5,
+                            borderRadius: "14px",
+                            border: "1px solid #d0d7e2",
+                            borderLeft: "4px solid #184ea4",
+                            background: "#f8fafc",
+                        }}
+                    >
+                        <Typography variant="body2">
+                            This becomes the “Explainability Contract” for the model version.
+                            It is used in the gates and in the Guardian policy pack.
                         </Typography>
                     </Box>
-                </Grid>
-            </Grid >
-        </>
-
+                </Box>
+            </CardContent>
+        </Card>
     );
 }

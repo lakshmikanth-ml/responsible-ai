@@ -65,6 +65,8 @@ export default function TabFMitigation() {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     return (
+        <Card variant="outlined" sx={{ mt: 2 }}>
+            <CardContent>
 
                 <Formik
                     initialValues={{ actions: [emptyAction()] }}
@@ -96,23 +98,25 @@ export default function TabFMitigation() {
                                             </Box>
 
 
+                                            <Stack direction="column" rowGap={1} mb={2}>
+                                                <Button
+                                                    variant="outlined"
+                                                    startIcon={<AddIcon />}
+                                                    onClick={() => push(emptyAction())}
+                                                >
+                                                    Add Action
+                                                </Button>
+                                                <Button
+                                                    variant="contained"
+
+                                                    type="submit"
+                                                >
+                                                    Save F
+                                                </Button>
+                                            </Stack>
+
                                         </Stack>
-                                        <Stack direction="row" spacing={1} mb={2}>
-                                            <Button
-                                                variant="outlined"
-                                                startIcon={<AddIcon />}
-                                                onClick={() => push(emptyAction())}
-                                            >
-                                                Add Action
-                                            </Button>
-                                            <Button
-                                                variant="contained"
-                                                startIcon={<SaveIcon />}
-                                                type="submit"
-                                            >
-                                                Save F
-                                            </Button>
-                                        </Stack>
+
                                         {/* <Divider sx={{ mb: 2 }} /> */}
 
                                         {/* TOP PAGINATION */}
@@ -293,7 +297,7 @@ export default function TabFMitigation() {
                                                                         <IconButton
                                                                             size="small"
                                                                             color="error"
-                                                disabled={values.actions.length === 1}
+                                                                            disabled={values.actions.length === 1}
                                                                             onClick={() => remove(index)}
                                                                         >
                                                                             <DeleteIcon fontSize="small" />
@@ -357,6 +361,8 @@ export default function TabFMitigation() {
                         </Form>
                     )}
                 </Formik>
-          
+            </CardContent>
+        </Card>
+
     );
 }

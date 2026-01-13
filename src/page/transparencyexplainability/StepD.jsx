@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
     Box,
     Card,
@@ -8,7 +8,6 @@ import {
     Button,
     Grid,
     TextField,
-    MenuItem,
     Divider,
     Chip,
     Table,
@@ -27,29 +26,6 @@ import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
 
 const COMPONENTS = ["citations", "reasoning", "confidence"];
-
-const KPIS = [
-    {
-        title: "Explainability Coverage Score",
-        value: "0%",
-        desc: "How many mandatory outputs have all required components present.",
-    },
-    {
-        title: "Citation Integrity Score",
-        value: "0%",
-        desc: "Spot-check confidence that citations point to correct sources.",
-    },
-    {
-        title: "Explanation Clarity Score",
-        value: "0%",
-        desc: "Readability for business users (SME rubric or automated score).",
-    },
-    {
-        title: "Fabricated Citations",
-        value: "0",
-        desc: "Must be 0 for release.",
-    },
-];
 
 export default function TabDEvaluation() {
     const [rows, setRows] = useState([
@@ -73,301 +49,298 @@ export default function TabDEvaluation() {
         page * rowsPerPage + rowsPerPage
     );
 
+    /* ================= KPI LOGIC ================= */
+
+    const kpis = useMemo(() => {
+        const total = rows.length || 1;
+
+        const coverage =
+            (rows.filter((r) => r.components.length > 0).length / total) * 100;
+
+        const citationScore =
+            (rows.filter((r) => r.citationOk === "yes").length / total) * 100;
+
+        const clarityScore =
+            (rows.filter((r) => r.clarityOk === "yes").length / total) * 100;
+
+        const fabricatedCount = rows.filter(
+            (r) => r.fabricated === "yes"
+        ).length;
+
+        return [
+            {
+                title: "Explainability Coverage Score",
+                value: `${Math.round(coverage)}%`,
+                desc: "Mandatory outputs with required components present.",
+            },
+            {
+                title: "Citation Integrity Score",
+                value: `${Math.round(citationScore)}%`,
+                desc: "Confidence that citations map to correct sources.",
+            },
+            {
+                title: "Explanation Clarity Score",
+                value: `${Math.round(clarityScore)}%`,
+                desc: "Readable for business users (SME rubric).",
+            },
+            {
+                title: "Fabricated Citations",
+                value: fabricatedCount,
+                desc: "Must be 0 for release.",
+                error: fabricatedCount > 0,
+            },
+        ];
+    }, [rows]);
+
+    const updateRow = (id, key, value) =>
+        setRows((prev) =>
+            prev.map((r) => (r.id === id ? { ...r, [key]: value } : r))
+        );
+
     return (
-        <>
-            {/* Header */}
-            <Stack
-                direction={{ xs: "column", md: "row" }}
-                justifyContent="space-between"
-                alignItems={{ xs: "flex-start", md: "center" }}
-                spacing={2}
-            >
-                <Box>
-                    <Typography variant="h6" fontWeight={700}>
-                        D. Explainability Methods & Validation (Evaluation)
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" mt={0.5} maxWidth={760}>
-                        Run baseline (pre-training) and post-training validation. Failures automatically create risks and can block release.
-                    </Typography>
-                </Box>
+
+        <Card variant="outlined" sx={{ mt: 2 }}>
+            <CardContent>
+                <Stack
+                    direction={{ xs: "column", md: "row" }}
+                    justifyContent="space-between"
+                    spacing={2}
+                >
+                    <Box>
+                        <Typography variant="h6" fontWeight={700}>
+                            D. Explainability Methods & Validation (Evaluation)
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" mt={0.5}>
+                            Run baseline and post-training validation. Failures generate risks
+                            and may block release.
+                        </Typography>
+                    </Box>
+                    <Stack direction={{ xs: "column" }} rowGap={1} mt={2}>
+                        <Button variant="outlined">Load Sample Eval</Button>
+                        <Button variant="contained">Run Evaluation (Simulated)</Button>
+                        <Button variant="outlined">Add Eval Case</Button>
+                    </Stack>
+                </Stack>
 
 
-            </Stack>
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={1} mt={2}>
-                <Button variant="outlined">Load Sample Eval</Button>
-                <Button variant="contained">Run Evaluation (Simulated)</Button>
-                <Button variant="outlined">Add Eval Case</Button>
-            </Stack>
 
-            {/* <Divider sx={{ my: 2 }} /> */}
+                {/* KPI CARDS */}
+                <Grid container spacing={2} mt={2}>
+                    {kpis.map((kpi) => (
+                        <Grid size={{ xs: 12, sm: 6 }} key={kpi.title}>
+                            <Card variant="outlined" sx={{ p: 2 }}>
+                                <Typography variant="caption" color="text.secondary">
+                                    {kpi.title}
+                                </Typography>
+                                <Typography
+                                    variant="h5"
+                                    color={kpi.error ? "error.main" : "text.primary"}
+                                >
+                                    {kpi.value}
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                    {kpi.desc}
+                                </Typography>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
 
-            <Grid container spacing={2} mt={2}>
-                {KPIS.map((kpi) => (
-                    <Grid size={{ xs: 12, sm: 6 }} key={kpi.title}>
-                        <Card
-                            variant="outlined"
-                            sx={{
-                                p: 2,
-                                height: "100%",
-                            }}
-                        >
-                            <Typography variant="caption" color="text.secondary">
-                                {kpi.title}
-                            </Typography>
-                            <Typography variant="h5" mt={0.5}>
-                                {kpi.value}
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                                {kpi.desc}
-                            </Typography>
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
-            {/* Evaluation Table */}
-            <Box mt={2}
-                sx={{
-                    overflowX: "auto",
-
-                    border: "1px solid",
-                    borderColor: "divider",
-                    borderRadius: 1,
-                }}
-
-            >
-                <Table stickyHeader
+                {/* TABLE */}
+                <Box
+                    mt={2}
                     sx={{
-                        minWidth: 800,
-                        "& th, & td": {
-                            borderRight: "1px solid",
-                            borderColor: "divider",
-                        },
-                        "& th:last-of-type, & td:last-of-type": {
-                            borderRight: 0,
-                        },
-                    }}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Case ID</TableCell>
-                            <TableCell>Prompt / Scenario</TableCell>
-                            <TableCell>Expected Components</TableCell>
-                            <TableCell>Citation OK</TableCell>
-                            <TableCell>Clarity OK</TableCell>
-                            <TableCell>Fabricated?</TableCell>
-                            <TableCell >Actions</TableCell>
-                        </TableRow>
-                    </TableHead>
+                        overflowX: "auto",
+                        border: "1px solid",
+                        borderColor: "divider",
+                        borderRadius: 1,
+                    }}
+                >
+                    <Table stickyHeader size="small" sx={{ minWidth: 900 }}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Case ID</TableCell>
+                                <TableCell>Prompt / Scenario</TableCell>
+                                <TableCell>Expected Components</TableCell>
+                                <TableCell>Citation OK</TableCell>
+                                <TableCell>Clarity OK</TableCell>
+                                <TableCell>Fabricated?</TableCell>
+                                <TableCell>Actions</TableCell>
+                            </TableRow>
+                        </TableHead>
 
-                    <TableBody>
-                        {paginatedRows.map((row) => {
-                            const isEdit = editRowId === row.id;
+                        <TableBody>
+                            {paginatedRows.map((row) => {
+                                const isEdit = editRowId === row.id;
 
-                            return (
-                                <TableRow key={row.id} hover>
-                                    {/* Case ID */}
-                                    <TableCell>
-                                        {isEdit ? (
-                                            <TextField
-                                                size="small"
-                                                value={row.caseId}
-                                                onChange={(e) =>
-                                                    setRows((prev) =>
-                                                        prev.map((r) =>
-                                                            r.id === row.id ? { ...r, caseId: e.target.value } : r
-                                                        )
-                                                    )
-                                                }
-                                            />
-                                        ) : (
-                                            row.caseId
-                                        )}
-                                    </TableCell>
+                                return (
+                                    <TableRow key={row.id} hover>
+                                        <TableCell>
+                                            {isEdit ? (
+                                                <TextField
+                                                    size="small"
+                                                    value={row.caseId}
+                                                    onChange={(e) =>
+                                                        updateRow(row.id, "caseId", e.target.value)
+                                                    }
+                                                />
+                                            ) : (
+                                                row.caseId
+                                            )}
+                                        </TableCell>
 
-                                    {/* Scenario */}
-                                    <TableCell>
-                                        {isEdit ? (
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                multiline
-                                                minRows={2}
-                                                value={row.scenario}
-                                                onChange={(e) =>
-                                                    setRows((prev) =>
-                                                        prev.map((r) =>
-                                                            r.id === row.id ? { ...r, scenario: e.target.value } : r
-                                                        )
-                                                    )
-                                                }
-                                            />
-                                        ) : (
-                                            row.scenario
-                                        )}
-                                    </TableCell>
+                                        <TableCell>
+                                            {isEdit ? (
+                                                <TextField
+                                                    size="small"
+                                                    fullWidth
+                                                    multiline
+                                                    minRows={2}
+                                                    value={row.scenario}
+                                                    onChange={(e) =>
+                                                        updateRow(row.id, "scenario", e.target.value)
+                                                    }
+                                                />
+                                            ) : (
+                                                row.scenario
+                                            )}
+                                        </TableCell>
 
-                                    {/* Components */}
-                                    <TableCell>
-                                        {COMPONENTS.map((c) => (
-                                            <Chip
-                                                key={c}
-                                                label={c}
-                                                size="small"
-                                                clickable={isEdit}
-                                                color={row.components.includes(c) ? "primary" : "default"}
-                                                variant={row.components.includes(c) ? "filled" : "outlined"}
-                                                onClick={
-                                                    isEdit
-                                                        ? () =>
-                                                            setRows((prev) =>
-                                                                prev.map((r) =>
-                                                                    r.id === row.id
-                                                                        ? {
-                                                                            ...r,
-                                                                            components: r.components.includes(c)
-                                                                                ? r.components.filter((x) => x !== c)
-                                                                                : [...r.components, c],
-                                                                        }
-                                                                        : r
+                                        <TableCell>
+                                            {COMPONENTS.map((c) => (
+                                                <Chip
+                                                    key={c}
+                                                    label={c}
+                                                    size="small"
+                                                    clickable={isEdit}
+                                                    color={
+                                                        row.components.includes(c)
+                                                            ? "primary"
+                                                            : "default"
+                                                    }
+                                                    variant={
+                                                        row.components.includes(c)
+                                                            ? "filled"
+                                                            : "outlined"
+                                                    }
+                                                    onClick={
+                                                        isEdit
+                                                            ? () =>
+                                                                updateRow(
+                                                                    row.id,
+                                                                    "components",
+                                                                    row.components.includes(c)
+                                                                        ? row.components.filter((x) => x !== c)
+                                                                        : [...row.components, c]
                                                                 )
-                                                            )
-                                                        : undefined
-                                                }
-                                                sx={{ mr: 0.5, mb: 0.5 }}
-                                            />
+                                                            : undefined
+                                                    }
+                                                    sx={{ mr: 0.5, mb: 0.5 }}
+                                                />
+                                            ))}
+                                        </TableCell>
+
+                                        {["citationOk", "clarityOk", "fabricated"].map((field) => (
+                                            <TableCell key={field}>
+                                                {isEdit ? (
+                                                    <Autocomplete
+                                                        size="small"
+                                                        value={row[field]}
+                                                        options={["yes", "no"]}
+                                                        onChange={(_, v) =>
+                                                            updateRow(row.id, field, v)
+                                                        }
+                                                        renderInput={(p) => <TextField {...p} />}
+                                                    />
+                                                ) : (
+                                                    <Chip
+                                                        size="small"
+                                                        label={row[field]}
+                                                        color={
+                                                            field === "fabricated" && row[field] === "yes"
+                                                                ? "error"
+                                                                : row[field] === "yes"
+                                                                    ? "success"
+                                                                    : "default"
+                                                        }
+                                                    />
+                                                )}
+                                            </TableCell>
                                         ))}
-                                    </TableCell>
 
-                                    {/* Citation OK */}
-                                    <TableCell>
-                                        {isEdit ? (
-                                            <Autocomplete
-                                                size="small"
-                                                value={row.citationOk}
-                                                options={["yes", "no"]}
-                                                onChange={(_, v) =>
-                                                    setRows((prev) =>
-                                                        prev.map((r) =>
-                                                            r.id === row.id ? { ...r, citationOk: v } : r
-                                                        )
-                                                    )
-                                                }
-                                                renderInput={(params) => <TextField {...params} />}
-                                            />
-                                        ) : (
-                                            row.citationOk
-                                        )}
-                                    </TableCell>
-
-                                    {/* Clarity OK */}
-                                    <TableCell>
-                                        {isEdit ? (
-                                            <Autocomplete
-                                                size="small"
-                                                value={row.clarityOk}
-                                                options={["yes", "no"]}
-                                                onChange={(_, v) =>
-                                                    setRows((prev) =>
-                                                        prev.map((r) =>
-                                                            r.id === row.id ? { ...r, clarityOk: v } : r
-                                                        )
-                                                    )
-                                                }
-                                                renderInput={(params) => <TextField {...params} />}
-                                            />
-                                        ) : (
-                                            row.clarityOk
-                                        )}
-                                    </TableCell>
-
-                                    {/* Fabricated */}
-                                    <TableCell>
-                                        {isEdit ? (
-                                            <Autocomplete
-                                                size="small"
-                                                value={row.fabricated}
-                                                options={["yes", "no"]}
-                                                onChange={(_, v) =>
-                                                    setRows((prev) =>
-                                                        prev.map((r) =>
-                                                            r.id === row.id ? { ...r, fabricated: v } : r
-                                                        )
-                                                    )
-                                                }
-                                                renderInput={(params) => <TextField {...params} />}
-                                            />
-                                        ) : (
-                                            row.fabricated
-                                        )}
-                                    </TableCell>
-
-                                    {/* Actions */}
-                                    <TableCell>
-                                        {isEdit ? (
-                                            <Stack direction="row" spacing={0.5}
-                                                justifyContent="flex-start">
-                                                <Tooltip title="Save">
-                                                    <IconButton size="small" onClick={() => setEditRowId(null)}>
-                                                        <SaveIcon fontSize="small" />
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title="Cancel">
-                                                    <IconButton size="small" onClick={() => setEditRowId(null)}>
-                                                        <CloseIcon fontSize="small" />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </Stack>
-                                        ) : (
-                                            <Stack direction="row" spacing={0.5}
-                                                justifyContent="flex-start">
-                                                <Tooltip title="Edit">
-                                                    <IconButton size="small" onClick={() => setEditRowId(row.id)}>
-                                                        <EditIcon fontSize="small" />
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title="Delete">
+                                        <TableCell>
+                                            {isEdit ? (
+                                                <>
                                                     <IconButton
                                                         size="small"
-                                                        onClick={() => setRows((prev) => prev.filter((r) => r.id !== row.id))}
+                                                        onClick={() => setEditRowId(null)}
+                                                    >
+                                                        <SaveIcon fontSize="small" />
+                                                    </IconButton>
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={() => setEditRowId(null)}
+                                                    >
+                                                        <CloseIcon fontSize="small" />
+                                                    </IconButton>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={() => setEditRowId(row.id)}
+                                                    >
+                                                        <EditIcon fontSize="small" />
+                                                    </IconButton>
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={() =>
+                                                            setRows((p) =>
+                                                                p.filter((r) => r.id !== row.id)
+                                                            )
+                                                        }
                                                     >
                                                         <DeleteIcon fontSize="small" />
                                                     </IconButton>
-                                                </Tooltip>
-                                            </Stack>
-                                        )}
-                                    </TableCell>
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody>
-                </Table>
-            </Box>
+                                                </>
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>
+                </Box>
 
-            {/* Pagination */}
-            <TablePagination
-                component="div"
-                count={rows.length}
-                page={page}
-                onPageChange={(_, newPage) => setPage(newPage)}
-                rowsPerPage={rowsPerPage}
-                onRowsPerPageChange={(e) => {
-                    setRowsPerPage(parseInt(e.target.value, 10));
-                    setPage(0);
-                }}
-                rowsPerPageOptions={[5, 10, 25]}
-            />
+                <TablePagination
+                    component="div"
+                    count={rows.length}
+                    page={page}
+                    onPageChange={(_, p) => setPage(p)}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={(e) => {
+                        setRowsPerPage(+e.target.value);
+                        setPage(0);
+                    }}
+                />
 
-            <Box sx={{
-
-                padding: "12px",
-                borderRadius: "14px",
-                background: "#f8fafc",
-                border: "1px solid lightgray",
-                borderLeft: "4px solid #184ea4"
-            }}>
-                <Typography variant="body2" color="black" display="block">
-                    Evaluation results automatically generate risks in section E and may block Release in section H.                </Typography>
-            </Box>
-        </>
-
+                {/* CALLOUT */}
+                <Box
+                    sx={{
+                        mt: 2,
+                        p: 1.5,
+                        borderRadius: 2,
+                        border: "1px solid lightgray",
+                        borderLeft: "4px solid #184ea4",
+                        background: "#f8fafc",
+                    }}
+                >
+                    <Typography variant="body2">
+                        Evaluation results automatically generate risks in Section E and may
+                        block Release in Section H.
+                    </Typography>
+                </Box>
+            </CardContent>
+        </Card>
     );
 }

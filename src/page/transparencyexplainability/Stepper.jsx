@@ -102,14 +102,18 @@ export default function TransparencyExplainabilityHeader() {
             <Card sx={{ mt: 2 }}>
                 <CardContent>
                     <Tabs
-                        sx={{
-                            marginLeft: "-40px",
-                        }}
+
                         value={tab}
                         onChange={(e, v) => setTab(v)}
                         variant="scrollable"
                         scrollButtons="auto"
                         allowScrollButtonsMobile
+                        sx={{
+                           
+                            borderBottom: 1,
+                            borderColor: 'divider',
+                            mb: 2,
+                        }}
                     >
                         {TABS.map((label) => (
                             <Tab key={label} label={label} />
@@ -147,7 +151,7 @@ export default function TransparencyExplainabilityHeader() {
                         <TabHLifecycleMonitoring />
                     </TabPanel>
                 </CardContent>
-            </Card>
+            </Card >
 
 
 

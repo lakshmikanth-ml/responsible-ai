@@ -64,6 +64,8 @@ export default function TabGEvidenceAudit() {
 
     return (
 
+        <Card variant="outlined" sx={{ mt: 2 }}>
+            <CardContent>
                 <Formik
                     initialValues={{ evidence: [emptyEvidence(), emptyEvidence()] }}
                     validationSchema={validationSchema}
@@ -146,31 +148,7 @@ export default function TabGEvidenceAudit() {
                                                 </Button>
                                             </Stack>
                                             {/* KPI TILES */}
-                                            <Stack direction={{ xs: "column", md: "row" }} spacing={2} mb={3}>
-                                                <Paper sx={{ p: 2, flex: 1 }}>
-                                                    <Typography variant="subtitle2">
-                                                        Evidence Completeness
-                                                    </Typography>
-                                                    <Typography variant="h6">
-                                                        {approvedCount}/{values.evidence.length} approved
-                                                    </Typography>
-                                                    <Typography variant="caption" color="text.secondary">
-                                                        Release requires required evidence approved.
-                                                    </Typography>
-                                                </Paper>
 
-                                                <Paper sx={{ p: 2, flex: 1 }}>
-                                                    <Typography variant="subtitle2">
-                                                        Runtime Samples
-                                                    </Typography>
-                                                    <Typography variant="h6">
-                                                        {runtimeCount} approved
-                                                    </Typography>
-                                                    <Typography variant="caption" color="text.secondary">
-                                                        Guardian-exported explained outputs.
-                                                    </Typography>
-                                                </Paper>
-                                            </Stack>
 
 
 
@@ -350,6 +328,8 @@ export default function TabGEvidenceAudit() {
                         );
                     }}
                 </Formik>
-            
+            </CardContent>
+        </Card>
+
     );
 }
