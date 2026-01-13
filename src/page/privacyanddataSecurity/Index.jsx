@@ -1,54 +1,253 @@
-import React from "react";
-import { Box, Typography, Paper } from "@mui/material";
-import GavelOutlinedIcon from "@mui/icons-material/GavelOutlined";
+import React, { useState } from 'react';
+import {
+    Box,
+    Typography,
+    Tabs,
+    Tab,
+    Chip,
+    Card,
+    CardContent,
+    Button,
+    Divider,
+    Grid,
+    TextField,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+} from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import SaveIcon from '@mui/icons-material/Save';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import TabA from './TabA';
+import TabB from './TabB';
+import TabC from './TabC';
+import TabD from './TabD';
+import TabE from './TabE';
+import TabF from './TabF';
+import TabG from './TabG';
+import TabH from './TabH';
 
 const Index = () => {
+    const [activeTab, setActiveTab] = useState('A');
+    const [projectContext, setProjectContext] = useState({
+        project: 'Carrier A — UW Copilot',
+        modelVersion: 'v1.2.0',
+        endpoint: '/uw/assistant',
+        decisionRole: 'Decision-support',
+        sensitivity: 'Tier 4 — Regulated (PII/PHI/PCI)',
+        hostingBoundary: 'Client VPC/VNet (Private)',
+    });
+    const [statusMessage, setStatusMessage] = useState('');
+
+    const handleTabChange = (event, newValue) => {
+        setActiveTab(newValue);
+    };
+
+    const handleContextChange = (field, value) => {
+        setProjectContext(prev => ({ ...prev, [field]: value }));
+    };
+
+    const handleSaveContext = () => {
+        try {
+            localStorage.setItem('privacy_projectContext', JSON.stringify(projectContext));
+            setStatusMessage('✓ Project Context saved successfully');
+            setTimeout(() => setStatusMessage(''), 2000);
+        } catch (e) {
+            setStatusMessage('✗ Error saving context');
+        }
+    };
+
+    const handleResetDemo = () => {
+        if (window.confirm('Reset all demo data? This cannot be undone.')) {
+            localStorage.clear();
+            setProjectContext({
+                project: '',
+                modelVersion: '',
+                endpoint: '',
+                decisionRole: '',
+                sensitivity: '',
+                hostingBoundary: '',
+            });
+            setStatusMessage('✓ Demo data reset');
+            setTimeout(() => setStatusMessage(''), 2000);
+        }
+    };
+
+    const renderTabContent = () => {
+        switch (activeTab) {
+            case 'A': return <TabA projectContext={projectContext} onStatusMessage={setStatusMessage} />;
+            case 'B': return <TabB projectContext={projectContext} onStatusMessage={setStatusMessage} />;
+            case 'C': return <TabC projectContext={projectContext} onStatusMessage={setStatusMessage} />;
+            case 'D': return <TabD projectContext={projectContext} onStatusMessage={setStatusMessage} />;
+            case 'E': return <TabE projectContext={projectContext} onStatusMessage={setStatusMessage} />;
+            case 'F': return <TabF projectContext={projectContext} onStatusMessage={setStatusMessage} />;
+            case 'G': return <TabG projectContext={projectContext} onStatusMessage={setStatusMessage} />;
+            case 'H': return <TabH projectContext={projectContext} onStatusMessage={setStatusMessage} />;
+            default: return <TabA projectContext={projectContext} onStatusMessage={setStatusMessage} />;
+        }
+    };
+
+    const tabLabels = [
+        'A. Objective',
+        'B. Coverage',
+        'C. Training Readiness (DFA)',
+        'D. Evaluation',
+        'E. Gaps & Risks',
+        'F. Mitigation',
+        'G. Evidence',
+        'H. Gates & Monitoring',
+    ];
+
+    const tabValues = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+
     return (
-         <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            minHeight="60vh"
-        >
-            <Paper
-                elevation={0}
-                sx={{
-                    p: 6,
-                    textAlign: "center",
-                    borderRadius: 3,
-                    maxWidth: 520,
-                    border: "1px dashed",
-                    borderColor: "divider",
-                }}
-            >
-                <GavelOutlinedIcon
-                    sx={{ fontSize: 56, color: "text.secondary", mb: 2 }}
-                />
+        <Box>
+            {/* Gate Status Cards */}
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }, gap: 2, mb: 3 }}>
+                {[
+                    { name: 'Pre-Training Gate', status: 'BLOCKED', color: '#d32f2f', msg: 'Regulated data tier: Security Owner and Privacy Owner must be assigned in section A.' },
+                    { name: 'Release Gate', status: 'BLOCKED', color: '#d32f2f', msg: 'Evaluation has FAIL tests. All privacy/security tests must PASS before release.' },
+                    { name: 'Production Gate', status: 'BLOCKED', color: '#d32f2f', msg: 'Production blocked because release gate is blocked.' },
+                    { name: 'Guardian Health', status: '—', color: '#f57c00', msg: 'Derived from runtime signals ingested in section H.' },
+                ].map((gate, idx) => (
+                    <Card key={idx} variant="outlined" sx={{ p: 2 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                            {gate.name}
+                        </Typography>
+                        <Box sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1,
+                            mb: 1.5,
+                            p: 1,
+                            bgcolor: gate.color + '15',
+                            borderRadius: '50px',
+                            width: 'fit-content',
+                        }}>
+                            <Box sx={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: '50%',
+                                bgcolor: gate.color,
+                            }} />
+                            <Typography variant="caption" sx={{ fontWeight: 700, color: gate.color }}>
+                                {gate.status}
+                            </Typography>
+                        </Box>
+                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.5 }}>
+                            {gate.msg}
+                        </Typography>
+                    </Card>
+                ))}
+            </Box>
+
+            <Card elevation={1}>
+                {/* Header Section */}
+                <Box sx={{ p: 2 }}>
+                    {/* Header Top */}
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-start',
+                        mb: 2,
+                        flexWrap: 'wrap',
+                        gap: 2,
+                    }}>
+                        {/* Title */}
+                        <Box sx={{ flex: 1, minWidth: 300 }}>
+                            <Typography variant="h4" fontWeight={700} gutterBottom>
+                                Privacy & Data Security
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Control whether the AI system prevents PII leakage, resists data exfiltration, enforces access boundaries, and remains audit-ready across Pre-Training, Release, and Production.
+                            </Typography>
+                        </Box>
+
+                        {/* Action Buttons */}
+                        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                            <Button variant="outlined" size="small" sx={{ fontWeight: 600 }}>
+                                Generate Policy Pack (for Guardian)
+                            </Button>
+                            <Button variant="outlined" size="small" sx={{ fontWeight: 600 }}>
+                                Export Snapshot
+                            </Button>
+                            <Button variant="contained" size="small" startIcon={<RefreshIcon />} sx={{ fontWeight: 600 }}>
+                                Recompute Gates
+                            </Button>
+                        </Box>
+                    </Box>
+
+                    {/* Status Chips */}
+                    <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mb: 3 }}>
+                        <Chip
+                            label="Lifecycle Controlled"
+                            variant="outlined"
+                            size="small"
+                            sx={{ fontWeight: 600 }}
+                        />
+                        <Chip
+                            label="Coverage: 100%"
+                            variant="outlined"
+                            size="small"
+                            sx={{ fontWeight: 600 }}
+                        />
+                        <Chip
+                            label="Evidence: 0/6 approved"
+                            variant="outlined"
+                            size="small"
+                            sx={{ fontWeight: 600 }}
+                        />
+                        <Chip
+                            label="Risks: 0 critical open"
+                            variant="outlined"
+                            size="small"
+                            sx={{ fontWeight: 600 }}
+                        />
+                    </Box>
+                </Box>
 
 
-                <Typography variant="h5" fontWeight={700} gutterBottom>
-                    Privacy & Data Security
-                </Typography>
+
+                {/* Main Content Grid: Project Context (Left) + Tab Content (Right) */}
+                <Grid container>
 
 
-                <Typography variant="body1" color="text.secondary" gutterBottom>
-                    This module is currently under development.
-                </Typography>
+                    {/* Right Panel: Tabs */}
+                    <Grid item xs={12} md={9} sx={{ p: 2 }}>
+                        {/* Tab Navigation */}
+                        <Tabs
+                            value={activeTab}
+                            onChange={handleTabChange}
+                            variant="scrollable"
+                            scrollButtons="auto"
+                            sx={{
+                                borderBottom: 1,
+                                borderColor: 'divider',
+                                mb: 2,
+                            }}
+                        >
+                            {tabValues.map((value, index) => (
+                                <Tab
+                                    key={value}
+                                    label={tabLabels[index]}
+                                    value={value}
+                                    sx={{
+                                        textTransform: 'none',
+                                        fontSize: '0.9rem',
+                                        fontWeight: 500,
+                                    }}
+                                />
+                            ))}
+                        </Tabs>
 
+                        {/* Tab Content */}
+                        {renderTabContent()}
+                    </Grid>
+                </Grid>
+            </Card>
+        </Box >
+    );
+};
 
-
-
-                <Typography
-                    variant="caption"
-                    display="block"
-                    color="text.secondary"
-                    sx={{ mt: 3 }}
-                >
-                    🚧 Coming Soon
-                </Typography>
-            </Paper>
-        </Box>
-    )
-}
-
-export default Index
+export default Index;
