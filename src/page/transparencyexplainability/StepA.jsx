@@ -91,16 +91,19 @@ export default function TabAObjective() {
                         </Typography>
                     </Box>
 
-                    <Stack direction="column" alignItems={"baseline"} rowGap={1}>
-                        <Button variant="outlined" onClick={loadSampleObjective}>
-                            Load Sample
-                        </Button>
-                        <Button variant="outlined" disabled={!canSave}>
-                            Save A
-                        </Button>
-                    </Stack>
-                </Stack>
 
+                </Stack>
+                <Stack direction={{ xs: "column", sm: "row" }} alignItems={"baseline"}
+                 rowGap={2} mt={2}
+                 spacing={2}>
+
+                    <Button variant="outlined" onClick={loadSampleObjective}>
+                        Load Sample
+                    </Button>
+                    <Button variant="outlined" disabled={!canSave}>
+                        Save A
+                    </Button>
+                </Stack>
                 <Divider sx={{ my: 2 }} />
 
                 {/* GRID 3 */}

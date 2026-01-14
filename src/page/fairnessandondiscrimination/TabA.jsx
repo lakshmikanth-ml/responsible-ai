@@ -35,11 +35,24 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const STORAGE_KEY = 'TabA_DemoData';
 
+const LOCKED_DEFAULT_TYPES = new Set(['Age', 'Gender', 'Location']);
+
 const defaultGroupRows = [
-    { type: 'Age', name: 'Age Band', included: 'Yes', justification: 'Pricing sensitivity / compliance review' },
-    { type: 'Gender', name: 'Gender', included: 'Yes', justification: 'Regulatory fairness requirement' },
-    { type: 'Location', name: 'Zip Code', included: 'No', justification: 'Proxy risk; assess separately' },
+    { type: 'Age', name: 'Age Band', included: 'Yes', justification: 'Pricing sensitivity / compliance review', locked: true },
+    { type: 'Gender', name: 'Gender', included: 'Yes', justification: 'Regulatory fairness requirement', locked: true },
+    { type: 'Location', name: 'Zip Code', included: 'No', justification: 'Proxy risk; assess separately', locked: true },
 ];
+
+const ensureDefaultRows = (rows) => {
+    const seen = new Set(rows.map(r => r.type));
+    const merged = [...rows];
+    defaultGroupRows.forEach((def) => {
+        if (!seen.has(def.type)) {
+            merged.unshift({ ...def });
+        }
+    });
+    return merged;
+};
 
 const defaultFormData = {
     useCase: 'Underwriting Assistant – Eligibility & Risk Notes',
@@ -56,7 +69,11 @@ const TabA = () => {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
                 const parsed = JSON.parse(saved);
-                return parsed.groupRows || defaultGroupRows;
+                const loadedRows = (parsed.groupRows || defaultGroupRows).map((row) => ({
+                    ...row,
+                    locked: !!row.locked || LOCKED_DEFAULT_TYPES.has(row.type),
+                }));
+                return ensureDefaultRows(loadedRows);
             }
         } catch (e) {
             console.error('Failed to load from localStorage:', e);
@@ -179,16 +196,24 @@ const TabA = () => {
     };
 
     const addGroupRow = () => {
-        setGroupRows([...groupRows, { type: '', name: '', included: 'Yes', justification: '' }]);
+        setGroupRows([...groupRows, { type: '', name: '', included: 'Yes', justification: '', locked: false }]);
     };
 
     const removeGroupRow = (index) => {
+        if (groupRows[index]?.locked) {
+            return;
+        }
         setGroupRows(groupRows.filter((_, i) => i !== index));
     };
 
     const updateGroupRow = (index, field, value) => {
         const updated = [...groupRows];
-        updated[index][field] = value;
+        const nextRow = {
+            ...updated[index],
+            [field]: value,
+        };
+        nextRow.locked = nextRow.locked || LOCKED_DEFAULT_TYPES.has(nextRow.type);
+        updated[index] = nextRow;
         setGroupRows(updated);
     };
 
@@ -553,13 +578,16 @@ const TabA = () => {
                                             />
                                         </TableCell>
                                         <TableCell>
-                                            <Tooltip title="Delete">
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={() => removeGroupRow(idx)}
-                                                >
-                                                    <DeleteIcon />
-                                                </IconButton>
+                                            <Tooltip title={row.locked ? "Default attribute cannot be deleted" : "Delete"}>
+                                                <span>
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={() => removeGroupRow(idx)}
+                                                        disabled={row.locked}
+                                                    >
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </span>
                                             </Tooltip>
                                         </TableCell>
                                     </TableRow>

@@ -438,7 +438,7 @@ export default function TransparencyExplainabilityHeader() {
                         <Stack
                             direction={{ xs: "row", md: "column" }}
                             spacing={1}
-                            alignItems={{ xs: "stretch", sm: "start" }}
+                            alignItems={{ xs: "stretch" }}
                             justifyContent="flex-start"
                         >
                             <Button variant="outlined" onClick={() => setDrawerType("policy")}>
