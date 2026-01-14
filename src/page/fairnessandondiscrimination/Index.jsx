@@ -301,7 +301,7 @@ const Index = () => {
                     </Card>
                 </Box>
 
-                <Divider />
+                {/* <Divider /> */}
 
                 {/* Tab Navigation */}
                 <Tabs

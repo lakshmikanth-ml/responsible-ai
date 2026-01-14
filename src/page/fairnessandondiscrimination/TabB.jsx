@@ -195,7 +195,7 @@ const TabB = () => {
                 sx={{
                     px: 1.5,
                     py: 0.5,
-                    borderRadius: 1,
+                    borderRadius: 15,
                     bgcolor: colorMap[status] ? `${colorMap[status]}.light` : 'default',
                     color: colorMap[status] ? `${colorMap[status]}.dark` : 'default',
                     fontWeight: 600,
@@ -273,7 +273,14 @@ const TabB = () => {
                     <Grid container spacing={2} sx={{ mt: 1 }}>
                         {/* Core Metrics */}
                         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                            <Card variant="outlined" sx={{ p: 2, bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                            <Card variant="outlined" sx={{
+                                border: "1px solid gray.300",
+                                borderLeft: "6px solid #93c5fd",
+                                padding: "12px",
+                                borderRadius: "12px",
+                                background: "#f8fafc",
+                                p: 2, bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column'
+                            }}>
                                 <Typography variant="subtitle2" fontWeight={600} gutterBottom>
                                     Core Metrics
                                 </Typography>
@@ -298,7 +305,15 @@ const TabB = () => {
 
                         {/* Model Quality Metrics */}
                         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                            <Card variant="outlined" sx={{ p: 2, bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                            <Card variant="outlined" sx={{
+                                border: "1px solid gray.300",
+                                borderLeft: "6px solid #93c5fd",
+                                padding: "12px",
+                                borderRadius: "12px",
+                                background: "#f8fafc",
+                                p: 2,
+                                bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column'
+                            }}>
                                 <Typography variant="subtitle2" fontWeight={600} gutterBottom>
                                     Model Quality by Group
                                 </Typography>
@@ -323,7 +338,13 @@ const TabB = () => {
 
                         {/* Evaluation Configuration */}
                         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                            <Card variant="outlined" sx={{ p: 2, bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                            <Card variant="outlined" sx={{
+                                border: "1px solid gray.300",
+                                borderLeft: "6px solid #93c5fd",
+                                padding: "12px",
+                                borderRadius: "12px",
+                                background: "#f8fafc", p: 2, bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column'
+                            }}>
                                 <Typography variant="subtitle2" fontWeight={600} gutterBottom>
                                     Evaluation Configuration
                                 </Typography>
@@ -481,7 +502,7 @@ const TabB = () => {
                     </Box>
                 </CardContent>
             </Card>
-        </Box>
+        </Box >
     );
 };
 

@@ -20,7 +20,7 @@ function StatusChip({ status }) {
             label={status}
             color={map[status]}
             size="small"
-            sx={{ fontWeight: 700 }}
+            sx={{ fontWeight: 400 }}
         />
     );
 }
@@ -51,7 +51,7 @@ const GATES = [
     {
         id: "guardian",
         title: "Guardian Health",
-        value: "—",
+        value: "CRITICAL",
         description: "Derived from runtime signals ingested in section H.",
         grid: { xs: 12 },
     },
@@ -70,7 +70,7 @@ export default function KpiGateRow() {
                                 flexDirection: "column",
                             }}
                         >
-                            <Typography variant="subtitle1" color="text.secondary">
+                            <Typography variant="subtitle2" color="text.secondary">
                                 {gate.title}
                             </Typography>
 
@@ -82,7 +82,7 @@ export default function KpiGateRow() {
                                     mt={1}
                                     mb={1}
                                 >
-                                    <StatusChip status={gate.status} />
+                                    <StatusChip status={gate.status}  />
                                 </Stack>
                             )}
 
@@ -93,7 +93,7 @@ export default function KpiGateRow() {
                             )}
 
                             <Typography
-                                variant="body2"
+                                variant="caption"
                                 color="text.secondary"
                                 mt={1}
                                 sx={{ mt: "auto" }}

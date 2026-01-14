@@ -1,31 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Box,
-    Typography,
-    Card,
-    CardContent,
-    Button,
-    Alert,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    Chip,
-    List,
-    ListItem,
-    ListItemText,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    TextField,
+    Box, Typography, Card, CardContent, Button, Alert, Stack,
+    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, List,
+    ListItem, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions, TextField
 } from '@mui/material';
+// import {
+//     Box,
+//     Typography,
+//     Card,
+//     CardContent,
+//     Button,
+//     Alert,
+//     Table,
+//     TableBody,
+//     TableCell,
+//     TableContainer,
+//     TableHead,
+//     TableRow,
+//     Paper,
+//     Chip,
+//     List,
+//     ListItem,
+//     ListItemText,
+//     Dialog,
+//     DialogTitle,
+//     DialogContent,
+//     DialogActions,
+//     TextField,
+//     Chip,
+// } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import BlockIcon from '@mui/icons-material/Block';
 import SendIcon from '@mui/icons-material/Send';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
 const STORAGE_KEY_TAB_F = 'TabF_DemoData';
 
@@ -316,9 +324,25 @@ const TabF = () => {
             </Alert>
 
             {/* Approval Request Dialog */}
-            <Dialog open={approvalDialogOpen} onClose={() => setApprovalDialogOpen(false)} maxWidth="sm" fullWidth>
-                <DialogTitle>Request Approval: {selectedStage}</DialogTitle>
-                <DialogContent sx={{ pt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Dialog
+                open={approvalDialogOpen}
+                onClose={() => setApprovalDialogOpen(false)}
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogTitle sx={{ pb: 1.5 }}>
+                    Request Approval: {selectedStage || '—'}
+                </DialogTitle>
+                <DialogContent
+                    sx={{
+                        pt: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                    }}
+                >
+
+
                     <Typography variant="body2" color="text.secondary">
                         Provide justification and context for this approval request. Required approvers will review and respond.
                     </Typography>
@@ -333,9 +357,15 @@ const TabF = () => {
                         variant="outlined"
                     />
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setApprovalDialogOpen(false)}>Cancel</Button>
-                    <Button onClick={handleSubmitApprovalRequest} variant="contained">
+                <DialogActions sx={{ px: 3, pb: 2 }}>
+                    <Button onClick={() => setApprovalDialogOpen(false)} variant="outlined">
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={handleSubmitApprovalRequest}
+                        variant="contained"
+                        startIcon={<SendIcon />}
+                    >
                         Submit Request
                     </Button>
                 </DialogActions>

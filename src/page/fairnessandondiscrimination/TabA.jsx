@@ -26,7 +26,7 @@ import {
     ListItem,
     ListItemText,
     IconButton,
-    Autocomplete,
+    Autocomplete, Tooltip
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -245,9 +245,9 @@ const TabA = () => {
             'Complete': 'success',
         };
         return <Typography variant="caption" sx={{
-            px: 1.5,
+            px: 1,
             py: 0.5,
-            borderRadius: 1,
+            borderRadius: 15,
             bgcolor: colorMap[status] ? `${colorMap[status]}.light` : 'default',
             color: colorMap[status] ? `${colorMap[status]}.dark` : 'default',
             fontWeight: 600
@@ -553,13 +553,14 @@ const TabA = () => {
                                             />
                                         </TableCell>
                                         <TableCell>
-                                            <IconButton
-                                                size="small"
-                                                color="error"
-                                                onClick={() => removeGroupRow(idx)}
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
+                                            <Tooltip title="Delete">
+                                                <IconButton
+                                                    size="small"
+                                                    onClick={() => removeGroupRow(idx)}
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </Tooltip>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -624,7 +625,7 @@ const TabA = () => {
                             </Card>
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <Card variant="outlined" sx={{ p: 2, bgcolor: 'grey.50' }}>
+                            <Card variant="outlined" sx={{ p: 2, height: "100%", bgcolor: 'grey.50' }}>
                                 <Typography variant="subtitle2" fontWeight={600}>
                                     Upload Legal / Compliance Notes
                                 </Typography>

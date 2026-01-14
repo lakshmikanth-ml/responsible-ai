@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+    Stack,
     Box,
     Typography,
     Card,
@@ -16,10 +17,7 @@ import {
     DialogContent,
     DialogActions,
     TextField,
-    FormControl,
-    FormLabel,
-    Select,
-    MenuItem,
+    Autocomplete,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -27,6 +25,8 @@ import WarningIcon from '@mui/icons-material/Warning';
 import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import SaveIcon from '@mui/icons-material/Save';
 
 const STORAGE_KEY_TAB_C = 'TabC_DemoData';
 
@@ -104,6 +104,8 @@ const TabC = () => {
         severity: 'Warning',
         description: '',
     });
+    const [importDialogOpen, setImportDialogOpen] = useState(false);
+    const [importText, setImportText] = useState(JSON.stringify(defaultRisksData.risks, null, 2));
 
     // Persist data to localStorage
     useEffect(() => {
@@ -184,6 +186,32 @@ const TabC = () => {
         setTimeout(() => setStatusMessage(''), 3000);
     };
 
+    const handleSave = () => {
+        try {
+            localStorage.setItem(STORAGE_KEY_TAB_C, JSON.stringify(risksData));
+            setStatusMessage('✓ Risks saved.');
+            setTimeout(() => setStatusMessage(''), 2000);
+        } catch (err) {
+            setStatusMessage('❌ Error saving risks.');
+        }
+    };
+
+    const handleImportRisks = () => {
+        try {
+            const parsed = JSON.parse(importText);
+            if (Array.isArray(parsed)) {
+                setRisksData({ risks: parsed });
+                setImportDialogOpen(false);
+                setStatusMessage('✓ Risks imported.');
+                setTimeout(() => setStatusMessage(''), 2000);
+            } else {
+                setStatusMessage('❌ Import JSON must be an array.');
+            }
+        } catch (err) {
+            setStatusMessage('❌ Invalid JSON. Please check and try again.');
+        }
+    };
+
     const resetAll = () => {
         if (window.confirm('Are you sure you want to reset all demo data? This action cannot be undone.')) {
             setRisksData(defaultRisksData);
@@ -202,13 +230,24 @@ const TabC = () => {
 
 
             {/* Header */}
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, mb: 1 }}>
+            <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 1 }}>
                 C. Gaps & Risk Assessment
             </Typography>
             <Typography variant="body2"
-                color="text.secondary" sx={{ mb: 3 }}>
+                color="text.secondary" sx={{ mb: 2 }}>
                 Auto-generated from A/B completeness, evaluation results, missing evidence, and open mitigation actions.
             </Typography>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mb: 2, flexWrap: 'wrap' }}>
+                <Button variant="outlined" startIcon={<AddIcon />} onClick={addManualRisk}>
+                    Add Risk
+                </Button>
+                <Button variant="outlined" startIcon={<CloudUploadIcon />} onClick={() => setImportDialogOpen(true)}>
+                    Bulk Import Risks
+                </Button>
+                <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave}>
+                    Save C
+                </Button>
+            </Stack>
 
             {/* KPI Dashboard - Risk Counts */}
             <Box sx={{
@@ -231,6 +270,7 @@ const TabC = () => {
                             borderLeft: `5px solid ${kpi.accent}`,
                             display: 'flex',
                             flexDirection: 'column',
+                            boxShadow: '0 6px 18px rgba(0,0,0,0.05)',
                         }}
                     >
                         <CardContent sx={{ p: 2, pb: 1.5, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
@@ -266,9 +306,11 @@ const TabC = () => {
                         Active Risks
                     </Typography>
 
-                    <Box sx={{ display: 'flex',
-                         flexDirection: 'column',
-                          gap: 3 }}>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 3
+                    }}>
                         {risksData.risks.map((risk) => {
                             const colorConfig = getSeverityColor(risk.severity);
                             const IconComponent = colorConfig.icon;
@@ -412,45 +454,74 @@ const TabC = () => {
             </Card>
 
             {/* Add Manual Risk Dialog */}
-            <Dialog open={addRiskDialogOpen} onClose={() => setAddRiskDialogOpen(false)} maxWidth="sm" fullWidth>
-                <DialogTitle>Add Manual Risk</DialogTitle>
-                <DialogContent sx={{ pt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <TextField
+            <Dialog open={addRiskDialogOpen}
+                onClose={() => setAddRiskDialogOpen(false)} maxWidth="sm" fullWidth>
+                <DialogTitle p={1}>Add Manual Risk</DialogTitle>
+                <DialogContent sx={{
+                    pt: 0, pb: 2,
+                    display: 'flex',
+                    flexDirection: 'column', gap: 0,
+                    '&.MuiDialogContent-root': { pt: 1 }
+                }}>
+                    <Box mb={2}>
+                        <TextField
+                            size='small'
+                            fullWidth
+                            label="Risk Title"
+                            placeholder="e.g., Potential proxy discrimination risk"
+                            value={newRiskForm.title}
+                            onChange={(e) => setNewRiskForm(prev => ({ ...prev, title: e.target.value }))}
+                            variant="outlined"
+                        />
+                    </Box>
+                    <Autocomplete
                         fullWidth
-                        label="Risk Title"
-                        placeholder="e.g., Potential proxy discrimination risk"
-                        value={newRiskForm.title}
-                        onChange={(e) => setNewRiskForm(prev => ({ ...prev, title: e.target.value }))}
-                        variant="outlined"
+                        size="small"
+                        options={["Critical", "Warning", "Info"]}
+                        value={newRiskForm.severity}
+                        onChange={(_, v) => setNewRiskForm(prev => ({ ...prev, severity: v || 'Warning' }))}
+                        renderInput={(params) => (
+                            <TextField {...params} label="Severity" placeholder="Select severity" />
+                        )}
                     />
-                    <FormControl fullWidth>
-                        <FormLabel sx={{ mb: 1 }}>Severity</FormLabel>
-                        <Select
-                            size="small"
-                            value={newRiskForm.severity}
-                            onChange={(e) => setNewRiskForm(prev => ({ ...prev, severity: e.target.value }))}
-                        >
-                            <MenuItem value="Critical">Critical</MenuItem>
-                            <MenuItem value="Warning">Warning</MenuItem>
-                            <MenuItem value="Info">Info</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <TextField
-                        fullWidth
-                        label="Description"
-                        placeholder="Describe the risk and its implications"
-                        value={newRiskForm.description}
-                        onChange={(e) => setNewRiskForm(prev => ({ ...prev, description: e.target.value }))}
-                        multiline
-                        rows={3}
-                        variant="outlined"
-                    />
+                    <Box sx={{ mt: 2 }}>
+                        <TextField
+
+                            fullWidth
+                            label="Description"
+                            placeholder="Describe the risk and its implications"
+                            value={newRiskForm.description}
+                            onChange={(e) => setNewRiskForm(prev => ({ ...prev, description: e.target.value }))}
+                            multiline
+                            rows={3}
+                            variant="outlined"
+                        />
+                    </Box>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setAddRiskDialogOpen(false)}>Cancel</Button>
+                <DialogActions sx={{ mb: 1.5 }}>
+                    <Button variant='outlined' onClick={() => setAddRiskDialogOpen(false)}>Cancel</Button>
                     <Button onClick={handleAddRisk} variant="contained">
                         Add Risk
                     </Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Bulk Import Dialog */}
+            <Dialog open={importDialogOpen} onClose={() => setImportDialogOpen(false)} fullWidth maxWidth="md">
+                <DialogTitle>Bulk Import Risks (JSON array)</DialogTitle>
+                <DialogContent dividers>
+                    <TextField
+                        fullWidth
+                        multiline
+                        minRows={12}
+                        value={importText}
+                        onChange={(e) => setImportText(e.target.value)}
+                        InputProps={{ sx: { fontFamily: 'monospace' } }}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setImportDialogOpen(false)}>Cancel</Button>
+                    <Button variant="contained" onClick={handleImportRisks}>Import</Button>
                 </DialogActions>
             </Dialog>
 

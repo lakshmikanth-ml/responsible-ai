@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
     Box,
     Card,
@@ -14,71 +14,135 @@ import {
     TableCell,
     TableHead,
     TableRow,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    TextField,
 } from "@mui/material";
+import DownloadIcon from "@mui/icons-material/Download";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 const CHECKLIST = [
     {
         check: "Are sources stable (no conflicting versions)?",
         input: "DFA: conflicting_versions_detected",
+        key: "conflict",
         followUp:
             "If failing: pin approved versions; block training for mandatory citation outputs.",
     },
     {
         check: "Is OCR quality acceptable for citations?",
         input: "DFA: ocr_quality_avg",
+        key: "ocr",
         followUp:
             "If failing: re-OCR or exclude docs; citations become unreliable.",
     },
     {
         check: "Are outdated docs present in citation scope?",
         input: "DFA: outdated_docs_detected",
+        key: "outdated",
         followUp:
             "If failing: curate KB; exclude outdated docs; require pinning.",
     },
     {
         check: "Is PII detected that restricts quoting/citations?",
-        input: "DFA: pii_detected",
+        input: "DFA: pii_detected / pii_files_flagged",
+        key: "pii",
         followUp:
-            "If failing: redact/exclude; switch to restricted citation policy.",
+            "If failing: redact/exclude; switch to “restricted citations” policy for those sources.",
     },
     {
         check: "Is duplication too high causing ambiguous citations?",
         input: "DFA: duplicates_detected",
+        key: "dupe",
         followUp:
-            "If failing: deduplicate; create single approved knowledge set.",
+            "If failing: deduplicate; create single approved knowledge set with citations.",
     },
 ];
 
+const SAMPLE_DFA = {
+    status: "DFA Loaded",
+    meta:
+        "Source: sharepoint | Location: /Underwriting/Policies | Files scanned: 12450 | Score: 74 | 2026-01-14T06:37:21.276Z",
+    readiness: { label: "Not Ready (fix required)", tone: "warning" },
+    controls: `{
+  "citation_scope": "approved_kb_only",
+  "pin_approved_versions": true,
+  "exclude_outdated_docs": true,
+  "reocr_required": false,
+  "dedupe_required": true,
+  "pii_citation_restriction": true
+}`,
+    checks: {
+        conflict: "Fail",
+        ocr: "Pass",
+        outdated: "Warning",
+        pii: "Restricted",
+        dupe: "Warning",
+    },
+};
+
 export default function TabCTrainingReadiness() {
-    const [dfaLoaded, setDfaLoaded] = useState(false);
-    const [readiness, setReadiness] = useState("—");
-    const [controls, setControls] = useState("—");
-    const [results, setResults] = useState({});
+    const [dfa, setDfa] = useState(null);
+    const [pasteOpen, setPasteOpen] = useState(false);
+    const [pasteValue, setPasteValue] = useState("");
+
+    const readinessTone = useMemo(() => {
+        if (!dfa) return { color: "default", label: "No DFA loaded" };
+        if (dfa.readiness?.tone === "success") return { color: "success", label: dfa.readiness.label };
+        if (dfa.readiness?.tone === "warning") return { color: "warning", label: dfa.readiness.label };
+        return { color: "default", label: dfa.readiness?.label || "Not Ready" };
+    }, [dfa]);
 
     const loadSampleDFA = () => {
-        setDfaLoaded(true);
-        setResults({
-            0: "PASS",
-            1: "PASS",
-            2: "FAIL",
-            3: "PASS",
-            4: "PASS",
-        });
-        setReadiness("PARTIAL");
-        setControls(
-            "- Pin approved document versions\n- Exclude outdated docs\n- Enforce citation policy"
-        );
+        setDfa(SAMPLE_DFA);
+        setPasteValue(JSON.stringify(SAMPLE_DFA, null, 2));
     };
 
     const applyDfaToRisks = () => {
-        if (!dfaLoaded) return;
-        setReadiness("READY");
+        if (!dfa) return;
+        setDfa((prev) =>
+            prev
+                ? {
+                    ...prev,
+                    readiness: { label: "Applied to Risks", tone: "success" },
+                }
+                : prev
+        );
+    };
+
+    const handlePasteApply = () => {
+        try {
+            const parsed = JSON.parse(pasteValue);
+            setDfa({
+                status: parsed.status || "DFA Loaded",
+                meta: parsed.meta || SAMPLE_DFA.meta,
+                readiness: parsed.readiness || SAMPLE_DFA.readiness,
+                controls:
+                    parsed.controls ||
+                    JSON.stringify(parsed.auto_controls || SAMPLE_DFA.controls, null, 2),
+                checks: parsed.checks || SAMPLE_DFA.checks,
+            });
+            setPasteOpen(false);
+        } catch (err) {
+            alert("Invalid JSON. Please check and try again.");
+        }
+    };
+
+    const getStatusChip = (value) => {
+        const val = (value || "").toLowerCase();
+        if (val.includes("pass")) return { color: "success", label: value };
+        if (val.includes("fail") || val.includes("not ready")) return { color: "error", label: value };
+        if (val.includes("warn") || val.includes("restrict")) return { color: "warning", label: value };
+        return { color: "default", label: value || "—" };
     };
 
     return (
         <Card variant="outlined" sx={{ mt: 2 }}>
             <CardContent>
-                {/* HEADER */}
                 <Stack
                     direction={{ xs: "column", md: "row" }}
                     justifyContent="space-between"
@@ -89,89 +153,76 @@ export default function TabCTrainingReadiness() {
                             C. Training-Time Explainability Readiness (DFA + Config)
                         </Typography>
                         <Typography variant="body2" color="text.secondary" mt={0.5}>
-                            Ingest Data Foundation Analyzer signals and determine whether
-                            citations and explanations can be trusted before training.
+                            Ingest Data Foundation Analyzer signals and determine whether citations and explanations can be trusted
+                            before training. DFA generates risks/actions and constrains policy.
                         </Typography>
                     </Box>
 
-                    <Stack direction="row" flexDirection={"column"} justifyContent={"flex-start"}
-                        rowGap={1}
-                        alignItems={"flex-start"} >
 
-                        <Button variant="outlined" onClick={loadSampleDFA}>
-                            Load Sample DFA
-                        </Button>
-                        <Button variant="outlined">Paste DFA JSON</Button>
-                        <Button
-                            variant="outlined"
-                            disabled={!dfaLoaded}
-                            onClick={applyDfaToRisks}
-                        >
-                            Apply DFA → Risks
-                        </Button>
-                    </Stack>
+                </Stack>
+                <Stack direction={{ xs: "row", sm: "row" }} spacing={1} mt={2}>
+                    <Button variant="outlined" startIcon={<DownloadIcon />} onClick={loadSampleDFA}>
+                        Load Sample DFA
+                    </Button>
+                    <Button variant="outlined" startIcon={<ContentPasteIcon />} onClick={() => setPasteOpen(true)}>
+                        Paste DFA JSON
+                    </Button>
+                    <Button
+                        variant="contained"
+                        startIcon={<PlayCircleOutlineIcon />}
+                        disabled={!dfa}
+                        onClick={applyDfaToRisks}
+                    >
+                        Apply DFA → Risks
+                    </Button>
                 </Stack>
 
-                <Divider sx={{ my: 2 }} />
-
-                {/* STATUS GRID */}
-                <Grid container spacing={2}>
+                <Grid container spacing={2} sx={{ mt: 2 }}>
                     <Grid size={{ xs: 12, md: 4 }}>
                         <Typography variant="subtitle2">DFA Snapshot Status</Typography>
                         <Chip
-                            label={dfaLoaded ? "DFA Loaded" : "No DFA loaded"}
-                            color={dfaLoaded ? "success" : "default"}
+                            label={dfa ? dfa.status : "No DFA loaded"}
+                            color={dfa ? "primary" : "default"}
                             sx={{ mt: 0.5 }}
                         />
                         <Typography variant="caption" display="block" mt={0.5}>
-                            Load or paste DFA JSON to assess readiness.
+                            {dfa?.meta || "Load or paste DFA JSON to assess readiness."}
                         </Typography>
                     </Grid>
 
                     <Grid size={{ xs: 12, md: 4 }}>
-                        <Typography variant="subtitle2">
-                            Training Readiness (Explainability)
-                        </Typography>
-                        <Chip
-                            label={readiness}
-                            color={
-                                readiness === "READY"
-                                    ? "success"
-                                    : readiness === "PARTIAL"
-                                        ? "warning"
-                                        : "default"
-                            }
-                            sx={{ mt: 0.5 }}
-                        />
+                        <Typography variant="subtitle2">Training Readiness (Explainability)</Typography>
+                        <Chip label={readinessTone.label} color={readinessTone.color} sx={{ mt: 0.5 }} />
                         <Typography variant="caption" display="block" mt={0.5}>
                             Derived from DFA + coverage requirements.
                         </Typography>
                     </Grid>
 
                     <Grid size={{ xs: 12, md: 4 }}>
-                        <Typography variant="subtitle2">
-                            Auto-Generated Controls
-                        </Typography>
+                        <Typography variant="subtitle2">Auto-Generated Controls</Typography>
                         <Typography
                             variant="caption"
                             component="pre"
                             sx={{
                                 mt: 0.5,
                                 p: 1,
-                                bgcolor: "background.default",
-                                borderRadius: 1,
+                                bgcolor: "grey.50",
+                                borderRadius: 1.5,
+                                border: "1px solid",
+                                borderColor: "divider",
                                 whiteSpace: "pre-wrap",
+                                fontFamily: "monospace",
+                                fontSize: 12,
                             }}
                         >
-                            {controls}
+                            {dfa?.controls || "No controls generated."}
                         </Typography>
                     </Grid>
                 </Grid>
 
                 <Divider sx={{ my: 2 }} />
 
-                {/* CHECKLIST */}
-                <Typography fontWeight={600} mb={1}>
+                <Typography fontWeight={700} mb={1.5}>
                     Training Readiness Checklist
                 </Typography>
 
@@ -181,10 +232,11 @@ export default function TabCTrainingReadiness() {
                         border: "1px solid",
                         borderColor: "divider",
                         borderRadius: 2,
-                        maxHeight: 320,
+                        maxHeight: 360,
+                        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)",
                     }}
                 >
-                    <Table stickyHeader size="small" sx={{ minWidth: 800 }}>
+                    <Table stickyHeader size="small" sx={{ minWidth: 900 }}>
                         <TableHead>
                             <TableRow>
                                 <TableCell>Check</TableCell>
@@ -194,29 +246,23 @@ export default function TabCTrainingReadiness() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {CHECKLIST.map((row, idx) => (
-                                <TableRow key={idx}>
-                                    <TableCell>{row.check}</TableCell>
-                                    <TableCell>{row.input}</TableCell>
-                                    <TableCell>
-                                        {results[idx] ? (
-                                            <Chip
-                                                size="small"
-                                                label={results[idx]}
-                                                color={results[idx] === "PASS" ? "success" : "error"}
-                                            />
-                                        ) : (
-                                            "—"
-                                        )}
-                                    </TableCell>
-                                    <TableCell>{row.followUp}</TableCell>
-                                </TableRow>
-                            ))}
+                            {CHECKLIST.map((row) => {
+                                const status = getStatusChip(dfa?.checks?.[row.key]);
+                                return (
+                                    <TableRow key={row.key} hover>
+                                        <TableCell>{row.check}</TableCell>
+                                        <TableCell>{row.input}</TableCell>
+                                        <TableCell>
+                                            <Chip size="small" color={status.color} label={status.label} />
+                                        </TableCell>
+                                        <TableCell>{row.followUp}</TableCell>
+                                    </TableRow>
+                                );
+                            })}
                         </TableBody>
                     </Table>
                 </Box>
 
-                {/* CALLOUT */}
                 <Box
                     sx={{
                         mt: 2,
@@ -226,14 +272,39 @@ export default function TabCTrainingReadiness() {
                         borderColor: "divider",
                         borderLeft: "4px solid #184ea4",
                         background: "#f8fafc",
+                        display: "flex",
+                        gap: 1,
+                        alignItems: "flex-start",
                     }}
                 >
+                    <InfoOutlinedIcon fontSize="small" color="primary" sx={{ mt: 0.25 }} />
                     <Typography variant="body2">
-                        Output: This section creates data-driven constraints for citations,
-                        and generates risks/actions before SFT/DPO begins.
+                        Output: This section creates data-driven constraints for citations, and generates risks/actions before
+                        SFT/DPO begins.
                     </Typography>
                 </Box>
             </CardContent>
+
+            <Dialog open={pasteOpen} onClose={() => setPasteOpen(false)} fullWidth maxWidth="md">
+                <DialogTitle>Paste DFA JSON</DialogTitle>
+                <DialogContent dividers>
+                    <TextField
+                        fullWidth
+                        multiline
+                        minRows={12}
+                        value={pasteValue}
+                        onChange={(e) => setPasteValue(e.target.value)}
+                        placeholder="Paste DFA JSON here"
+                        InputProps={{ sx: { fontFamily: "monospace" } }}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setPasteOpen(false)}>Cancel</Button>
+                    <Button variant="contained" onClick={handlePasteApply}>
+                        Apply
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Card>
     );
 }

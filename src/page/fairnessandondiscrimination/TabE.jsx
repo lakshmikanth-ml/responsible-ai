@@ -154,18 +154,56 @@ const TabE = () => {
         setTimeout(() => setStatusMessage(''), 2000);
     };
 
+    const triggerDownload = (filename, content, mimeType) => {
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+    };
+
     const downloadEvidenceIndexCSV = () => {
-        let csv = 'Artifact,Stage,Status,Approved,File Count\n';
-        artifactsData.artifacts.forEach(art => {
-            csv += `${art.name},${art.stage},${art.status},${art.approved ? 'Yes' : 'No'},${art.files?.length || 0}\n`;
-        });
+        const header = ['Artifact', 'Stage', 'Status', 'Approved', 'File Count'];
+        const rows = artifactsData.artifacts.map((art) => [
+            art.name,
+            art.stage,
+            art.status,
+            art.approved ? 'Yes' : 'No',
+            art.files?.length || 0,
+        ]);
+        const csv = [header, ...rows].map((r) => r.join(',')).join('\n');
+        triggerDownload('evidence-index.csv', csv, 'text/csv;charset=utf-8;');
         setStatusMessage('📥 Evidence Index CSV downloaded');
         setTimeout(() => setStatusMessage(''), 2000);
     };
 
     const generatePillarReportHTML = () => {
-        setStatusMessage('📊 Generating comprehensive pillar report (HTML)...');
-        setTimeout(() => setStatusMessage(''), 3000);
+        const rows = artifactsData.artifacts.map((art) => {
+            return `<tr><td>${art.name}</td><td>${art.stage}</td><td>${art.status}</td><td>${art.approved ? 'Yes' : 'No'}</td><td>${art.files?.length || 0}</td></tr>`;
+        }).join('');
+        const html = `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Evidence Report</title>
+<style>
+body { font-family: Arial, sans-serif; padding: 16px; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #ddd; padding: 8px; }
+th { background: #f5f5f5; text-align: left; }
+</style>
+</head><body>
+<h2>Fairness & Non-Discrimination Evidence Report</h2>
+<p>Generated ${new Date().toISOString()}</p>
+<table>
+<thead><tr><th>Artifact</th><th>Stage</th><th>Status</th><th>Approved</th><th>Files</th></tr></thead>
+<tbody>${rows}</tbody>
+</table>
+</body></html>`;
+        triggerDownload('pillar-report.html', html, 'text/html;charset=utf-8;');
+        setStatusMessage('📊 Pillar report (HTML) generated.');
+        setTimeout(() => setStatusMessage(''), 2000);
     };
 
     const resetAll = () => {

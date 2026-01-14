@@ -1,8 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-    IconButton,
-    Tooltip,
-    Autocomplete,
     Box,
     Card,
     CardContent,
@@ -19,11 +16,20 @@ import {
     TableCell,
     TableHead,
     TableRow,
+    Checkbox,
+    Select,
+    FormControl,
+    InputLabel,
+    Alert,
+    Tooltip,
+    IconButton,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import DownloadIcon from "@mui/icons-material/Download";
 import SaveIcon from "@mui/icons-material/Save";
-import CloseIcon from "@mui/icons-material/Close";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const DEPTH_OPTIONS = ["low", "medium", "high"];
 const AUDIENCE_OPTIONS = [
@@ -33,200 +39,458 @@ const AUDIENCE_OPTIONS = [
     "Customer",
     "Regulator/Auditor",
 ];
-const COMPONENTS = ["citations", "reasoning", "confidence", "rule ref"];
+const STORAGE_KEY = "transparency_stepB";
+
+const SAMPLE_ROWS = [
+    {
+        id: 1,
+        outputType: "claim_priority",
+        audience: "Operations",
+        depth: "medium",
+        mandatory: "yes",
+        components: { citations: true, reasoning: true, confidence: false, ruleRef: false },
+        justification: "High dispute & audit risk",
+    },
+    {
+        id: 2,
+        outputType: "risk_flag",
+        audience: "Underwriter",
+        depth: "high",
+        mandatory: "yes",
+        components: { citations: true, reasoning: true, confidence: true, ruleRef: true },
+        justification: "Decision-influencing signal",
+    },
+    {
+        id: 3,
+        outputType: "policy_answer",
+        audience: "Customer",
+        depth: "high",
+        mandatory: "yes",
+        components: { citations: true, reasoning: true, confidence: false, ruleRef: false },
+        justification: "Customer-facing defensibility",
+    },
+    {
+        id: 4,
+        outputType: "summary_note",
+        audience: "Operations",
+        depth: "low",
+        mandatory: "no",
+        components: { citations: false, reasoning: false, confidence: false, ruleRef: false },
+        justification: "Internal convenience output",
+    },
+];
 
 export default function TabBCoverage() {
-    const [rows, setRows] = useState([
-        {
-            id: 1,
-            outputType: "claim_priority",
-            audience: "Operations",
-            depth: "medium",
-            mandatory: "yes",
-            components: ["citations", "reasoning"],
-            justification: "Audit + dispute risk",
-        },
-    ]);
+    const [rows, setRows] = useState(SAMPLE_ROWS);
+    const [policy, setPolicy] = useState({
+        defaultDepth: "medium",
+        sources: "",
+        citationPolicy: "required",
+        reasoningPolicy: "required",
+    });
 
-    const [editRowId, setEditRowId] = useState(null);
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed.rows) setRows(parsed.rows);
+                if (parsed.policy) setPolicy(parsed.policy);
+            }
+        } catch (err) {
+            console.error("Failed to load Step B data", err);
+        }
+    }, []);
 
-    const updateRow = (id, key, value) =>
-        setRows((prev) => prev.map((r) => (r.id === id ? { ...r, [key]: value } : r)));
+    const persist = (nextRows, nextPolicy = policy) => {
+        setRows(nextRows);
+        setPolicy(nextPolicy);
+        try {
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify({ rows: nextRows, policy: nextPolicy })
+            );
+        } catch (err) {
+            console.error("Failed to save Step B data", err);
+        }
+    };
+
+    const handleAddRow = () => {
+        const next = [
+            ...rows,
+            {
+                id: Date.now(),
+                outputType: "",
+                audience: AUDIENCE_OPTIONS[0],
+                depth: policy.defaultDepth || "medium",
+                mandatory: "no",
+                components: { citations: false, reasoning: false, confidence: false, ruleRef: false },
+                justification: "",
+            },
+        ];
+        persist(next);
+    };
+
+    const handleDelete = (id) => persist(rows.filter((r) => r.id !== id));
+
+    const handleUpdate = (id, key, value) => {
+        const next = rows.map((r) => (r.id === id ? { ...r, [key]: value } : r));
+        persist(next);
+    };
+
+    const toggleComponent = (id, field) => {
+        const next = rows.map((r) =>
+            r.id === id
+                ? { ...r, components: { ...r.components, [field]: !r.components[field] } }
+                : r
+        );
+        persist(next);
+    };
+
+    const handleLoadSample = () => {
+        persist(SAMPLE_ROWS);
+    };
+
+    const handleSave = () => {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ rows, policy }));
+        } catch (err) {
+            console.error("Failed to save Step B data", err);
+        }
+    };
+
+    const mandatoryRows = rows.filter((r) => r.mandatory === "yes");
+    const coveredMandatory = mandatoryRows.filter((r) =>
+        Object.values(r.components).some(Boolean)
+    );
+    const coverageScore =
+        mandatoryRows.length === 0
+            ? 100
+            : Math.round((coveredMandatory.length / mandatoryRows.length) * 100);
 
     return (
         <Card variant="outlined" sx={{ mt: 2 }}>
             <CardContent>
-                {/* HEADER */}
-                <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" spacing={2}>
+                <Stack
+                    direction={{ xs: "column", md: "row" }}
+                    justifyContent="space-between"
+                    spacing={2}
+                    alignItems={{ xs: "flex-start", }}
+                >
                     <Box>
                         <Typography variant="h6" fontWeight={700}>
                             B. Scope & Explainability Coverage Matrix
                         </Typography>
                         <Typography variant="body2" color="text.secondary" mt={0.5} maxWidth={760}>
-                            Transparency equivalent of impacted groups. Define mandatory outputs and required explanation components.
+                            Transparency equivalent of “impacted groups.” Define mandatory outputs and required explanation components.
                             Missing coverage blocks training.
                         </Typography>
                     </Box>
 
-                    <Stack direction="row" flexDirection={"column"}
-                        alignItems={"baseline"} rowGap={1} >
-                        <Button variant="outlined">Add Output</Button>
-                        <Button variant="outlined">Load Sample</Button>
-                        <Button variant="contained">Save B</Button>
+                    <Stack direction={{ xs: "row", md: "column" }} spacing={1}>
+                        <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddRow}>
+                            Add Output
+                        </Button>
+                        <Button variant="outlined" startIcon={<DownloadIcon />} onClick={handleLoadSample}>
+                            Load Sample
+                        </Button>
+                        <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave}>
+                            Save B
+                        </Button>
                     </Stack>
                 </Stack>
 
-                <Divider sx={{ my: 2 }} />
-
-                {/* POLICY CONTROLS */}
-                <Grid container spacing={2}>
+                <Grid container spacing={2} sx={{ mt: 2 }}>
                     <Grid size={{ xs: 12, md: 3 }}>
-                        <Autocomplete
-                            size="small"
-                            options={DEPTH_OPTIONS}
-                            defaultValue="medium"
-                            renderInput={(p) => <TextField {...p} label="Default Explanation Depth" />}
-                        />
+                        <FormControl fullWidth size="small">
+                            <InputLabel>Default Explanation Depth</InputLabel>
+                            <Select
+                                label="Default Explanation Depth"
+                                value={policy.defaultDepth}
+                                onChange={(e) =>
+                                    persist(rows, { ...policy, defaultDepth: e.target.value })
+                                }
+                            >
+                                <MenuItem value="low">Low (internal advisory)</MenuItem>
+                                <MenuItem value="medium">Medium (internal decisions)</MenuItem>
+                                <MenuItem value="high">High (customer / regulator)</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid size={{ xs: 12, md: 3 }}>
                         <TextField
                             size="small"
                             fullWidth
-                            label="Allowed Evidence Sources"
-                            placeholder="Approved KB, curated policies"
+                            label="Allowed Evidence Sources (summary)"
+                            placeholder="e.g., Approved KB only (pinned versions), curated policies, guidelines"
+                            value={policy.sources}
+                            onChange={(e) => persist(rows, { ...policy, sources: e.target.value })}
                         />
                     </Grid>
                     <Grid size={{ xs: 12, md: 3 }}>
-                        <Autocomplete
-                            size="small"
-                            options={["required", "optional", "restricted"]}
-                            defaultValue="required"
-                            renderInput={(p) => <TextField {...p} label="Citation Policy" />}
-                        />
+                        <FormControl fullWidth size="small">
+                            <InputLabel>Citation Policy</InputLabel>
+                            <Select
+                                label="Citation Policy"
+                                value={policy.citationPolicy}
+                                onChange={(e) =>
+                                    persist(rows, { ...policy, citationPolicy: e.target.value })
+                                }
+                            >
+                                <MenuItem value="required">Citations required for mandatory outputs</MenuItem>
+                                <MenuItem value="optional">Citations optional (not recommended)</MenuItem>
+                                <MenuItem value="restricted">Citations restricted (PII or sensitive)</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid size={{ xs: 12, md: 3 }}>
-                        <Autocomplete
-                            size="small"
-                            options={["required", "optional"]}
-                            defaultValue="required"
-                            renderInput={(p) => <TextField {...p} label="Reasoning Policy" />}
-                        />
+                        <FormControl fullWidth size="small">
+                            <InputLabel>Reasoning Policy</InputLabel>
+                            <Select
+                                label="Reasoning Policy"
+                                value={policy.reasoningPolicy}
+                                onChange={(e) =>
+                                    persist(rows, { ...policy, reasoningPolicy: e.target.value })
+                                }
+                            >
+                                <MenuItem value="required">Business-readable reasoning required</MenuItem>
+                                <MenuItem value="optional">Reasoning optional</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Grid>
                 </Grid>
 
-                {/* TABLE */}
-                <Box sx={{ mt: 2, overflowX: "auto", border: "1px solid", borderColor: "divider", borderRadius: 2 }}>
-                    <Table size="small" sx={{ minWidth: 900 }}>
+                <Divider sx={{ my: 2 }} />
+
+                <Grid container spacing={2}>
+                    <Grid size={{ xs: 12, md: 4 }}>
+                        <Card
+                            variant="outlined"
+                            sx={{
+                                p: 2,
+                                background: "linear-gradient(120deg, #e3f2fd 0%, #f5f8ff 100%)",
+                                borderColor: "#bbdefb",
+                            }}
+                        >
+                            <Stack direction="row" spacing={1} alignItems="center">
+                                <InfoOutlinedIcon color="primary" fontSize="small" />
+                                <Typography variant="subtitle2" color="text.secondary">
+                                    Coverage Completeness
+                                </Typography>
+                            </Stack>
+                            <Typography variant="h5" fontWeight={700} mt={0.5}>
+                                {coverageScore}%
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                {mandatoryRows.length === 0
+                                    ? "No mandatory outputs defined."
+                                    : coveredMandatory.length === mandatoryRows.length
+                                        ? "All mandatory outputs have required components defined."
+                                        : `${coveredMandatory.length}/${mandatoryRows.length} mandatory outputs have required components.`}
+                            </Typography>
+                        </Card>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 4 }}>
+                        <Card
+                            variant="outlined"
+                            sx={{
+                                p: 2,
+                                background: "linear-gradient(120deg, #fff3e0 0%, #fff7ed 100%)",
+                                borderColor: "#ffe0b2",
+                            }}
+                        >
+                            <Stack direction="row" spacing={1} alignItems="center">
+                                <ShieldOutlinedIcon color="warning" fontSize="small" />
+                                <Typography variant="subtitle2" color="text.secondary">
+                                    Mandatory Outputs
+                                </Typography>
+                            </Stack>
+                            <Typography variant="h5" fontWeight={700} mt={0.5}>
+                                {mandatoryRows.length}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                Outputs marked mandatory must pass evaluation and runtime monitoring.
+                            </Typography>
+                        </Card>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 4 }}>
+                        <Card variant="outlined" sx={{ p: 2, borderColor: "divider" }}>
+                            <Typography variant="subtitle2" color="text.secondary">
+                                Policy Pack Preview
+                            </Typography>
+                            <Typography variant="h6" fontFamily="monospace">
+                                {rows.length} outputs mapped
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                Generated JSON pushed into Guardian as rule configuration.
+                            </Typography>
+                        </Card>
+                    </Grid>
+                </Grid>
+
+                <Box
+                    sx={{
+                        mt: 2,
+                        overflowX: "auto",
+                        border: "1px solid",
+                        borderColor: "divider",
+                        borderRadius: 2,
+                        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)",
+                    }}
+                >
+                    <Table
+                        size="small"
+                        sx={{
+                            minWidth: 1000,
+                            "& thead th": {
+                                bgcolor: "grey.50",
+                                fontWeight: 600,
+                            },
+                            "& tbody tr:hover": {
+                                backgroundColor: "action.hover",
+                            },
+                        }}
+                    >
                         <TableHead>
                             <TableRow>
-                                <TableCell>Output Type</TableCell>
-                                <TableCell>Audience</TableCell>
-                                <TableCell>Depth</TableCell>
-                                <TableCell>Mandatory</TableCell>
+                                <TableCell sx={{ width: 220 }}>Output Type</TableCell>
+                                <TableCell sx={{ width: 160 }}>Audience</TableCell>
+                                <TableCell sx={{ width: 140 }}>Depth</TableCell>
+                                <TableCell sx={{ width: 120 }}>Mandatory</TableCell>
                                 <TableCell>Required Components</TableCell>
-                                <TableCell>Justification</TableCell>
-                                <TableCell align="right">Actions</TableCell>
+                                <TableCell sx={{ width: 220 }}>Justification</TableCell>
+                                <TableCell sx={{ width: 70 }}></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => {
-                                const isEdit = editRowId === row.id;
-                                return (
-                                    <TableRow key={row.id} hover>
-                                        <TableCell>
-                                            {isEdit ? (
-                                                <TextField size="small" value={row.outputType} onChange={(e) => updateRow(row.id, "outputType", e.target.value)} />
-                                            ) : (
-                                                row.outputType
-                                            )}
-                                        </TableCell>
-                                        <TableCell>
-                                            {isEdit ? (
-                                                <TextField select size="small" value={row.audience} onChange={(e) => updateRow(row.id, "audience", e.target.value)}>
-                                                    {AUDIENCE_OPTIONS.map((o) => (
-                                                        <MenuItem key={o} value={o}>{o}</MenuItem>
-                                                    ))}
-                                                </TextField>
-                                            ) : (
-                                                row.audience
-                                            )}
-                                        </TableCell>
-                                        <TableCell>
-                                            {isEdit ? (
-                                                <TextField select size="small" value={row.depth} onChange={(e) => updateRow(row.id, "depth", e.target.value)}>
-                                                    {DEPTH_OPTIONS.map((d) => (
-                                                        <MenuItem key={d} value={d}>{d}</MenuItem>
-                                                    ))}
-                                                </TextField>
-                                            ) : (
-                                                row.depth
-                                            )}
-                                        </TableCell>
-                                        <TableCell>
-                                            {isEdit ? (
-                                                <TextField select size="small" value={row.mandatory} onChange={(e) => updateRow(row.id, "mandatory", e.target.value)}>
-                                                    <MenuItem value="yes">yes</MenuItem>
-                                                    <MenuItem value="no">no</MenuItem>
-                                                </TextField>
-                                            ) : (
-                                                <Chip size="small" label={row.mandatory} color={row.mandatory === "yes" ? "error" : "default"} />
-                                            )}
-                                        </TableCell>
-                                        <TableCell>
-                                            {COMPONENTS.map((c) => (
+                            {rows.map((row) => (
+                                <TableRow key={row.id} hover>
+                                    <TableCell>
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            value={row.outputType}
+                                            placeholder="e.g., claim_priority"
+                                            onChange={(e) => handleUpdate(row.id, "outputType", e.target.value)}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <FormControl fullWidth size="small">
+                                            <Select
+                                                value={row.audience}
+                                                onChange={(e) => handleUpdate(row.id, "audience", e.target.value)}
+                                            >
+                                                {AUDIENCE_OPTIONS.map((opt) => (
+                                                    <MenuItem key={opt} value={opt}>
+                                                        {opt}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </TableCell>
+                                    <TableCell>
+                                        <FormControl fullWidth size="small">
+                                            <Select
+                                                value={row.depth}
+                                                onChange={(e) => handleUpdate(row.id, "depth", e.target.value)}
+                                            >
+                                                {DEPTH_OPTIONS.map((opt) => (
+                                                    <MenuItem key={opt} value={opt}>
+                                                        {opt}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </TableCell>
+                                    <TableCell>
+                                        <FormControl fullWidth size="small">
+                                            <Select
+                                                value={row.mandatory}
+                                                onChange={(e) => handleUpdate(row.id, "mandatory", e.target.value)}
+                                            >
+                                                <MenuItem value="yes">yes</MenuItem>
+                                                <MenuItem value="no">no</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                                            {Object.entries(row.components).map(([key, val]) => (
                                                 <Chip
-                                                    key={c}
-                                                    label={c}
+                                                    key={key}
+                                                    label={key.replace("ruleRef", "rule ref")}
                                                     size="small"
-                                                    clickable={isEdit}
-                                                    color={row.components.includes(c) ? "primary" : "default"}
-                                                    variant={row.components.includes(c) ? "filled" : "outlined"}
-                                                    onClick={isEdit ? () => updateRow(row.id, "components", row.components.includes(c) ? row.components.filter((x) => x !== c) : [...row.components, c]) : undefined}
-                                                    sx={{ mr: 0.5, mb: 0.5 }}
+                                                    icon={
+                                                        <Checkbox
+                                                            checked={val}
+                                                            onChange={() => toggleComponent(row.id, key)}
+                                                            sx={{
+                                                                p: 0.2,
+                                                                color: "grey",
+                                                                "&.Mui-checked":
+                                                                    { color: "#0190FE" },
+
+                                                            }}
+
+                                                            color="green"
+                                                            size="small"
+                                                        />
+                                                    }
+                                                    variant={val ? "filled" : "outlined"}
+                                                    color={val ? "primary" : "default"}
+                                                    onClick={() => toggleComponent(row.id, key)}
+                                                    sx={{
+                                                        pl: 0.5,
+                                                        backgroundColor: "#f1f5f9",
+                                                        color: "#0f172a",
+                                                        border: "1px solid var(--border)",
+                                                        "& .MuiChip-icon": {
+                                                            color: "#0f172a",
+                                                        },
+                                                    }}
                                                 />
                                             ))}
-                                        </TableCell>
-                                        <TableCell>
-                                            {isEdit ? (
-                                                <TextField size="small" value={row.justification} onChange={(e) => updateRow(row.id, "justification", e.target.value)} />
-                                            ) : (
-                                                row.justification
-                                            )}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {isEdit ? (
-                                                <>
-                                                    <Tooltip title="Save">
-                                                        <IconButton size="small" onClick={() => setEditRowId(null)}><SaveIcon fontSize="small" /></IconButton>
-                                                    </Tooltip>
-                                                    <Tooltip title="Cancel">
-                                                        <IconButton size="small" onClick={() => setEditRowId(null)}><CloseIcon fontSize="small" /></IconButton>
-                                                    </Tooltip>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Tooltip title="Edit">
-                                                        <IconButton size="small" onClick={() => setEditRowId(row.id)}><EditIcon fontSize="small" /></IconButton>
-                                                    </Tooltip>
-                                                    <Tooltip title="Delete">
-                                                        <IconButton size="small" onClick={() => setRows((p) => p.filter((r) => r.id !== row.id))}><DeleteIcon fontSize="small" /></IconButton>
-                                                    </Tooltip>
-                                                </>
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
+                                        </Stack>
+                                    </TableCell>
+                                    <TableCell>
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            value={row.justification}
+                                            placeholder="Audit / dispute risk"
+                                            onChange={(e) => handleUpdate(row.id, "justification", e.target.value)}
+                                        />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <Tooltip title="Delete row">
+                                            <IconButton
+                                                size="small"
+
+                                                onClick={() => handleDelete(row.id)}
+                                            >
+                                                <DeleteIcon fontSize="small" />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
                 </Box>
 
-                <Box sx={{ mt: 2, p: 1.5, borderRadius: 2, border: "1px solid", borderColor: "divider", borderLeft: "4px solid #184ea4", background: "#f8fafc" }}>
-                    <Typography variant="body2">
-                        Hard rule: any mandatory output must have at least one explanation component enabled.
-                        For decision-influencing use cases, citations + reasoning is recommended baseline.
-                    </Typography>
-                </Box>
+                <Alert
+                    icon={<InfoOutlinedIcon />}
+                    severity="info"
+                    sx={{
+                        mt: 2,
+                        border: "1px solid",
+                        borderColor: "primary.100",
+                        background: "#f8fafc",
+                    }}
+                >
+                    Hard rule: any mandatory output must have at least one explanation component enabled.
+                    For decision-influencing use cases, citations + reasoning is recommended baseline.
+                </Alert>
             </CardContent>
         </Card>
     );

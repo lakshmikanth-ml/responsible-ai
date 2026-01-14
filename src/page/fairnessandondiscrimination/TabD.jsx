@@ -197,7 +197,7 @@ const TabD = () => {
                         '&:hover': { bgcolor: '#1565c0' }
                     }}
                 >
-                    + Add Action
+                    Add Action
                 </Button>
                 <Button
                     variant="contained"
@@ -380,14 +380,19 @@ const TabD = () => {
             )}
 
             {/* Tip */}
-            <Alert severity="info" sx={{ bgcolor: '#e3f2fd', borderColor: '#64b5f6', borderLeft: '4px solid #1976d2' }}>
+            <Alert severity="info" sx={{
+                bgcolor: '#e3f2fd', borderColor: '#64b5f6',
+                borderLeft: '4px solid #1976d2'
+            }} >
                 <Typography variant="caption" sx={{ color: '#1565c0', lineHeight: 1.6 }}>
                     <strong>💡 Tip:</strong> Link every Critical/Warning risk to at least one action. Attach evidence when completed.
                 </Typography>
             </Alert>
 
             {/* Demo Data Note & Reset Section */}
-            <Card variant="outlined" sx={{ mb: 3, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
+            <Card variant="outlined" 
+
+                sx={{ mb: 3, mt: 2, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
                 <CardContent sx={{ pb: 2 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
                         <Box>
