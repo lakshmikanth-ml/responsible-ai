@@ -3,7 +3,7 @@ import Zoom from '@mui/material/Zoom';
 
 import Router from './routes/Index'
 import ThemeProvider from './theme/Index'
-// import { useScrollToTop } from './hooks/use-scroll-to-top'
+import { useScrollToTop } from './hooks/use-scroll-to-top'
 import ReduxProvider from './redux/redux-provider'
 import SnackbarListener from './components/snakbar/Index'
 import { SnackbarProvider } from 'notistack';
@@ -12,7 +12,7 @@ import "./index.css"
 
 
 function App() {
-  // useScrollToTop();
+  useScrollToTop();
   return (
     <ReduxProvider>
 
