@@ -25,7 +25,9 @@ import {
     TableCell,
     TableBody,
     Button,
-    Chip
+    Chip,
+    TableContainer,
+    Paper
 } from "@mui/material";
 
 const validationSchema = Yup.object({
@@ -152,60 +154,64 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
 
                 {/* Coverage Checklist */}
                 <Typography fontWeight={600} mb={1}>Coverage Checklist</Typography>
-                <Table size="small" sx={{ mb: 2 }}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>COVERAGE ITEM</TableCell>
-                            <TableCell>STATUS</TableCell>
-                            <TableCell>OWNER ROLE</TableCell>
-                            <TableCell>NOTES</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {formik.values.checklist.map((row, i) => (
-                            <TableRow key={row.key}>
-                                <TableCell>{row.label}</TableCell>
-                                <TableCell>
-                                    <TextField
-                                        select size="small"
-                                        value={row.status}
-                                        onChange={(e) =>
-                                            formik.setFieldValue(`checklist.${i}.status`, e.target.value)
-                                        }
-                                    >
-                                        <MenuItem value="miss">Miss</MenuItem>
-                                        <MenuItem value="partial">Partial</MenuItem>
-                                        <MenuItem value="complete">Complete</MenuItem>
-                                    </TextField>
-                                </TableCell>
-                                <TableCell>
-                                    <TextField
-                                        select size="small"
-                                        value={row.owner}
-                                        onChange={(e) =>
-                                            formik.setFieldValue(`checklist.${i}.owner`, e.target.value)
-                                        }
-                                    >
-                                        <MenuItem value="product">Product</MenuItem>
-                                        <MenuItem value="design">Design</MenuItem>
-                                        <MenuItem value="qa">QA</MenuItem>
-                                        <MenuItem value="engineering">Engineering</MenuItem>
-                                    </TextField>
-                                </TableCell>
-                                <TableCell>
-                                    <TextField
-                                        size="small"
-                                        value={row.notes}
-                                        onChange={(e) =>
-                                            formik.setFieldValue(`checklist.${i}.notes`, e.target.value)
-                                        }
-                                    />
-                                </TableCell>
+                <TableContainer sx={{ mb: 2 }} component={Paper}>
+                    <Table >
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>COVERAGE ITEM</TableCell>
+                                <TableCell>STATUS</TableCell>
+                                <TableCell>OWNER ROLE</TableCell>
+                                <TableCell>NOTES</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHead>
+                        <TableBody>
+                            {formik.values.checklist.map((row, i) => (
+                                <TableRow key={row.key}>
+                                    <TableCell>{row.label}</TableCell>
+                                    <TableCell>
+                                        <TextField
+                                            select
+                                            size="small"
+                                            value={row.status}
+                                            onChange={(e) =>
+                                                formik.setFieldValue(`checklist.${i}.status`, e.target.value)
+                                            }
+                                        >
+                                            <MenuItem value="miss">Miss</MenuItem>
+                                            <MenuItem value="partial">Partial</MenuItem>
+                                            <MenuItem value="complete">Complete</MenuItem>
+                                        </TextField>
+                                    </TableCell>
+                                    <TableCell>
+                                        <TextField
+                                            select
+                                            size="small"
+                                            value={row.owner}
+                                            onChange={(e) =>
+                                                formik.setFieldValue(`checklist.${i}.owner`, e.target.value)
+                                            }
+                                        >
+                                            <MenuItem value="product">Product</MenuItem>
+                                            <MenuItem value="design">Design</MenuItem>
+                                            <MenuItem value="qa">QA</MenuItem>
+                                            <MenuItem value="engineering">Engineering</MenuItem>
+                                        </TextField>
+                                    </TableCell>
+                                    <TableCell>
+                                        <TextField
+                                            size="small"
+                                            value={row.notes}
+                                            onChange={(e) =>
+                                                formik.setFieldValue(`checklist.${i}.notes`, e.target.value)
+                                            }
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
 
+                </TableContainer>
                 {/* Actions */}
                 <Box sx={{ display: 'flex', gap: 1 }}>
                     <Button variant="outlined" onClick={onLoadSample}>Load Sample</Button>
