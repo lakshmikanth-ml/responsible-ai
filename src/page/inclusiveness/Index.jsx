@@ -10,7 +10,7 @@
   - Values persist across tabs
 */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Formik, Form, FieldArray } from "formik";
 import * as Yup from "yup";
 import {
@@ -23,8 +23,11 @@ import {
     Tab,
     Chip,
     Button,
+    Alert,
     Switch,
     FormControlLabel,
+    FormControl,
+    InputLabel,
     Select,
     MenuItem,
     TextField,
@@ -56,6 +59,90 @@ const TABS = [
     "G. Evidence",
     "H. Gates & Monitoring",
 ];
+
+const DECISION_ROLE_OPTIONS = [
+    { value: "advisory", label: "Advisory only" },
+    { value: "decision_support", label: "Decision-support" },
+    { value: "decision_influencing", label: "Decision-influencing" },
+];
+
+const ProjectContextCard = ({
+    context,
+    onFieldChange,
+    onSave,
+    onReset,
+    statusMessage,
+    sx,
+}) => (
+    <Card variant="outlined" sx={{ width: "100%", ...sx }}>
+        <CardContent>
+            <Typography variant="h6" fontWeight={700} gutterBottom>
+                Project Context
+            </Typography>
+
+            <Stack spacing={2}>
+                <TextField
+                    size="small"
+                    fullWidth
+                    label="Project"
+                    placeholder="e.g., Carrier A - Claims Copilot"
+                    value={context.project}
+                    onChange={(e) => onFieldChange("project", e.target.value)}
+                />
+                <TextField
+                    size="small"
+                    fullWidth
+                    label="Model Version"
+                    placeholder="e.g., v1.0.3"
+                    value={context.modelVersion}
+                    onChange={(e) => onFieldChange("modelVersion", e.target.value)}
+                />
+                <TextField
+                    size="small"
+                    fullWidth
+                    label="Endpoint"
+                    placeholder="e.g., /claims/triage"
+                    value={context.endpoint}
+                    onChange={(e) => onFieldChange("endpoint", e.target.value)}
+                />
+                <FormControl fullWidth size="small">
+                    <InputLabel id="decision-role-label">Decision Role</InputLabel>
+                    <Select
+                        labelId="decision-role-label"
+                        label="Decision Role"
+                        value={context.decisionRole}
+                        onChange={(e) => onFieldChange("decisionRole", e.target.value)}
+                    >
+                        {DECISION_ROLE_OPTIONS.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Stack>
+
+            <Stack direction="row" spacing={1} mt={2}>
+                <Button size="small" variant="outlined" onClick={onReset}>
+                    Reset Demo Data
+                </Button>
+                <Button size="small" variant="contained" onClick={onSave}>
+                    Save
+                </Button>
+            </Stack>
+
+            {statusMessage && (
+                <Typography variant="caption" color="success.main" display="block" mt={1}>
+                    {statusMessage}
+                </Typography>
+            )}
+
+            <Typography variant="caption" color="text.secondary" mt={1} display="block">
+                Data persists locally (browser localStorage) for demo realism.
+            </Typography>
+        </CardContent>
+    </Card>
+);
 
 
 const OBJECTIVE_SAMPLE = {
@@ -383,6 +470,13 @@ const GATES_MONITORING_SAMPLE = {
 
 export default function InclusivenessFormikPage() {
     const [tab, setTab] = useState(0);
+    const [projectContext, setProjectContext] = useState({
+        project: "Carrier A - Inclusiveness",
+        modelVersion: "v1.0.3",
+        endpoint: "/quotes",
+        decisionRole: "decision_support",
+    });
+    const [statusMessage, setStatusMessage] = useState("");
 
     const [formState, setFormState] = useState({
         objective: {
@@ -654,199 +748,251 @@ export default function InclusivenessFormikPage() {
         }));
     };
 
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem("inclusiveness_projectContext");
+            if (saved) setProjectContext(JSON.parse(saved));
+        } catch (e) {
+            console.error("Failed to load inclusiveness project context", e);
+        }
+    }, []);
+
+    const handleFieldChange = (field, value) => {
+        setProjectContext((prev) => ({ ...prev, [field]: value }));
+    };
+
+    const handleSaveContext = () => {
+        try {
+            localStorage.setItem("inclusiveness_projectContext", JSON.stringify(projectContext));
+            setStatusMessage("✓ Project Context saved");
+            setTimeout(() => setStatusMessage(""), 2000);
+        } catch (e) {
+            setStatusMessage("✗ Error saving context");
+        }
+    };
+
+    const handleResetDemo = () => {
+        if (window.confirm("Reset demo data? This cannot be undone.")) {
+            localStorage.removeItem("inclusiveness_projectContext");
+            setProjectContext({
+                project: "",
+                modelVersion: "",
+                endpoint: "",
+                decisionRole: "decision_support",
+            });
+            setStatusMessage("✓ Demo data reset");
+            setTimeout(() => setStatusMessage(""), 2000);
+        }
+    };
+
     return (
+        <>
+            <Paper variant="outlined" sx={{ p: 2 }}>
+                {/* Header */}
+                <Typography variant="h4" gutterBottom>
+                    Inclusiveness
+                </Typography>
+                <Typography variant="body2" color="text.secondary" mb={2}>
+                    Ensure the AI system is accessible, usable, and beneficial across diverse user groups (including underserved communities), and that accessibility standards and inclusive testing are enforced across pre-training, release, and production.
+                </Typography>
+                <Card sx={{ mb: 2 }}>
+                    <CardContent>
+                        <Stack direction="row" spacing={1} mt={2} mb={2} flexWrap="wrap">
+                            <Chip color="primary" label="Lifecycle Controlled" />
+                            <Chip color="error" label="Coverage: 3%" />
+                            <Chip color="warning" label="Evidence: 0/6 approved" />
+                            <Chip color="error" label="Risks: 3 critical open" />
+                        </Stack>
 
-        <Paper variant="outlined" sx={{ p: 2 }}>
-            {/* Header */}
-            <Typography variant="h4" gutterBottom>
-                Inclusiveness
-            </Typography>
-            <Typography variant="body2" color="text.secondary" mb={2}>
-                Ensure the AI system is accessible, usable, and beneficial across diverse user groups (including underserved communities), and that accessibility standards and inclusive testing are enforced across pre-training, release, and production.
-            </Typography>
-            <Card sx={{ mb: 2 }}>
-                <CardContent>
-                    <Stack direction="row" spacing={1} mt={2} mb={2} flexWrap="wrap">
-                        <Chip color="primary" label="Lifecycle Controlled" />
-                        <Chip color="error" label="Coverage: 3%" />
-                        <Chip color="warning" label="Evidence: 0/6 approved" />
-                        <Chip color="error" label="Risks: 3 critical open" />
-                    </Stack>
+                        <Grid container spacing={2}>
+                            <Grid size={{ xs: 12, md: 3 }}>
+                                <GateCard
+                                    title="Pre-Training Gate"
+                                    status="PASS"
+                                    description="Pre-training inclusiveness prerequisites met (DFA ingested + groups + WCAG scope)."
+                                />
+                            </Grid>
 
-                    <Grid container spacing={2}>
-                        <Grid size={{ xs: 12, md: 3 }}>
-                            <GateCard
-                                title="Pre-Training Gate"
-                                status="PASS"
-                                description="Pre-training inclusiveness prerequisites met (DFA ingested + groups + WCAG scope)."
-                            />
+                            <Grid size={{ xs: 12, md: 3 }}>
+                                <GateCard
+                                    title="Release Gate"
+                                    status="BLOCKED"
+                                    description="Accessibility testing and/or diverse testing and/or evidence approvals incomplete; critical risks may be open."
+                                />
+                            </Grid>
+
+                            <Grid size={{ xs: 12, md: 3 }}>
+                                <GateCard
+                                    title="Production Gate"
+                                    status="BLOCKED"
+                                    description="Production blocked because release gate is blocked or monitoring configuration is incomplete."
+                                />
+                            </Grid>
+                            <Grid size={{ xs: 12, md: 3 }}>
+                                <GateCard
+                                    title="Guardian Health"
+                                    status="DEGRADED"
+                                    description="Guardian indicates repeated inclusiveness/usability issues. Route to owner for remediation."
+                                />
+                            </Grid>
                         </Grid>
+                    </CardContent>
+                </Card>
 
-                        <Grid size={{ xs: 12, md: 3 }}>
-                            <GateCard
-                                title="Release Gate"
-                                status="BLOCKED"
-                                description="Accessibility testing and/or diverse testing and/or evidence approvals incomplete; critical risks may be open."
-                            />
-                        </Grid>
+                {statusMessage && (
+                    <Alert
+                        severity={statusMessage.startsWith("\u2713") ? "success" : "info"}
+                        sx={{ mb: 2 }}
+                    >
+                        {statusMessage}
+                    </Alert>
+                )}
 
-                        <Grid size={{ xs: 12, md: 3 }}>
-                            <GateCard
-                                title="Production Gate"
-                                status="BLOCKED"
-                                description="Production blocked because release gate is blocked or monitoring configuration is incomplete."
-                            />
-                        </Grid>
-                        <Grid size={{ xs: 12, md: 3 }}>
-                            <GateCard
-                                title="Guardian Health"
-                                status="DEGRADED"
-                                description="Guardian indicates repeated inclusiveness/usability issues. Route to owner for remediation."
-                            />
-                        </Grid>
-                    </Grid>
-                </CardContent>
-            </Card>
+                {/* Tabs */}
+                <Tabs
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    sx={{ borderBottom: 1, borderColor: "divider", mb: 2 }}
+                    value={tab}
+                    onChange={(_, v) => setTab(v)}
+                >
+                    {TABS.map(t => <Tab key={t} label={t} />)}
+                </Tabs>
 
+                {tab === 0 && (
+                    <ObjectiveTab
+                        initialValues={formState.objective}
+                        onSave={(values) =>
+                            setFormState((prev) => ({
+                                ...prev,
+                                objective: values,
+                            }))
+                        }
+                        onLoadSample={loadObjectiveSample}
+                    />
+                )}
+                {tab === 1 && (
+                    <CoverageTab
+                        initialValues={formState.coverage}
+                        onSave={(values) =>
+                            setFormState((prev) => ({ ...prev, coverage: values }))
+                        }
+                        onLoadSample={() =>
+                            setFormState((prev) => ({ ...prev, coverage: COVERAGE_SAMPLE }))
+                        }
+                    />
+                )}
+                {tab === 2 && (
+                    <TrainingReadinessTab
+                        initialValues={formState.training}
+                        onSave={(values) =>
+                            setFormState((prev) => ({
+                                ...prev,
+                                training: values,
+                            }))
+                        }
+                        onLoadSample={() =>
+                            setFormState((prev) => ({
+                                ...prev,
+                                training: TRAINING_READINESS_SAMPLE,
+                            }))
+                        }
+                    />
 
+                )}
+                {tab === 3 && (
+                    <EvaluationTab
+                        initialValues={formState.evaluation}
+                        onSave={(values) =>
+                            setFormState((prev) => ({ ...prev, evaluation: values }))
+                        }
+                        onLoadSample={() =>
+                            setFormState((prev) => ({ ...prev, evaluation: EVALUATION_SAMPLE }))
+                        }
+                    />
 
+                )}
+                {tab === 4 && (
+                    <GapsRisksTab
+                        initialValues={formState.gapsRisks}
+                        onSave={(values) =>
+                            setFormState((prev) => ({ ...prev, gapsRisks: values }))
+                        }
+                        onGenerateRisks={() =>
+                            setFormState((prev) => ({ ...prev, gapsRisks: GAPS_RISKS_SAMPLE }))
+                        }
+                        onClearRisks={() =>
+                            setFormState((prev) => ({ ...prev, gapsRisks: { risks: [] } }))
+                        }
+                    />
 
-            {/* Tabs */}
-            <Tabs
-                variant="scrollable"
-                scrollButtons="auto"
-                sx={{ borderBottom: 1, borderColor: "divider", mb: 2 }}
-                value={tab}
-                onChange={(_, v) => setTab(v)}
-            >
-                {TABS.map(t => <Tab key={t} label={t} />)}
-            </Tabs>
+                )}
+                {tab === 5 && (
+                    <MitigationTab
+                        initialValues={formState.mitigation}
+                        onSave={(values) =>
+                            setFormState((prev) => ({ ...prev, mitigation: values }))
+                        }
+                        onGenerateFromRisks={() =>
+                            setFormState((prev) => ({ ...prev, mitigation: MITIGATION_SAMPLE }))
+                        }
+                        onAddMitigation={() =>
+                            setFormState((prev) => ({
+                                ...prev,
+                                mitigation: {
+                                    ...prev.mitigation,
+                                    mitigations: [
+                                        ...prev.mitigation.mitigations,
+                                        {
+                                            key: crypto.randomUUID(),
+                                            mitigation: "New mitigation task",
+                                            priority: "medium",
+                                            owner: "product",
+                                            dueDate: "",
+                                            status: "open",
+                                        },
+                                    ],
+                                },
+                            }))
+                        }
+                    />
 
-            {tab === 0 && (
-                <ObjectiveTab
-                    initialValues={formState.objective}
-                    onSave={(values) =>
-                        setFormState((prev) => ({
-                            ...prev,
-                            objective: values,
-                        }))
-                    }
-                    onLoadSample={loadObjectiveSample}
+                )}
+                {tab === 6 && (
+                    <EvidenceTab
+                        initialValues={formState.evidence}
+                        onSave={(values) =>
+                            setFormState((prev) => ({ ...prev, evidence: values }))
+                        }
+                    />
+
+                )}
+                {tab === 7 && (
+                    <GatesMonitoringTab
+                        initialValues={formState.gatesMonitoring}
+                        onSave={(values) =>
+                            setFormState((prev) => ({ ...prev, gatesMonitoring: values }))
+                        }
+                        onLoadSample={() =>
+                            setFormState((prev) => ({
+                                ...prev,
+                                gatesMonitoring: GATES_MONITORING_SAMPLE,
+                            }))
+                        }
+                    />
+
+                )}
+            </Paper>
+            <Box mt={2}>
+                <ProjectContextCard
+                    context={projectContext}
+                    onFieldChange={handleFieldChange}
+                    onSave={handleSaveContext}
+                    onReset={handleResetDemo}
+                    statusMessage={statusMessage}
                 />
-            )}
-            {tab === 1 && (
-                <CoverageTab
-                    initialValues={formState.coverage}
-                    onSave={(values) =>
-                        setFormState((prev) => ({ ...prev, coverage: values }))
-                    }
-                    onLoadSample={() =>
-                        setFormState((prev) => ({ ...prev, coverage: COVERAGE_SAMPLE }))
-                    }
-                />
-            )}
-            {tab === 2 && (
-                <TrainingReadinessTab
-                    initialValues={formState.training}
-                    onSave={(values) =>
-                        setFormState((prev) => ({
-                            ...prev,
-                            training: values,
-                        }))
-                    }
-                    onLoadSample={() =>
-                        setFormState((prev) => ({
-                            ...prev,
-                            training: TRAINING_READINESS_SAMPLE,
-                        }))
-                    }
-                />
-
-            )}
-            {tab === 3 && (
-                <EvaluationTab
-                    initialValues={formState.evaluation}
-                    onSave={(values) =>
-                        setFormState((prev) => ({ ...prev, evaluation: values }))
-                    }
-                    onLoadSample={() =>
-                        setFormState((prev) => ({ ...prev, evaluation: EVALUATION_SAMPLE }))
-                    }
-                />
-
-            )}
-            {tab === 4 && (
-                <GapsRisksTab
-                    initialValues={formState.gapsRisks}
-                    onSave={(values) =>
-                        setFormState((prev) => ({ ...prev, gapsRisks: values }))
-                    }
-                    onGenerateRisks={() =>
-                        setFormState((prev) => ({ ...prev, gapsRisks: GAPS_RISKS_SAMPLE }))
-                    }
-                    onClearRisks={() =>
-                        setFormState((prev) => ({ ...prev, gapsRisks: { risks: [] } }))
-                    }
-                />
-
-            )}
-            {tab === 5 && (
-                <MitigationTab
-                    initialValues={formState.mitigation}
-                    onSave={(values) =>
-                        setFormState((prev) => ({ ...prev, mitigation: values }))
-                    }
-                    onGenerateFromRisks={() =>
-                        setFormState((prev) => ({ ...prev, mitigation: MITIGATION_SAMPLE }))
-                    }
-                    onAddMitigation={() =>
-                        setFormState((prev) => ({
-                            ...prev,
-                            mitigation: {
-                                ...prev.mitigation,
-                                mitigations: [
-                                    ...prev.mitigation.mitigations,
-                                    {
-                                        key: crypto.randomUUID(),
-                                        mitigation: "New mitigation task",
-                                        priority: "medium",
-                                        owner: "product",
-                                        dueDate: "",
-                                        status: "open",
-                                    },
-                                ],
-                            },
-                        }))
-                    }
-                />
-
-            )}
-            {tab === 6 && (
-                <EvidenceTab
-                    initialValues={formState.evidence}
-                    onSave={(values) =>
-                        setFormState((prev) => ({ ...prev, evidence: values }))
-                    }
-                />
-
-            )}
-            {tab === 7 && (
-                <GatesMonitoringTab
-                    initialValues={formState.gatesMonitoring}
-                    onSave={(values) =>
-                        setFormState((prev) => ({ ...prev, gatesMonitoring: values }))
-                    }
-                    onLoadSample={() =>
-                        setFormState((prev) => ({
-                            ...prev,
-                            gatesMonitoring: GATES_MONITORING_SAMPLE,
-                        }))
-                    }
-                />
-
-            )}
-        </Paper>
-
+            </Box>
+        </>
     );
 }
 

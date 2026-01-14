@@ -221,7 +221,7 @@ export default function SideNav({
                   sx={{
                     borderRadius: "999px",
                     py: "6px",
-                    px: "12px",
+                    px: finalCollapsed ? "16px" : "16px",
                     color: theme.palette.text.secondary,
 
                     "&:hover": {
@@ -232,6 +232,7 @@ export default function SideNav({
                       background: itemActiveBg,
                       color: itemActiveColor,
                       fontWeight: 500,
+
 
                       "&:hover": {
                         background: itemActiveBg,

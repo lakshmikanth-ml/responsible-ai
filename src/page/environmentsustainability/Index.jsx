@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Box,
     Tabs,
@@ -6,6 +6,7 @@ import {
     Typography,
     Card,
     CardContent,
+    TextField,
     Table,
     TableHead,
     TableRow,
@@ -16,7 +17,11 @@ import {
     Paper,
     TableContainer,
     Grid,
-    Button
+    Button,
+    Stack,
+    FormControl,
+    InputLabel,
+    Alert,
 } from "@mui/material";
 
 const tabs = [
@@ -30,82 +35,229 @@ const tabs = [
     "H. Monitoring"
 ];
 
+const DECISION_ROLE_OPTIONS = [
+    { value: "advisory", label: "Advisory only" },
+    { value: "decision_support", label: "Decision-support" },
+    { value: "decision_influencing", label: "Decision-influencing" },
+];
+
+const ProjectContextCard = ({
+    context,
+    onFieldChange,
+    onSave,
+    onReset,
+    statusMessage,
+    sx,
+}) => (
+    <Card variant="outlined" sx={{ width: "100%", ...sx }}>
+        <CardContent>
+            <Typography variant="h6" fontWeight={700} gutterBottom>
+                Project Context
+            </Typography>
+
+            <Stack spacing={2}>
+                <TextField
+                    size="small"
+                    fullWidth
+                    label="Project"
+                    placeholder="e.g., Carrier A - Claims Copilot"
+                    value={context.project}
+                    onChange={(e) => onFieldChange("project", e.target.value)}
+                />
+                <TextField
+                    size="small"
+                    fullWidth
+                    label="Model Version"
+                    placeholder="e.g., v1.0.3"
+                    value={context.modelVersion}
+                    onChange={(e) => onFieldChange("modelVersion", e.target.value)}
+                />
+                <TextField
+                    size="small"
+                    fullWidth
+                    label="Endpoint"
+                    placeholder="e.g., /claims/triage"
+                    value={context.endpoint}
+                    onChange={(e) => onFieldChange("endpoint", e.target.value)}
+                />
+                <FormControl fullWidth size="small">
+                    <InputLabel id="decision-role-label">Decision Role</InputLabel>
+                    <Select
+                        labelId="decision-role-label"
+                        label="Decision Role"
+                        value={context.decisionRole}
+                        onChange={(e) => onFieldChange("decisionRole", e.target.value)}
+                    >
+                        {DECISION_ROLE_OPTIONS.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Stack>
+
+            <Stack direction="row" spacing={1} mt={2}>
+                <Button size="small" variant="outlined" onClick={onReset}>
+                    Reset Demo Data
+                </Button>
+                <Button size="small" variant="contained" onClick={onSave}>
+                    Save
+                </Button>
+            </Stack>
+
+            {statusMessage && (
+                <Typography variant="caption" color="success.main" display="block" mt={1}>
+                    {statusMessage}
+                </Typography>
+            )}
+
+            <Typography variant="caption" color="text.secondary" mt={1} display="block">
+                Data persists locally (browser localStorage) for demo realism.
+            </Typography>
+        </CardContent>
+    </Card>
+);
+
 export default function EnvironmentalSustainabilityTabs() {
     const [activeTab, setActiveTab] = useState(0);
+    const [projectContext, setProjectContext] = useState({
+        project: "Carrier A - Sustainability",
+        modelVersion: "v1.0.0",
+        endpoint: "/sustainability",
+        decisionRole: "decision_support",
+    });
+    const [statusMessage, setStatusMessage] = useState("");
+
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem("sustainability_projectContext");
+            if (saved) setProjectContext(JSON.parse(saved));
+        } catch (e) {
+            console.error("Failed to load sustainability project context", e);
+        }
+    }, []);
+
+    const handleFieldChange = (field, value) => {
+        setProjectContext((prev) => ({ ...prev, [field]: value }));
+    };
+
+    const handleSaveContext = () => {
+        try {
+            localStorage.setItem("sustainability_projectContext", JSON.stringify(projectContext));
+            setStatusMessage("✓ Project Context saved");
+            setTimeout(() => setStatusMessage(""), 2000);
+        } catch (e) {
+            setStatusMessage("Error saving context");
+        }
+    };
+
+    const handleResetDemo = () => {
+        if (window.confirm("Reset demo data? This cannot be undone.")) {
+            localStorage.removeItem("sustainability_projectContext");
+            setProjectContext({
+                project: "",
+                modelVersion: "",
+                endpoint: "",
+                decisionRole: "decision_support",
+            });
+            setStatusMessage("✓ Demo data reset");
+            setTimeout(() => setStatusMessage(""), 2000);
+        }
+    };
 
     return (
-        <Paper sx={{ p: 2 }}>
-            <Typography variant="h4" gutterBottom>
-                Environmental Sustainability
-            </Typography>
-            <Typography variant="body2" color="text.secondary" mb={2}>
-                Lightweight, declarative sustainability governance for AI systems
-            </Typography>
+        <>
+            <Paper sx={{ p: 2 }}>
+                <Typography variant="h4" gutterBottom>
+                    Environmental Sustainability
+                </Typography>
+                <Typography variant="body2" color="text.secondary" mb={2}>
+                    Lightweight, declarative sustainability governance for AI systems
+                </Typography>
+                {statusMessage && (
+                    <Alert
+                        severity={statusMessage.startsWith("✓") ? "success" : "info"}
+                        sx={{ mb: 2 }}
+                    >
+                        {statusMessage}
+                    </Alert>
+                )}
 
-            <Grid container spacing={2} mb={3}>
-                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <Card variant="outlined">
-                        <CardContent>
-                            <Typography variant="caption" color="text.secondary">Lifecycle</Typography>
-                            <Typography fontWeight={600}>Baseline</Typography>
-                        </CardContent>
-                    </Card>
+                <Grid container spacing={2} mb={3}>
+                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                        <Card variant="outlined">
+                            <CardContent>
+                                <Typography variant="caption" color="text.secondary">Lifecycle</Typography>
+                                <Typography fontWeight={600}>Baseline</Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                        <Card variant="outlined">
+                            <CardContent>
+                                <Typography variant="caption" color="text.secondary">Coverage</Typography>
+                                <Typography fontWeight={600}>Limited</Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                        <Card variant="outlined">
+                            <CardContent>
+                                <Typography variant="caption" color="text.secondary">Evidence</Typography>
+                                <Typography fontWeight={600}>1</Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                        <Card variant="outlined">
+                            <CardContent>
+                                <Typography variant="caption" color="text.secondary">Risk</Typography>
+                                <Typography fontWeight={600} color="success.main">Low</Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <Card variant="outlined">
-                        <CardContent>
-                            <Typography variant="caption" color="text.secondary">Coverage</Typography>
-                            <Typography fontWeight={600}>Limited</Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <Card variant="outlined">
-                        <CardContent>
-                            <Typography variant="caption" color="text.secondary">Evidence</Typography>
-                            <Typography fontWeight={600}>1</Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <Card variant="outlined">
-                        <CardContent>
-                            <Typography variant="caption" color="text.secondary">Risk</Typography>
-                            <Typography fontWeight={600} color="success.main">Low</Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
 
 
-            {/* Actions */}
-            <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
-                <Button variant="contained">Generate Policy Pack</Button>
-                <Button variant="outlined">Export Snapshot</Button>
-                <Button variant="outlined">Recompute Gates</Button>
+                {/* Actions */}
+                <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
+                    <Button variant="contained">Generate Policy Pack</Button>
+                    <Button variant="outlined">Export Snapshot</Button>
+                    <Button variant="outlined">Recompute Gates</Button>
+                </Box>
+
+                <Tabs
+                    value={activeTab}
+                    onChange={(_, v) => setActiveTab(v)}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}
+                >
+                    {tabs.map(label => (
+                        <Tab key={label} label={label} />
+                    ))}
+                </Tabs>
+
+                {activeTab === 0 && <ObjectiveTab />}
+                {activeTab === 1 && <CoverageTab />}
+                {activeTab === 2 && <ReadinessTab />}
+                {activeTab === 3 && <EvaluationTab />}
+                {activeTab === 4 && <RisksTab />}
+                {activeTab === 5 && <MitigationTab />}
+                {activeTab === 6 && <EvidenceTab />}
+                {activeTab === 7 && <MonitoringTab />}
+            </Paper>
+            <Box mt={2}>
+                <ProjectContextCard
+                    context={projectContext}
+                    onFieldChange={handleFieldChange}
+                    onSave={handleSaveContext}
+                    onReset={handleResetDemo}
+                    statusMessage={statusMessage}
+                />
             </Box>
-
-            <Tabs
-                value={activeTab}
-                onChange={(_, v) => setActiveTab(v)}
-                variant="scrollable"
-                scrollButtons="auto"
-                sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}
-            >
-                {tabs.map(label => (
-                    <Tab key={label} label={label} />
-                ))}
-            </Tabs>
-
-            {activeTab === 0 && <ObjectiveTab />}
-            {activeTab === 1 && <CoverageTab />}
-            {activeTab === 2 && <ReadinessTab />}
-            {activeTab === 3 && <EvaluationTab />}
-            {activeTab === 4 && <RisksTab />}
-            {activeTab === 5 && <MitigationTab />}
-            {activeTab === 6 && <EvidenceTab />}
-            {activeTab === 7 && <MonitoringTab />}
-        </Paper>
+        </>
     );
 }
 

@@ -55,7 +55,7 @@ export default function AuditTrail() {
     };
 
     return (
-        <Card variant="outlined" sx={{ mt: 2 }}>
+        <Card variant="outlined" sx={{ mt: 0 }}>
             <CardContent>
                 {/* Header */}
                 <Stack direction="row" justifyContent="space-between" alignItems="center">

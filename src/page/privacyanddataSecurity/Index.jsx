@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Box,
     Typography,
@@ -15,10 +15,9 @@ import {
     MenuItem,
     FormControl,
     InputLabel,
+    Stack,
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import SaveIcon from '@mui/icons-material/Save';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import TabA from './TabA';
 import TabB from './TabB';
 import TabC from './TabC';
@@ -28,23 +27,116 @@ import TabF from './TabF';
 import TabG from './TabG';
 import TabH from './TabH';
 
+const DECISION_ROLE_OPTIONS = [
+    { value: 'advisory', label: 'Advisory only' },
+    { value: 'decision_support', label: 'Decision-support' },
+    { value: 'decision_influencing', label: 'Decision-influencing' },
+];
+
+const ProjectContextCard = ({
+    context,
+    onFieldChange,
+    onSave,
+    onReset,
+    statusMessage,
+    sx,
+}) => (
+    <Card variant="outlined" sx={{ width: '100%', ...sx }}>
+        <CardContent>
+            <Typography variant="h6" fontWeight={700} gutterBottom>
+                Project Context
+            </Typography>
+
+            <Stack spacing={2}>
+                <TextField
+                    size="small"
+                    fullWidth
+                    label="Project"
+                    placeholder="e.g., Carrier A - Claims Copilot"
+                    value={context.project}
+                    onChange={(e) => onFieldChange('project', e.target.value)}
+                />
+                <TextField
+                    size="small"
+                    fullWidth
+                    label="Model Version"
+                    placeholder="e.g., v1.0.3"
+                    value={context.modelVersion}
+                    onChange={(e) => onFieldChange('modelVersion', e.target.value)}
+                />
+                <TextField
+                    size="small"
+                    fullWidth
+                    label="Endpoint"
+                    placeholder="e.g., /claims/triage"
+                    value={context.endpoint}
+                    onChange={(e) => onFieldChange('endpoint', e.target.value)}
+                />
+                <FormControl fullWidth size="small">
+                    <InputLabel id="decision-role-label">Decision Role</InputLabel>
+                    <Select
+                        labelId="decision-role-label"
+                        label="Decision Role"
+                        value={context.decisionRole}
+                        onChange={(e) => onFieldChange('decisionRole', e.target.value)}
+                    >
+                        {DECISION_ROLE_OPTIONS.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Stack>
+
+            <Stack direction="row" spacing={1} mt={2}>
+                <Button size="small" variant="outlined" onClick={onReset}>
+                    Reset Demo Data
+                </Button>
+                <Button size="small" variant="contained" onClick={onSave}>
+                    Save
+                </Button>
+            </Stack>
+
+            {statusMessage && (
+                <Typography variant="caption" color="success.main" display="block" mt={1}>
+                    {statusMessage}
+                </Typography>
+            )}
+
+            <Typography variant="caption" color="text.secondary" mt={1} display="block">
+                Data persists locally (browser localStorage) for demo realism.
+            </Typography>
+        </CardContent>
+    </Card>
+);
+
 const Index = () => {
     const [activeTab, setActiveTab] = useState('A');
     const [projectContext, setProjectContext] = useState({
-        project: 'Carrier A — UW Copilot',
+        project: 'Carrier A - UW Copilot',
         modelVersion: 'v1.2.0',
         endpoint: '/uw/assistant',
-        decisionRole: 'Decision-support',
-        sensitivity: 'Tier 4 — Regulated (PII/PHI/PCI)',
+        decisionRole: 'decision_support',
+        sensitivity: 'Tier 4 - Regulated (PII/PHI/PCI)',
         hostingBoundary: 'Client VPC/VNet (Private)',
     });
     const [statusMessage, setStatusMessage] = useState('');
+
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem('privacy_projectContext');
+            if (saved) setProjectContext(JSON.parse(saved));
+        } catch (e) {
+            console.error('Failed to load privacy project context', e);
+        }
+    }, []);
 
     const handleTabChange = (event, newValue) => {
         setActiveTab(newValue);
     };
 
-    const handleContextChange = (field, value) => {
+    const handleFieldChange = (field, value) => {
         setProjectContext(prev => ({ ...prev, [field]: value }));
     };
 
@@ -246,6 +338,15 @@ const Index = () => {
                     </Grid>
                 </Grid>
             </Card>
+            {/* <Box mt={2}>
+                <ProjectContextCard
+                    context={projectContext}
+                    onFieldChange={handleFieldChange}
+                    onSave={handleSaveContext}
+                    onReset={handleResetDemo}
+                    statusMessage={statusMessage}
+                />
+            </Box> */}
         </Box >
     );
 };

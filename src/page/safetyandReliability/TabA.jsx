@@ -138,7 +138,7 @@ export default function ObjectiveTabA() {
                                             Safety & Reliability Intent
                                         </Typography>
                                         <Typography variant="caption" color="text.secondary">
-                                            Define why safety/reliability is required
+                                            Define why safety/reliability is required, what failure looks like, and who is accountable.
                                         </Typography>
                                     </Box>
                                     <Chip label="COMPLETE" color="success" size="small" />
@@ -283,8 +283,10 @@ export default function ObjectiveTabA() {
                             </Table>
                         </CardContent>
                     </Card> */}
-                        <AuditTrail notes={notes} setNotes={setNotes} />
+
+
                     </Grid>
+
 
                     {/* ================= RIGHT COLUMN ================= */}
                     <Grid size={{ xs: 12, md: 4 }}>
@@ -316,6 +318,9 @@ export default function ObjectiveTabA() {
                                 </Button>
                             </CardContent>
                         </Card>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 12 }}>
+                        <AuditTrail notes={notes} setNotes={setNotes} />
                     </Grid>
                 </Grid>
             </CardContent>
