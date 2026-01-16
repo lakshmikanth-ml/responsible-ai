@@ -1,15 +1,4 @@
-/*
-  Inclusiveness – FULL PAGE (Formik + Yup)
-  =====================================
-  - No sidebar
-  - Summary cards ABOVE tabs
-  - Tabs A–H
-  - ALL fields per screenshots
-  - Formik for state
-  - Yup for validation
-  - Values persist across tabs
-*/
-
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { useEffect, useState } from "react";
 import { Formik, Form, FieldArray } from "formik";
 import * as Yup from "yup";
@@ -789,12 +778,40 @@ export default function InclusivenessFormikPage() {
         <>
             <Paper variant="outlined" sx={{ p: 2 }}>
                 {/* Header */}
-                <Typography variant="h4" gutterBottom>
-                    Inclusiveness
-                </Typography>
-                <Typography variant="body2" color="text.secondary" mb={2}>
-                    Ensure the AI system is accessible, usable, and beneficial across diverse user groups (including underserved communities), and that accessibility standards and inclusive testing are enforced across pre-training, release, and production.
-                </Typography>
+
+
+
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    mb: 2,
+                    flexWrap: 'wrap',
+                    gap: 2,
+                }}>
+                    {/* Title */}
+                    <Box sx={{ flex: 1, minWidth: 300 }}>
+                        <Typography variant="h4" fontWeight={700} gutterBottom>
+                            Inclusiveness
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                            Ensure the AI system is accessible, usable, and beneficial across diverse user groups (including underserved communities), and that accessibility standards and inclusive testing are enforced across pre-training, release, and production.
+                        </Typography>
+                    </Box>
+
+                    {/* Action Buttons */}
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                        <Button variant="outlined" size="small" sx={{ fontWeight: 600 }}>
+                            Generate Policy Pack (for Guardian)
+                        </Button>
+                        <Button variant="outlined" size="small" sx={{ fontWeight: 600 }}>
+                            Export Snapshot
+                        </Button>
+                        <Button variant="contained" size="small" startIcon={<RefreshIcon />} sx={{ fontWeight: 600 }}>
+                            Recompute Gates
+                        </Button>
+                    </Box>
+                </Box>
                 <Card sx={{ mb: 2 }}>
                     <CardContent>
                         <Stack direction="row" spacing={1} mt={2} mb={2} flexWrap="wrap">

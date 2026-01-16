@@ -94,8 +94,8 @@ export default function TabAObjective() {
 
                 </Stack>
                 <Stack direction={{ xs: "column", sm: "row" }} alignItems={"baseline"}
-                 rowGap={2} mt={2}
-                 spacing={2}>
+                    rowGap={2} mt={2}
+                    spacing={2}>
 
                     <Button variant="outlined" onClick={loadSampleObjective}>
                         Load Sample

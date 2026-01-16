@@ -196,20 +196,21 @@ export default function TabDEvaluation() {
                             Run baseline (pre-training) and post-training validation. Failures automatically create risks and can block release.
                         </Typography>
                     </Box>
-                    <Stack direction={{ xs: "column" }} spacing={1}>
-                        <Button variant="outlined" startIcon={<DownloadIcon />} onClick={handleLoadSample}>
-                            Load Sample Eval
-                        </Button>
-                        <Button variant="contained" startIcon={<PlayCircleOutlineIcon />} onClick={handleRunEval}>
-                            Run Evaluation (Simulated)
-                        </Button>
-                        <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddCase}>
-                            Add Eval Case
-                        </Button>
-                    </Stack>
+
+                </Stack>
+                <Stack direction={{ xs: "row" }} spacing={1} mt={2}>
+                    <Button variant="outlined" startIcon={<DownloadIcon />} onClick={handleLoadSample}>
+                        Load Sample Eval
+                    </Button>
+                    <Button variant="contained" startIcon={<PlayCircleOutlineIcon />} onClick={handleRunEval}>
+                        Run Evaluation (Simulated)
+                    </Button>
+                    <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddCase}>
+                        Add Eval Case
+                    </Button>
                 </Stack>
 
-                <Grid container spacing={2} sx={{ mt: 2 }}>
+                <Grid container spacing={2} sx={{ mt: 3 }}>
                     <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                         <TextField
                             label="Threshold: Citation Coverage %"

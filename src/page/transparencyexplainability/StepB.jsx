@@ -187,20 +187,20 @@ export default function TabBCoverage() {
                         </Typography>
                     </Box>
 
-                    <Stack direction={{ xs: "row", md: "column" }} spacing={1}>
-                        <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddRow}>
-                            Add Output
-                        </Button>
-                        <Button variant="outlined" startIcon={<DownloadIcon />} onClick={handleLoadSample}>
-                            Load Sample
-                        </Button>
-                        <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave}>
-                            Save B
-                        </Button>
-                    </Stack>
-                </Stack>
 
-                <Grid container spacing={2} sx={{ mt: 2 }}>
+                </Stack>
+                <Stack direction={{ xs: "row" }} spacing={1} mt={2} >
+                    <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddRow}>
+                        Add Output
+                    </Button>
+                    <Button variant="outlined" startIcon={<DownloadIcon />} onClick={handleLoadSample}>
+                        Load Sample
+                    </Button>
+                    <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave}>
+                        Save B
+                    </Button>
+                </Stack>
+                <Grid container spacing={2} sx={{ mt: 3 }}>
                     <Grid size={{ xs: 12, md: 3 }}>
                         <FormControl fullWidth size="small">
                             <InputLabel>Default Explanation Depth</InputLabel>

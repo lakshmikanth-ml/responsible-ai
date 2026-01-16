@@ -416,7 +416,7 @@ const Index = () => {
             {/* Main Card with Header + Content */}
             <Card elevation={1} sx={{ m: 0 }}>
                 {/* Header Section */}
-                <Box sx={{ p: 3 }}>
+                <Box sx={{ p: 2 }}>
                     {/* Header Top: Title + Action Buttons */}
                     <Box
                         sx={{
@@ -441,7 +441,7 @@ const Index = () => {
                         {/* Action Buttons */}
                         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                             <Button variant="outlined" size="small" onClick={handleGeneratePolicyPack} sx={{ fontWeight: 600 }}>
-                                Generate Policy Pack
+                                Generate Policy Pack  (for Guardian)
                             </Button>
                             <Button variant="outlined" size="small" onClick={handleExportJSON} sx={{ fontWeight: 600 }}>
                                 Export Snapshot

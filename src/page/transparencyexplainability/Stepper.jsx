@@ -15,6 +15,7 @@ import {
     TextField,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { useState } from "react";
 import TabAObjective from "./StepA";
 import TabBCoverage from "./StepB";
@@ -401,55 +402,53 @@ export default function TransparencyExplainabilityHeader() {
     return (
         <>
             <Card sx={{ mt: 2 }}>
-                <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: { xs: "column", md: "row" },
-                            justifyContent: "space-between",
-                            gap: 2.5,
-                        }}
-                    >
-                        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                            <Typography variant="h5" fontWeight={700}>
+                <CardContent sx={{ p: { xs: 2, sm: 2 } }}>
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-start',
+                        mb: 2,
+                        flexWrap: 'wrap',
+                        gap: 2,
+                    }}>
+                        {/* Title */}
+                        <Box sx={{ flex: 1, minWidth: 300 }}>
+                            <Typography variant="h4" fontWeight={700} gutterBottom>
                                 Transparency & Explainability
                             </Typography>
-                            <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                maxWidth={720}
-                            >
+                            <Typography variant="body2" color="text.secondary">
                                 Control whether AI outputs are explainable, defensible, and
                                 audit-ready across Pre-Training, Release, and Production.
                             </Typography>
-                            <Stack
-                                direction="row"
-                                spacing={1}
-                                flexWrap="wrap"
-                                alignItems="center"
-                                useFlexGap
-                            >
-                                {PILL_ITEMS.map((pill) => (
-                                    <Pill key={pill.label} {...pill} />
-                                ))}
-                            </Stack>
                         </Box>
 
-                        <Stack
-                            direction={{ xs: "row", md: "column" }}
-                            spacing={1}
-                            alignItems={{ xs: "stretch" }}
-                            justifyContent="flex-start"
-                        >
-                            <Button variant="outlined" onClick={() => setDrawerType("policy")}>
+                        {/* Action Buttons */}
+                        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                            <Button variant="outlined" size="small" sx={{ fontWeight: 600 }}>
                                 Generate Policy Pack (for Guardian)
                             </Button>
-                            <Button variant="outlined" onClick={() => setDrawerType("snapshot")}>
+                            <Button variant="outlined" size="small" sx={{ fontWeight: 600 }}>
                                 Export Snapshot
                             </Button>
-                            <Button variant="contained">Recompute Gates</Button>
-                        </Stack>
+                            <Button variant="contained" size="small" startIcon={<RefreshIcon />} sx={{ fontWeight: 600 }}>
+                                Recompute Gates
+                            </Button>
+                        </Box>
                     </Box>
+
+                    <Stack
+                        mt={2}
+                        direction="row"
+                        spacing={1}
+                        flexWrap="wrap"
+                        alignItems="center"
+                        useFlexGap
+                    >
+                        {PILL_ITEMS.map((pill) => (
+                            <Pill key={pill.label} {...pill} />
+                        ))}
+                    </Stack>
+
 
                     <Tabs
                         value={tab}

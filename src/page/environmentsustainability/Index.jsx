@@ -23,6 +23,8 @@ import {
     InputLabel,
     Alert,
 } from "@mui/material";
+import RefreshIcon from '@mui/icons-material/Refresh';
+
 
 const tabs = [
     "A. Objective",
@@ -169,12 +171,40 @@ export default function EnvironmentalSustainabilityTabs() {
     return (
         <>
             <Paper sx={{ p: 2 }}>
-                <Typography variant="h4" gutterBottom>
-                    Environmental Sustainability
-                </Typography>
-                <Typography variant="body2" color="text.secondary" mb={2}>
-                    Lightweight, declarative sustainability governance for AI systems
-                </Typography>
+
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    mb: 2,
+                    flexWrap: 'wrap',
+                    gap: 2,
+                }}>
+                    {/* Title */}
+                    <Box sx={{ flex: 1, minWidth: 300 }}>
+                        <Typography variant="h4" fontWeight={700} gutterBottom>
+                            Environmental Sustainability
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                            Lightweight, declarative sustainability governance for AI systems
+                        </Typography>
+                    </Box>
+
+                    {/* Action Buttons */}
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                        <Button variant="outlined" size="small" sx={{ fontWeight: 600 }}>
+                            Generate Policy Pack (for Guardian)
+                        </Button>
+                        <Button variant="outlined" size="small" sx={{ fontWeight: 600 }}>
+                            Export Snapshot
+                        </Button>
+                        <Button variant="contained" size="small" startIcon={<RefreshIcon />} sx={{ fontWeight: 600 }}>
+                            Recompute Gates
+                        </Button>
+                    </Box>
+                </Box>
+
+
                 {statusMessage && (
                     <Alert
                         severity={statusMessage.startsWith("✓") ? "success" : "info"}
@@ -221,11 +251,11 @@ export default function EnvironmentalSustainabilityTabs() {
 
 
                 {/* Actions */}
-                <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
+                {/* <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
                     <Button variant="contained">Generate Policy Pack</Button>
                     <Button variant="outlined">Export Snapshot</Button>
                     <Button variant="outlined">Recompute Gates</Button>
-                </Box>
+                </Box> */}
 
                 <Tabs
                     value={activeTab}

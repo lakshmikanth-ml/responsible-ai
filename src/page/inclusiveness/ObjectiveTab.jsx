@@ -66,6 +66,7 @@ export default function ObjectiveTab({ initialValues, onSave, onLoadSample }) {
                 <Grid container spacing={2}>
                     <Grid size={{ xs: 12, md: 6 }}>
                         <TextField
+                            size="small"
                             select fullWidth
                             label="Primary Purpose"
                             {...formik.getFieldProps('primaryPurpose')}
@@ -80,6 +81,7 @@ export default function ObjectiveTab({ initialValues, onSave, onLoadSample }) {
 
                     <Grid size={{ xs: 12, md: 6 }}>
                         <TextField
+                            size="small"
                             select fullWidth
                             label="Jurisdiction / Market"
                             {...formik.getFieldProps('jurisdiction')}
@@ -94,6 +96,7 @@ export default function ObjectiveTab({ initialValues, onSave, onLoadSample }) {
 
                     <Grid size={{ xs: 12, md: 6 }}>
                         <TextField
+                            size="small"
                             select fullWidth
                             label="Inclusiveness Owner (Accountable Role)"
                             {...formik.getFieldProps('owner')}
@@ -108,6 +111,7 @@ export default function ObjectiveTab({ initialValues, onSave, onLoadSample }) {
 
                     <Grid size={{ xs: 12, md: 6 }}>
                         <TextField
+                            size="small"
                             select fullWidth
                             label="Deployment Audience"
                             {...formik.getFieldProps('audience')}
@@ -122,6 +126,7 @@ export default function ObjectiveTab({ initialValues, onSave, onLoadSample }) {
 
                     <Grid size={{ xs: 12 }}>
                         <TextField
+                            size="small"
                             select fullWidth
                             SelectProps={{ multiple: true }}
                             label="Critical User Groups (Required coverage)"
@@ -166,6 +171,7 @@ export default function ObjectiveTab({ initialValues, onSave, onLoadSample }) {
 
                     <Grid size={{ xs: 12, md: 12 }}>
                         <TextField
+                            size="small"
                             fullWidth multiline minRows={4}
                             label="What is Unacceptable (Failure Definition)"
                             {...formik.getFieldProps('failureDefinition')}
@@ -176,6 +182,7 @@ export default function ObjectiveTab({ initialValues, onSave, onLoadSample }) {
 
                     <Grid size={{ xs: 12, md: 12 }}>
                         <TextField
+                            size="small"
                             select fullWidth
                             label="Minimum Inclusion Standard (Contract Summary)"
                             {...formik.getFieldProps('minimumStandard')}

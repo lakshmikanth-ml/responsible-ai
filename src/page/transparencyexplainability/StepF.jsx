@@ -98,23 +98,25 @@ export default function TabFMitigation() {
                                             </Box>
 
 
-                                            <Stack direction="column" rowGap={1} mb={2}>
-                                                <Button
-                                                    variant="outlined"
-                                                    startIcon={<AddIcon />}
-                                                    onClick={() => push(emptyAction())}
-                                                >
-                                                    Add Action
-                                                </Button>
-                                                <Button
-                                                    variant="contained"
 
-                                                    type="submit"
-                                                >
-                                                    Save F
-                                                </Button>
-                                            </Stack>
 
+                                        </Stack>
+                                        <Stack direction={{ xs: "column", sm: "row" }}
+                                            spacing={2} mb={2} mt={2}>
+                                            <Button
+                                                variant="outlined"
+                                                startIcon={<AddIcon />}
+                                                onClick={() => push(emptyAction())}
+                                            >
+                                                Add Action
+                                            </Button>
+                                            <Button
+                                                variant="contained"
+
+                                                type="submit"
+                                            >
+                                                Save F
+                                            </Button>
                                         </Stack>
 
                                         {/* <Divider sx={{ mb: 2 }} /> */}
