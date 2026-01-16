@@ -33,6 +33,13 @@ import ThemeToggle from "../components/switch/ThemeToggle";
 
 export const drawerWidth = 250;
 export const collapsedWidth = 72;
+export const DEMO_CREDENTIALS = {
+  email: "demo@example.com",
+  password: "Demo@123",
+};
+
+export const validateDemoCredentials = (email, password) =>
+  email === DEMO_CREDENTIALS.email && password === DEMO_CREDENTIALS.password;
 
 const StyledAppBar = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -102,11 +109,28 @@ export default function Header({ onMenuClick, open = true, user, mobileOpen }) {
     navigate("/app/profile");
   };
 
+  React.useEffect(() => {
+    const storedEmail = localStorage.getItem("demoEmail");
+    const storedPassword = localStorage.getItem("demoPassword");
+    if (storedEmail && storedPassword) {
+      const valid = validateDemoCredentials(storedEmail, storedPassword);
+      if (!valid) {
+        dispatch({ type: "RESET_APP" });
+        axiosInstance.defaults.headers.common["Authorization"] = "";
+        localStorage.removeItem("demoEmail");
+        localStorage.removeItem("demoPassword");
+        navigate("/", { replace: true });
+      }
+    }
+  }, [dispatch, navigate]);
+
   const handleLogout = () => {
     handleProfileClose();
     // default logout behavior - customize as needed
     dispatch({ type: "RESET_APP" });
     axiosInstance.defaults.headers.common["Authorization"] = "";
+    localStorage.removeItem("demoEmail");
+    localStorage.removeItem("demoPassword");
     navigate("/", { replace: true });
   };
 
@@ -262,9 +286,9 @@ export default function Header({ onMenuClick, open = true, user, mobileOpen }) {
 
             <Divider /> */}
 
-            <MenuItem onClick={handleLogout} sx={{ color: "error.main" }}>
+            <MenuItem onClick={handleLogout} sx={{ color: "text.secondary" }}>
               <ListItemIcon>
-                <Logout fontSize="small" color="error" />
+                <Logout fontSize="small" sx={{ color: "text.secondary" }} />
               </ListItemIcon>
               Logout
             </MenuItem>
