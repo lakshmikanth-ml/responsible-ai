@@ -168,7 +168,7 @@ export default function TabCTrainingReadiness() {
                         Paste DFA JSON
                     </Button>
                     <Button
-                        variant="contained"
+                        variant="outlined"
                         startIcon={<PlayCircleOutlineIcon />}
                         disabled={!dfa}
                         onClick={applyDfaToRisks}

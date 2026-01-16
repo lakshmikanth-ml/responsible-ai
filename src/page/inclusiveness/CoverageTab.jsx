@@ -121,6 +121,7 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
 
                     <Grid size={{ xs: 12, md: 4 }}>
                         <TextField
+                            size="small"
                             select
                             fullWidth
                             label="Target Standard"
@@ -136,6 +137,7 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
 
                     <Grid size={{ xs: 12, md: 4 }}>
                         <TextField
+                            size="small"
                             select
                             fullWidth
                             SelectProps={{ multiple: true }}
