@@ -81,15 +81,16 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 const menuItems = [
-  {
-    to: ["/app/transparencyexplainability"],
-    Icon: Eye,
-    label: "Transparency & Explainability",
-  },
+
   {
     to: ["/app/fairnessandondiscrimination"],
     Icon: Scale,
     label: "Fairness & Non-Discrimination",
+  },
+  {
+    to: ["/app/transparencyexplainability"],
+    Icon: Eye,
+    label: "Transparency & Explainability",
   },
   {
     to: ["/app/privacyanddatasecurity"],
