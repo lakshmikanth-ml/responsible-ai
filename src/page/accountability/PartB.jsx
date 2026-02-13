@@ -17,6 +17,7 @@ import {
     TableBody,
     TableRow,
     TableCell,
+    FormHelperText,
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
@@ -223,6 +224,7 @@ const PartB = ({ projectContext = {}, onStatusMessage }) => {
                     </Card>
                 )}
 
+
                 {/* DFA Ingestion Card */}
                 <Card variant="outlined" sx={{ mb: 2 }}>
                     <CardContent>
@@ -234,12 +236,11 @@ const PartB = ({ projectContext = {}, onStatusMessage }) => {
                                 Load Sample
                             </Button>
                             <Button variant="contained" size="small" onClick={handleIngestDFA}>
-                                Ingest
+                                Ingest DFA JSON
                             </Button>
                         </Box>
                         <Typography variant="caption" sx={{ display: 'block', mb: 1, color: 'text.secondary' }}>
-                            Paste DFA JSON from the Data Foundation Analyzer app.
-                        </Typography>
+                            Paste DFA JSON from the separate Data Foundation Analyzer app. This populates Tab C and influences gates.                        </Typography>
                         <TextField
                             multiline
                             minRows={4}
@@ -247,13 +248,19 @@ const PartB = ({ projectContext = {}, onStatusMessage }) => {
                             fullWidth
                             size="small"
                             variant="outlined"
-                            placeholder="Paste DFA JSON here..."
+                            placeholder="Paste DFA JSON here (e.g., {&quot;datasetOwnership&quot;:...})"
                             value={dfaJson}
                             onChange={(e) => setDfaJson(e.target.value)}
                             sx={{ fontFamily: 'monospace', fontSize: '0.75rem', mb: 1 }}
                         />
-                        <Typography variant="caption" sx={{ display: 'block', bgcolor: '#fafafa', p: 1, borderRadius: 1, color: 'text.secondary' }}>
-                            💡 <strong>Tip:</strong> For demo, use <code>Load DFA Sample</code>, then <code>Ingest</code>.
+                        <Typography variant="caption"
+                            sx={{
+                                display: 'block',
+                                bgcolor: '#f2f6ff',
+                                border: "1px solid #dbe4ff",
+                                p: 1, borderRadius: 1, color: 'text.secondary'
+                            }}>
+                            💡 <strong>Tip:</strong> For demo, use <code>Load DFA Sample</code>, then <code>Ingest</code>. In production, this would be an API integration.
                         </Typography>
                     </CardContent>
                 </Card>
@@ -266,7 +273,7 @@ const PartB = ({ projectContext = {}, onStatusMessage }) => {
                                 Policy Pack Preview
                             </Typography>
                             <Button variant="outlined" size="small" onClick={handleCopyPolicy}>
-                                Copy
+                                Copy  JSON
                             </Button>
                         </Box>
                         <TextField
@@ -281,7 +288,7 @@ const PartB = ({ projectContext = {}, onStatusMessage }) => {
                             sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}
                         />
                         <Typography variant="caption" sx={{ display: 'block', mt: 1, color: 'text.secondary' }}>
-                            This preview indicates it would be pushed to Guardian.
+                            This preview indicates it would be pushed to Guardian as a policy pack.
                         </Typography>
                     </CardContent>
                 </Card>
@@ -289,11 +296,27 @@ const PartB = ({ projectContext = {}, onStatusMessage }) => {
                 {/* Snapshot Export Card */}
                 <Card variant="outlined">
                     <CardContent>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                            Snapshot Export
-                        </Typography>
+                        <Box display={"flex"}
+                            alignItems={"center"}
+                            justifyContent={"space-between"}
+                            mb={1}     >
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600, }}>
+                                Snapshot Export
+                            </Typography>
+                            <Button
+
+                                variant="contained"
+                                size="small"
+
+                            // onClick={handleExportJSON}
+                            >
+                                Export HTML Report
+                            </Button>
+                        </Box>
+
                         <Typography variant="caption" sx={{ display: 'block', mb: 2, color: 'text.secondary' }}>
-                            Exports JSON snapshot and HTML report for audits.
+                            Exports a simple JSON snapshot and an HTML report (download). Useful for audit packets and stakeholder reviews.
+
                         </Typography>
                         <Button
                             fullWidth
@@ -302,7 +325,7 @@ const PartB = ({ projectContext = {}, onStatusMessage }) => {
                             startIcon={<CloudDownloadIcon />}
                             onClick={handleExportJSON}
                         >
-                            Export JSON
+                            Export JSON snapshot
                         </Button>
                     </CardContent>
                 </Card>
@@ -354,7 +377,8 @@ const PartB = ({ projectContext = {}, onStatusMessage }) => {
                                 </Typography>
                             </Box>
                             <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                                Coverage: {coveragePercent}% ({toggleCount}/{totalToggles})
+                                Use Save + Recompute Gates after updates.
+                                {/* Coverage: {coveragePercent}% ({toggleCount}/{totalToggles}) */}
                             </Typography>
                         </Box>
 
@@ -475,17 +499,18 @@ const PartB = ({ projectContext = {}, onStatusMessage }) => {
 
                         {/* Approval Boundary Select */}
                         <FormControl fullWidth size="small" sx={{ mb: 3 }}>
-                            <InputLabel>Approval Boundary</InputLabel>
+                            <InputLabel>Approval Boundary </InputLabel>
                             <Select
                                 value={formData.boundary}
                                 label="Approval Boundary"
                                 onChange={(e) => handleFormChange('boundary', e.target.value)}
                             >
-                                <MenuItem value="">Select…</MenuItem>
+
                                 <MenuItem value="Advisory only (human decides)">Advisory only (human decides)</MenuItem>
                                 <MenuItem value="Decisioning with approval (human signs off)">Decisioning with approval (human signs off)</MenuItem>
                                 <MenuItem value="Automated decisioning (restricted)">Automated decisioning (restricted)</MenuItem>
                             </Select>
+                            <FormHelperText>How far the AI can go</FormHelperText>
                         </FormControl>
 
                         {/* Audit Trail */}
@@ -533,7 +558,7 @@ const PartB = ({ projectContext = {}, onStatusMessage }) => {
                                 </Table>
                             ) : (
                                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', textAlign: 'center', py: 2 }}>
-                                    No notes yet.
+                                    No notes yet. Add a short note when decisions are made (e.g., owners assigned, evidence approved).
                                 </Typography>
                             )}
                         </Box>

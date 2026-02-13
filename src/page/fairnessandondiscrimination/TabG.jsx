@@ -234,12 +234,10 @@ const TabG = () => {
             {/* RAI Owner Section */}
             <Card variant="outlined" sx={{ mb: 3 }}>
                 <CardContent>
-                    <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
-                        Responsible AI Officer (Owner)
-                    </Typography>
+
                     <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', alignItems: 'flex-end' }}>
                         <TextField
-                            label="RAI Officer Name"
+                            label="Responsible AI Officer (Owner)"
                             placeholder="e.g., Head of Risk, Compliance Officer, RAI Lead"
                             value={trainingData.raiOwner}
                             onChange={(e) => setTrainingData(prev => ({ ...prev, raiOwner: e.target.value }))}

@@ -198,61 +198,7 @@ const Index = () => {
 
     return (
         <Box>
-            {/* Gate Status Cards */}
-            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }, gap: 2, mb: 3 }}>
-                {[
-                    {
-                        name: 'Pre-Training Gate',
-                        status: 'BLOCKED',
-                        color: '#d32f2f',
-                        msg: 'DFA not ingested (Tab C). Critical safety risks are still open (Tab E).'
-                    },
-                    {
-                        name: 'Release Gate', status: 'BLOCKED',
-                        color: '#d32f2f',
-                        msg: 'Pre-training gate not passed. Missing required testing (stress + edge cases + UAT) in Tab D. Failover / fallback evidence not approved (Tab G). Incident response playbook not approved (Tab G). Critical risks still open (Tab E).'
-                    },
-                    {
-                        name: 'Production Gate', status: 'BLOCKED',
-                        color: '#d32f2f',
-                        msg: 'Release gate is blocked.'
-                    },
-                    {
-                        name: 'Guardian Health', status: '—',
-                        color: '#f57c00',
-                        msg: 'No Guardian runtime signals loaded yet.'
-                    },
-                ].map((gate, idx) => (
-                    <Card key={idx} variant="outlined" sx={{ p: 2 }}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                            {gate.name}
-                        </Typography>
-                        <Box sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1,
-                            mb: 1.5,
-                            p: 1,
-                            bgcolor: gate.color + '15',
-                            borderRadius: '50px',
-                            width: 'fit-content',
-                        }}>
-                            <Box sx={{
-                                width: 10,
-                                height: 10,
-                                borderRadius: '50%',
-                                bgcolor: gate.color,
-                            }} />
-                            <Typography variant="caption" sx={{ fontWeight: 700, color: gate.color }}>
-                                {gate.status}
-                            </Typography>
-                        </Box>
-                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.5 }}>
-                            {gate.msg}
-                        </Typography>
-                    </Card>
-                ))}
-            </Box>
+
 
             <Card elevation={1}>
                 {/* Header Section */}
@@ -291,36 +237,100 @@ const Index = () => {
                     </Box>
 
                     {/* Status Chips */}
-                    <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mb: 3 }}>
+                    <Stack
+                        direction={{ xs: "column", sm: "row" }}
+                        spacing={1}
+                        sx={{ mt: 2, flexWrap: "wrap" }}
+                    >
                         <Chip
                             label="Lifecycle Controlled"
                             variant="outlined"
-                            size="small"
-                            sx={{ fontWeight: 600 }}
                         />
+
+
                         <Chip
-                            label="Coverage: 100%"
-                            variant="outlined"
-                            size="small"
-                            sx={{ fontWeight: 600 }}
+                            label="Coverage: 44%"
+                            color="warning"
+                            variant="filled"
                         />
+
+
                         <Chip
                             label="Evidence: 0/6 approved"
-                            variant="outlined"
-                            size="small"
-                            sx={{ fontWeight: 600 }}
+                            color="error"
+                            variant="filled"
                         />
+
+
                         <Chip
-                            label="Risks: 0 critical open"
-                            variant="outlined"
-                            size="small"
-                            sx={{ fontWeight: 600 }}
+                            label="Risks: 3 open (3 critical)"
+                            color="error"
+                            variant="filled"
                         />
-                    </Box>
+                    </Stack>
                 </Box>
 
 
+                {/* Gate Status Cards */}
+                <Box sx={{
 
+                    display: 'grid', mx: 2,
+                    gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' },
+                    gap: 2, mb: 0
+                }}>
+                    {[
+                        {
+                            name: 'Pre-Training Gate',
+                            status: 'BLOCKED',
+                            color: '#d32f2f',
+                            msg: 'DFA not ingested (Tab C). Critical safety risks are still open (Tab E).'
+                        },
+                        {
+                            name: 'Release Gate', status: 'BLOCKED',
+                            color: '#d32f2f',
+                            msg: 'Pre-training gate not passed. Missing required testing (stress + edge cases + UAT) in Tab D. Failover / fallback evidence not approved (Tab G). Incident response playbook not approved (Tab G). Critical risks still open (Tab E).'
+                        },
+                        {
+                            name: 'Production Gate', status: 'BLOCKED',
+                            color: '#d32f2f',
+                            msg: 'Release gate is blocked.'
+                        },
+                        {
+                            name: 'Guardian Health', status: '—',
+                            color: '#f57c00',
+                            msg: 'No Guardian runtime signals loaded yet.'
+                        },
+                    ].map((gate, idx) => (
+                        <Card key={idx} variant="outlined" sx={{ p: 2 }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                                {gate.name}
+                            </Typography>
+                            <Box sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1,
+                                mb: 1.5,
+                                p: 1,
+                                bgcolor: gate.color + '15',
+                                borderRadius: '50px',
+                                width: 'fit-content',
+                            }}>
+                                <Box sx={{
+                                    width: 10,
+                                    height: 10,
+                                    borderRadius: '50%',
+                                    bgcolor: gate.color,
+                                }} />
+                                <Typography variant="caption" sx={{ fontWeight: 700, color: gate.color }}>
+                                    {gate.status}
+                                </Typography>
+                            </Box>
+                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.5 }}>
+                                {gate.msg}
+                            </Typography>
+                        </Card>
+                    ))}
+                </Box>
                 {/* Main Content Grid: Project Context (Left) + Tab Content (Right) */}
                 <Grid container>
 

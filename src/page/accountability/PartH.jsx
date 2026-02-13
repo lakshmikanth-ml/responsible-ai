@@ -12,7 +12,13 @@ import {
     TableHead,
     TableBody,
     TableRow,
-    TableCell, Select, MenuItem, Stack, Switch
+    TableCell,
+    Select,
+    MenuItem,
+    Stack,
+    Switch,
+    FormHelperText,
+    FormControlLabel,
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
@@ -33,248 +39,158 @@ const OWNER_OPTIONS = [
     { label: "Legal Counsel" },
 ];
 
-
-// ✅ INITIAL ROWS
-const INIT = [
-    "Governance Structure Document",
-    "Role Matrix / Responsibility Tracker",
-    "Incident Response Plan + SLAs",
-    "Audit Log Schema + Sample Export",
-    "Review Cadence Agenda + Minutes Template",
-    "Compliance Checklist / Audit Prep Toolkit",
-].map((name) => ({
-    name,
-    owner: null, // IMPORTANT: object or null
-    status: "Missing",
-    file: null,
-    approved: false,
-    updatedAt: null,
-}));
-
 const PartH = ({ projectContext = {}, onStatusMessage }) => {
-    // Actions register
-    const [rows, setRows] = React.useState(INIT);
+    // Gates & Monitoring state
+    const [guardianSignals, setGuardianSignals] = useState(true);
+    const [alertViolations, setAlertViolations] = useState(true);
+    const [alertOverrides, setAlertOverrides] = useState(true);
+    const [alertMissingApprovals, setAlertMissingApprovals] = useState(true);
 
+    const [violationThreshold, setViolationThreshold] = useState('5');
+    const [overrideThreshold, setOverrideThreshold] = useState('15');
+    const [reviewCadence, setReviewCadence] = useState('Weekly');
+    const [criticalSLA, setCriticalSLA] = useState('24');
+    const [nonCriticalSLA, setNonCriticalSLA] = useState('5');
+    const [routeCritical, setRouteCritical] = useState(OWNER_OPTIONS[1]);
+    const [routeCompliance, setRouteCompliance] = useState(OWNER_OPTIONS[2]);
+    const [smEscalation, setSmEscalation] = useState(OWNER_OPTIONS[1]);
 
-    // ✅ SAFE UPDATE FUNCTION (NO AUTOCOMPLETE RESET)
-    const update = (i, field, value) => {
-        setRows((prev) =>
-            prev.map((r, idx) =>
-                idx === i
-                    ? {
-                        ...r,
-                        [field]: value,
-                        ...(field !== "owner" && { updatedAt: new Date() }),
-                    }
-                    : r
-            )
-        );
-    };
-    const [actions, setActions] = useState([
-        {
-            id: 'A-MAN-001',
-            title: 'Manual action (edit me)',
-            createdDate: new Date().toISOString().split('T')[0],
-            ownerRole: '',
-            dueDate: new Date().toISOString().split('T')[0],
-            status: 'Planned',
-            successCriteria: '',
-        },
-    ]);
+    // Guardian runtime data
+    const [guardianJson, setGuardianJson] = useState('');
+    const [runtimeMetrics, setRuntimeMetrics] = useState({
+        rowsLoaded: 2,
+        violations: 1,
+        overrideRate: '50%',
+    });
 
-    // DFA & Policy data
-    const [dfaJson, setDfaJson] = useState('');
-    const [policyPreview, setPolicyPreview] = useState('');
-
-    // Audit trail notes
+    // Audit trail
     const [auditNotes, setAuditNotes] = useState([]);
     const [noteInput, setNoteInput] = useState('');
-    const [notes, setNotes] = React.useState([]);
-
-
-
-
-
-    const loadSample = () => {
-        setRows((prev) =>
-            prev.map((r) => ({ ...r, owner: "Compliance Officer", status: "In Progress" }))
-        );
-    };
-
-
-    const addAction = () => {
-        setRows((r) => [
-            ...r,
-            {
-                id: `A-MAN-00${r.length + 1}`,
-                title: "Manual action (edit me)",
-                owner: "",
-                due: new Date().toISOString().slice(0, 10),
-                status: "Planned",
-                success: "",
-                created: new Date().toISOString().slice(0, 10),
-            },
-        ]);
-    };
-
-
-    const missing = rows.some((r) => r.status !== "Done");
 
     // Status message
     const [statusMessage, setStatusMessage] = useState('');
 
+
+
+
+
     // Load saved data on mount
     useEffect(() => {
-        const saved = localStorage.getItem('accountability_partF_data');
+        const saved = localStorage.getItem('accountability_partH_data');
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
-                setActions(parsed.actions || actions);
+                setGuardianSignals(parsed.guardianSignals ?? true);
+                setAlertViolations(parsed.alertViolations ?? true);
+                setAlertOverrides(parsed.alertOverrides ?? true);
+                setAlertMissingApprovals(parsed.alertMissingApprovals ?? true);
+                setViolationThreshold(parsed.violationThreshold || '');
+                setOverrideThreshold(parsed.overrideThreshold || '');
+                setReviewCadence(parsed.reviewCadence || '');
+                setCriticalSLA(parsed.criticalSLA || '');
+                setNonCriticalSLA(parsed.nonCriticalSLA || '');
+                setRouteCritical(parsed.routeCritical || '');
+                setRouteCompliance(parsed.routeCompliance || '');
+                setSmEscalation(parsed.smEscalation || '');
+                setGuardianJson(parsed.guardianJson || '');
+                setRuntimeMetrics(parsed.runtimeMetrics || runtimeMetrics);
                 setAuditNotes(parsed.auditNotes || []);
-                setDfaJson(parsed.dfaJson || '');
-                setPolicyPreview(parsed.policyPreview || '');
             } catch (e) {
-                console.error('Error loading PartF data:', e);
+                console.error('Error loading PartH data:', e);
             }
         }
     }, []);
 
-    const handleActionChange = (actionIndex, field, value) => {
-        const updated = [...actions];
-        updated[actionIndex][field] = value;
-        setActions(updated);
-    };
-
-    const handleAddAction = () => {
-        const newActionId = `A-MAN-${String(actions.length + 1).padStart(3, '0')}`;
-        const today = new Date().toISOString().split('T')[0];
-        const newAction = {
-            id: newActionId,
-            title: 'New action (edit me)',
-            createdDate: today,
-            ownerRole: '',
-            dueDate: today,
-            status: 'Planned',
-            successCriteria: '',
-        };
-        setActions([...actions, newAction]);
-        setStatusMessage('✓ New action added');
-        setTimeout(() => setStatusMessage(''), 2000);
-    };
-
-    const handleRegenerate = () => {
-        setStatusMessage('✓ Actions regenerated from missing controls');
-        setTimeout(() => setStatusMessage(''), 2000);
-    };
-
     const handleSave = () => {
         try {
-            const payload = { actions, auditNotes, dfaJson, policyPreview };
-            localStorage.setItem('accountability_partF_data', JSON.stringify(payload));
-            setStatusMessage('✓ Accountability F saved successfully');
+            const payload = {
+                guardianSignals,
+                alertViolations,
+                alertOverrides,
+                alertMissingApprovals,
+                violationThreshold,
+                overrideThreshold,
+                reviewCadence,
+                criticalSLA,
+                nonCriticalSLA,
+                routeCritical,
+                routeCompliance,
+                smEscalation,
+                guardianJson,
+                runtimeMetrics,
+                auditNotes,
+            };
+            localStorage.setItem('accountability_partH_data', JSON.stringify(payload));
+            setStatusMessage('✓ Accountability H saved successfully');
             setTimeout(() => setStatusMessage(''), 2000);
-            if (onStatusMessage) onStatusMessage('✓ Accountability F saved');
+            if (onStatusMessage) onStatusMessage('✓ Accountability H saved');
         } catch (e) {
             setStatusMessage('✗ Error saving data');
         }
     };
 
     const handleLoadSample = () => {
-        const today = new Date().toISOString().split('T')[0];
-        setActions([
-            {
-                id: 'A-AUTO-001',
-                title: 'Implement audit log export SLA',
-                createdDate: today,
-                ownerRole: 'Compliance Officer',
-                dueDate: '2026-02-15',
-                status: 'In Progress',
-                successCriteria: 'Logs exported within 24 hours; verified by test',
-            },
-            {
-                id: 'A-AUTO-002',
-                title: 'Add timestamp to override records',
-                createdDate: today,
-                ownerRole: 'Data Engineering Lead',
-                dueDate: '2026-02-01',
-                status: 'Planned',
-                successCriteria: 'All overrides timestamped; audit trail tested',
-            },
-            {
-                id: 'A-MAN-001',
-                title: 'Manual action (edit me)',
-                createdDate: today,
-                ownerRole: 'Model Risk Owner (Accountable)',
-                dueDate: '2026-01-31',
-                status: 'Done',
-                successCriteria: 'Dashboard live and monitoring 24/7',
-            },
-        ]);
+        setGuardianSignals(true);
+        setAlertViolations(true);
+        setAlertOverrides(true);
+        setAlertMissingApprovals(true);
+        setViolationThreshold('5');
+        setOverrideThreshold('15');
+        setReviewCadence('Weekly');
+        setCriticalSLA('24');
+        setNonCriticalSLA('5');
+        setRouteCritical('Incident Manager (Ops/SRE)');
+        setRouteCompliance('Compliance Officer');
+        setSmEscalation('Model Risk Owner (Accountable)');
         setStatusMessage('✓ Sample data loaded');
         setTimeout(() => setStatusMessage(''), 2000);
     };
 
-    const handleLoadDFASample = () => {
-        const sample = JSON.stringify({
-            actionsCount: 3,
-            plannedCount: 1,
-            inProgressCount: 1,
-            doneCount: 1,
-            lastRegenerated: new Date().toISOString(),
-        }, null, 2);
-        setDfaJson(sample);
-        setStatusMessage('✓ DFA sample loaded');
+    const handleLoadGuardianSample = () => {
+        const sample = JSON.stringify([
+            {
+                timestamp: new Date().toISOString(),
+                project: 'Underwriting AI',
+                violations: ['policy_breach', 'threshold_exceeded'],
+                actions: 'override',
+                approver: 'john.doe@company.com',
+            },
+            {
+                timestamp: new Date(Date.now() - 3600000).toISOString(),
+                project: 'Underwriting AI',
+                violations: [],
+                actions: 'approved',
+                approver: 'system',
+            },
+        ], null, 2);
+        setGuardianJson(sample);
+        setStatusMessage('✓ Guardian sample loaded');
         setTimeout(() => setStatusMessage(''), 2000);
     };
 
-    const handleIngestDFA = () => {
-        if (dfaJson.trim()) {
+    const handleIngestGuardian = () => {
+        if (guardianJson.trim()) {
             try {
-                JSON.parse(dfaJson);
-                setStatusMessage('✓ Action plan data ingested successfully');
+                const parsed = JSON.parse(guardianJson);
+                if (Array.isArray(parsed)) {
+                    const violations = parsed.filter(r => r.violations?.length > 0).length;
+                    const overrides = parsed.filter(r => r.actions === 'override').length;
+                    const rate = parsed.length > 0 ? Math.round((overrides / parsed.length) * 100) : 0;
+                    setRuntimeMetrics({
+                        rowsLoaded: parsed.length,
+                        violations,
+                        overrideRate: `${rate}%`,
+                    });
+                    setStatusMessage('✓ Guardian signals ingested successfully');
+                } else {
+                    setStatusMessage('✗ Expected JSON array');
+                }
                 setTimeout(() => setStatusMessage(''), 2000);
             } catch (e) {
                 setStatusMessage('✗ Invalid JSON');
                 setTimeout(() => setStatusMessage(''), 2000);
             }
         }
-    };
-
-    const handleGeneratePolicyPack = () => {
-        const policy = JSON.stringify({
-            version: '1.0',
-            part: 'F',
-            mitigationPlan: actions,
-            timestamp: new Date().toISOString(),
-        }, null, 2);
-        setPolicyPreview(policy);
-        setStatusMessage('✓ Policy pack generated');
-        setTimeout(() => setStatusMessage(''), 2000);
-    };
-
-    const handleCopyPolicy = () => {
-        navigator.clipboard.writeText(policyPreview).then(() => {
-            setStatusMessage('✓ Policy copied to clipboard');
-            setTimeout(() => setStatusMessage(''), 2000);
-        });
-    };
-
-    const handleExportJSON = () => {
-        const snapshot = {
-            actions,
-            auditNotes,
-            dfa: dfaJson,
-            exportedAt: new Date().toISOString(),
-        };
-        const blob = new Blob([JSON.stringify(snapshot, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `accountability-partF-${Date.now()}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        setStatusMessage('✓ Snapshot exported');
-        setTimeout(() => setStatusMessage(''), 2000);
     };
 
     const handleAddNote = () => {
@@ -288,142 +204,41 @@ const PartH = ({ projectContext = {}, onStatusMessage }) => {
         }
     };
 
-    const doneCount = actions.filter(a => a.status === 'Done').length;
-    const isFormComplete = actions.length > 0 && actions.some(a => a.ownerRole && a.status === 'Done');
-    const statusColor = isFormComplete ? '#2e7d32' : '#d32f2f';
-    const statusText = isFormComplete ? 'Complete' : 'Missing';
-
-    const ownerOptions = [
-        'Head of Data Science (Accountable)',
-        'Model Risk Owner (Accountable)',
-        'Compliance Officer',
-        'Privacy Officer',
-        'Underwriting SME Approver',
-        'Claims SME Approver',
-        'Incident Manager (Ops/SRE)',
-        'Security Lead',
-        'Product Manager',
-        'Data Engineering Lead',
-        'Legal Counsel',
-    ];
+    const isComplete = violationThreshold && overrideThreshold && reviewCadence && criticalSLA && nonCriticalSLA && routeCritical && routeCompliance && smEscalation;
+    const statusColor = isComplete ? '#2e7d32' : '#d32f2f';
+    const statusText = isComplete ? 'Complete' : 'Missing';
 
     return (
         <Grid container spacing={2} sx={{ p: 0 }}>
-            {/* Left Sidebar */}
-            <Grid size={{ xs: 12, md: 4 }}>
-                {statusMessage && (
-                    <Card variant="outlined" sx={{ mb: 2, bgcolor: '#c8e6c9', borderColor: '#4caf50' }}>
-                        <CardContent sx={{ p: 1, '&:last-child': { pb: 1 } }}>
-                            <Typography variant="caption" sx={{ color: '#2e7d32', fontWeight: 600 }}>
-                                {statusMessage}
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                )}
-
-                {/* DFA Ingestion Card */}
-                <Card variant="outlined" sx={{ mb: 2 }}>
-                    <CardContent>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                            DFA Ingestion
-                        </Typography>
-                        <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-                            <Button variant="outlined" size="small" onClick={handleLoadDFASample}>
-                                Load Sample
-                            </Button>
-                            <Button variant="contained" size="small" onClick={handleIngestDFA}>
-                                Ingest
-                            </Button>
-                        </Box>
-                        <Typography variant="caption" sx={{ display: 'block', mb: 1, color: 'text.secondary' }}>
-                            Paste DFA JSON from the separate Data Foundation Analyzer app. This populates Tab F and influences gates.
-                        </Typography>
-                        <TextField
-                            multiline
-                            minRows={4}
-                            maxRows={8}
-                            fullWidth
-                            size="small"
-                            variant="outlined"
-                            placeholder="Paste DFA JSON here..."
-                            value={dfaJson}
-                            onChange={(e) => setDfaJson(e.target.value)}
-                            sx={{ fontFamily: 'monospace', fontSize: '0.75rem', mb: 1 }}
-                        />
-                        <Typography variant="caption" sx={{ display: 'block', bgcolor: '#fafafa', p: 1, borderRadius: 1, color: 'text.secondary' }}>
-                            💡 <strong>Tip:</strong> For demo, use <code>Load Sample</code>, then <code>Ingest</code>. In production, this would be an API integration.
-                        </Typography>
-                    </CardContent>
-                </Card>
-
-                {/* Policy Pack Preview Card */}
-                <Card variant="outlined" sx={{ mb: 2 }}>
-                    <CardContent>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                                Policy Pack Preview
-                            </Typography>
-                            <Button variant="outlined" size="small" onClick={handleCopyPolicy}>
-                                Copy
-                            </Button>
-                        </Box>
-                        <TextField
-                            multiline
-                            minRows={6}
-                            maxRows={10}
-                            fullWidth
-                            size="small"
-                            variant="outlined"
-                            placeholder="Generate Policy Pack to preview JSON here."
-                            value={policyPreview}
-                            sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}
-                        />
-                        <Typography variant="caption" sx={{ display: 'block', mt: 1, color: 'text.secondary' }}>
-                            This preview indicates it would be pushed to Guardian.
-                        </Typography>
-                    </CardContent>
-                </Card>
-
-                {/* Snapshot Export Card */}
-                <Card variant="outlined">
-                    <CardContent>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                            Snapshot Export
-                        </Typography>
-                        <Typography variant="caption" sx={{ display: 'block', mb: 2, color: 'text.secondary' }}>
-                            Exports JSON snapshot and HTML report for audits.
-                        </Typography>
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            size="small"
-                            startIcon={<CloudDownloadIcon />}
-                            onClick={handleExportJSON}
-                        >
-                            Export JSON
-                        </Button>
-                    </CardContent>
-                </Card>
-            </Grid>
-
-            {/* Right Panel */}
-            <Grid size={{ xs: 12, md: 8 }}>
+            {/* Right Panel - Full Width */}
+            <Grid size={{ xs: 12 }}>
                 <Card variant="outlined">
                     <CardContent>
                         {/* Header */}
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                             <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                                G. Evidence (Local Demo Vault)
+                                H. Gates & Monitoring (Guardian Integration)
                             </Typography>
                             <Box sx={{ display: 'flex', gap: 1 }}>
                                 <Button variant="outlined" size="small" onClick={handleLoadSample}>
                                     Load Sample
                                 </Button>
                                 <Button variant="contained" size="small" startIcon={<SaveIcon />} onClick={handleSave}>
-                                    Save G
+                                    Save H
                                 </Button>
                             </Box>
                         </Box>
+
+                        {/* Status Message */}
+                        {statusMessage && (
+                            <Card variant="outlined" sx={{ mb: 2, bgcolor: '#c8e6c9', borderColor: '#4caf50' }}>
+                                <CardContent sx={{ p: 1, '&:last-child': { pb: 1 } }}>
+                                    <Typography variant="caption" sx={{ color: '#2e7d32', fontWeight: 600 }}>
+                                        {statusMessage}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        )}
 
                         {/* Status Pill */}
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
@@ -456,124 +271,279 @@ const PartH = ({ projectContext = {}, onStatusMessage }) => {
                             </Typography>
                         </Box>
 
-                        {/* Action plan info and actions */}
-
-                        <Box sx={{
-                            display: 'flex', gap: 1,
-                            mb: 1
-                        }}>
-                            <Typography variant="body2"
-                                sx={{
-                                    color: '#1565c0',
-                                    background: '#f2f6ff',
-                                    padding: '4px 8px',
-                                    borderRadius: '4px',
-                                    border: '1px solid #90caf9',
-                                }}>
-                                <b>Evidence rules</b>
-                                <br />
-                                For demo, evidence files are stored as metadata (filename + timestamp). In production, this connects to your Evidence Vault storage + approvals workflow.
+                        {/* Guardian Integration Info */}
+                        <Card variant="outlined" sx={{ mb: 3, p: 1.5, bgcolor: '#fafafa' }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
+                                Guardian integration
                             </Typography>
+                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                                Guardian already collects runtime rows. This tab defines how those signals drive accountability monitoring, routing, and the Guardian Health card.
+                            </Typography>
+                        </Card>
+
+                        {/* Guardian Signals Toggle Grid */}
+                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 2 }}>Alert Signals Configuration</Typography>
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2, mb: 3 }}>
+                            <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                                    <Box>
+                                        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>Guardian signals enabled</Typography>
+                                        <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>Use runtime signals for health + alerts</Typography>
+                                    </Box>
+                                    <Switch checked={guardianSignals} onChange={(e) => setGuardianSignals(e.target.checked)} />
+                                </Box>
+                            </Card>
+                            <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                                    <Box>
+                                        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>Alert on violations</Typography>
+                                        <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>Create incidents when violations spike</Typography>
+                                    </Box>
+                                    <Switch checked={alertViolations} onChange={(e) => setAlertViolations(e.target.checked)} />
+                                </Box>
+                            </Card>
+                            <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                                    <Box>
+                                        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>Alert on high overrides</Typography>
+                                        <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>Track decision overrides</Typography>
+                                    </Box>
+                                    <Switch checked={alertOverrides} onChange={(e) => setAlertOverrides(e.target.checked)} />
+                                </Box>
+                            </Card>
+                            <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                                    <Box>
+                                        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>Alert on missing approvals</Typography>
+                                        <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>Detect missing sign-offs</Typography>
+                                    </Box>
+                                    <Switch checked={alertMissingApprovals} onChange={(e) => setAlertMissingApprovals(e.target.checked)} />
+                                </Box>
+                            </Card>
                         </Box>
 
-
-
-                        {/* Actions Table */}
-                        <Box sx={{ overflowX: 'auto', mb: 3 }}>
-                            <Table sx={{ mt: 2 }}>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Evidence Item</TableCell>
-                                        <TableCell>Owner Role</TableCell>
-                                        <TableCell>Status</TableCell>
-                                        <TableCell>File</TableCell>
-                                        <TableCell>Approved</TableCell>
-                                    </TableRow>
-                                </TableHead>
-
-                                <TableBody>
-                                    {rows?.map((r, i) => (
-                                        <TableRow key={r.name}>
-                                            {/* Evidence Item */}
-                                            <TableCell>
-                                                <Typography fontWeight={800} fontSize={12}>{r.name}</Typography>
-                                                <Typography fontSize={11} color="text.secondary" mt={0.5}>
-                                                    Last updated: {r.updatedAt ? r.updatedAt.toLocaleString() : "—"}
-                                                </Typography>
-                                            </TableCell>
-
-
-                                            {/* Owner Role (Autocomplete — FIXED) */}
-                                            <TableCell>
-                                                <Autocomplete
-                                                    options={OWNER_OPTIONS}
-                                                    value={r.owner}
-                                                    size="small"
-                                                    disableClearable
-                                                    getOptionLabel={(option) => option.label}
-                                                    isOptionEqualToValue={(option, value) =>
-                                                        option.label === value.label
-                                                    }
-                                                    onChange={(_, newValue) => update(i, "owner", newValue)}
-                                                    renderInput={(params) => (
-                                                        <TextField {...params} placeholder="Select…" />
-                                                    )}
-                                                />
-                                            </TableCell>
-
-
-                                            {/* Status */}
-                                            <TableCell>
-                                                <Select
-                                                    fullWidth
-                                                    size="small"
-                                                    value={r.status}
-                                                    onChange={(e) => update(i, "status", e.target.value)}
-                                                >
-                                                    <MenuItem value="Missing">Missing</MenuItem>
-                                                    <MenuItem value="Partial">Partial</MenuItem>
-                                                    <MenuItem value="Complete">Complete</MenuItem>
-                                                </Select>
-                                            </TableCell>
-
-
-                                            {/* File */}
-                                            <TableCell>
-                                                <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
-                                                    <input
-                                                        type="file"
-                                                        onChange={(e) => update(i, "file", e.target.files?.[0] || null)}
-                                                    />
-                                                    <Typography fontSize={11} color="text.secondary">
-                                                        {r.file ? r.file.name : "No file"}
-                                                    </Typography>
-                                                </Stack>
-                                            </TableCell>
-
-
-                                            {/* Approved */}
-                                            <TableCell>
-                                                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
-                                                    <Typography
-                                                        fontSize={11}
-                                                        fontWeight={800}
-                                                        sx={{ color: r.approved ? "#15803d" : "#92400e" }}
-                                                    >
-                                                        {r.approved ? "Approved" : "Not approved"}
-                                                    </Typography>
-                                                    <Switch
-                                                        checked={r.approved}
-                                                        onChange={(e) => update(i, "approved", e.target.checked)}
-                                                    />
-                                                </Stack>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-
-
+                        {/* Thresholds Grid */}
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 2, mb: 3 }}>
+                            <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>Violation threshold (count)</Typography>
+                                <Select
+                                    fullWidth
+                                    size="small"
+                                    value={violationThreshold}
+                                    onChange={(e) => setViolationThreshold(e.target.value)}
+                                >
+                                    <MenuItem value="3">3</MenuItem>
+                                    <MenuItem value="5">5</MenuItem>
+                                    <MenuItem value="10">10</MenuItem>
+                                    <MenuItem value="20">20</MenuItem>
+                                </Select>
+                            </Card>
+                            <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>Override threshold (%)</Typography>
+                                <Select
+                                    fullWidth
+                                    size="small"
+                                    value={overrideThreshold}
+                                    onChange={(e) => setOverrideThreshold(e.target.value)}
+                                >
+                                    <MenuItem value="10">10</MenuItem>
+                                    <MenuItem value="15">15</MenuItem>
+                                    <MenuItem value="25">25</MenuItem>
+                                    <MenuItem value="40">40</MenuItem>
+                                </Select>
+                            </Card>
+                            <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>Review cadence</Typography>
+                                <Select
+                                    fullWidth
+                                    size="small"
+                                    value={reviewCadence}
+                                    onChange={(e) => setReviewCadence(e.target.value)}
+                                >
+                                    <MenuItem value="Weekly">Weekly</MenuItem>
+                                    <MenuItem value="Bi-weekly">Bi-weekly</MenuItem>
+                                    <MenuItem value="Monthly">Monthly</MenuItem>
+                                    <MenuItem value="Quarterly">Quarterly</MenuItem>
+                                </Select>
+                            </Card>
                         </Box>
+
+                        {/* SLA & Routing Grid */}
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 2, mb: 3 }}>
+                            <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>Critical SLA (hours)</Typography>
+                                <Select
+                                    fullWidth
+                                    size="small"
+                                    value={criticalSLA}
+                                    onChange={(e) => setCriticalSLA(e.target.value)}
+                                >
+                                    <MenuItem value="24">24</MenuItem>
+                                    <MenuItem value="48">48</MenuItem>
+                                    <MenuItem value="72">72</MenuItem>
+                                </Select>
+                            </Card>
+                            <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>Non-critical SLA (days)</Typography>
+                                <Select
+                                    fullWidth
+                                    size="small"
+                                    value={nonCriticalSLA}
+                                    onChange={(e) => setNonCriticalSLA(e.target.value)}
+                                >
+                                    <MenuItem value="3">3</MenuItem>
+                                    <MenuItem value="5">5</MenuItem>
+                                    <MenuItem value="7">7</MenuItem>
+                                    <MenuItem value="10">10</MenuItem>
+                                </Select>
+                            </Card>
+                            <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>Route critical incidents to *</Typography>
+                                <Autocomplete
+                                    options={OWNER_OPTIONS}
+                                    value={routeCritical || null}
+                                    size="small"
+                                    onChange={(_, value) => setRouteCritical(value)}
+                                    getOptionLabel={(option) => typeof option === 'string' ? option : option?.label || ''}
+                                    isOptionEqualToValue={(option, value) => {
+                                        if (!value) return false;
+                                        return option?.label === (typeof value === 'string' ? value : value?.label);
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            placeholder="Select owner role…"
+                                            error={!routeCritical}
+                                        />
+                                    )}
+                                />
+                                {!routeCritical && (
+                                    <Typography variant="caption" sx={{ color: '#d32f2f', mt: 0.5, display: 'block' }}>
+                                        Required field
+                                    </Typography>
+                                )}
+                            </Card>
+                        </Box>
+
+                        {/* Additional Routing Grid */}
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2, mb: 3 }}>
+                            <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>Route compliance notifications to *</Typography>
+                                <Autocomplete
+                                    options={OWNER_OPTIONS}
+                                    value={routeCompliance || null}
+                                    size="small"
+                                    onChange={(_, value) => setRouteCompliance(value)}
+                                    getOptionLabel={(option) => typeof option === 'string' ? option : option?.label || ''}
+                                    isOptionEqualToValue={(option, value) => {
+                                        if (!value) return false;
+                                        return option?.label === (typeof value === 'string' ? value : value?.label);
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            placeholder="Select owner role…"
+                                            error={!routeCompliance}
+                                        />
+                                    )}
+                                />
+                                {!routeCompliance && (
+                                    <Typography variant="caption" sx={{ color: '#d32f2f', mt: 0.5, display: 'block' }}>
+                                        Required field
+                                    </Typography>
+                                )}
+                            </Card>
+                            <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>SME approver for escalations *</Typography>
+                                <Autocomplete
+                                    options={OWNER_OPTIONS}
+                                    value={smEscalation || null}
+                                    size="small"
+                                    onChange={(_, value) => setSmEscalation(value)}
+                                    getOptionLabel={(option) => typeof option === 'string' ? option : option?.label || ''}
+                                    isOptionEqualToValue={(option, value) => {
+                                        if (!value) return false;
+                                        return option?.label === (typeof value === 'string' ? value : value?.label);
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            placeholder="Select owner role…"
+                                            error={!smEscalation}
+                                        />
+                                    )}
+                                />
+                                {!smEscalation && (
+                                    <Typography variant="caption" sx={{ color: '#d32f2f', mt: 0.5, display: 'block' }}>
+                                        Required field
+                                    </Typography>
+                                )}
+                            </Card>
+                        </Box>
+
+                        {/* Guardian Runtime Signals */}
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>Guardian runtime signals (sample / paste)</Typography>
+                            <Box sx={{ display: 'flex', gap: 1 }}>
+                                <Button variant="outlined" size="small" onClick={handleLoadGuardianSample}>
+                                    Load Sample
+                                </Button>
+                                <Button variant="contained" size="small" onClick={handleIngestGuardian}>
+                                    Ingest JSON
+                                </Button>
+                            </Box>
+                        </Box>
+
+                        <TextField
+                            multiline
+                            minRows={6}
+                            maxRows={10}
+                            fullWidth
+                            size="small"
+                            variant="outlined"
+                            placeholder='Paste runtime JSON array here (Guardian table rows). Example: [{"timestamp":"...","project":"...","violations":["..."],"actions":"override"}]'
+                            value={guardianJson}
+                            onChange={(e) => setGuardianJson(e.target.value)}
+                            sx={{ fontFamily: 'monospace', fontSize: '0.75rem', mb: 2 }}
+                        />
+
+                        {/* Runtime Metrics KPIs */}
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 2, mb: 3 }}>
+                            <Card variant="outlined" sx={{ p: 2, textAlign: 'center' }}>
+                                <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 1 }}>
+                                    Runtime rows loaded
+                                </Typography>
+                                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                                    {runtimeMetrics.rowsLoaded}
+                                </Typography>
+                            </Card>
+                            <Card variant="outlined" sx={{ p: 2, textAlign: 'center' }}>
+                                <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 1 }}>
+                                    Violations (total)
+                                </Typography>
+                                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                                    {runtimeMetrics.violations}
+                                </Typography>
+                            </Card>
+                            <Card variant="outlined" sx={{ p: 2, textAlign: 'center' }}>
+                                <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 1 }}>
+                                    Override rate
+                                </Typography>
+                                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                                    {runtimeMetrics.overrideRate}
+                                </Typography>
+                            </Card>
+                        </Box>
+
+                        {/* Guardian Info Card */}
+                        <Card variant="outlined" sx={{ mb: 3, p: 1.5, bgcolor: '#fafafa' }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
+                                Where these signals feed the UI
+                            </Typography>
+                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                                These rows drive the Guardian Health card and can trigger incident routing based on thresholds. In production, this is a live feed from Guardian.
+                            </Typography>
+                        </Card>
 
                         {/* Audit Trail */}
                         <Box sx={{ mb: 2 }}>
@@ -620,20 +590,10 @@ const PartH = ({ projectContext = {}, onStatusMessage }) => {
                                 </Table>
                             ) : (
                                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', textAlign: 'center', py: 2 }}>
-                                    No notes yet. Add a short note when decisions are made (e.g., owners assigned, milestones reached).
+                                    No notes yet. Add a short note when decisions are made (e.g., owners assigned, evidence approved).
                                 </Typography>
                             )}
                         </Box>
-
-                        {/* Why This Matters */}
-                        <Card variant="outlined" sx={{ bgcolor: '#fafafa', p: 2 }}>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                                Why this matters
-                            </Typography>
-                            <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
-                                A mitigation plan with assigned owners and clear success criteria turns identified risks into concrete work. Without tracking, mitigations get lost and gaps resurface during audits.
-                            </Typography>
-                        </Card>
                     </CardContent>
                 </Card >
             </Grid >

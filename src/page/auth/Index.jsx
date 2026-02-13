@@ -48,7 +48,7 @@ export default function Login() {
            email: values.email, role: "admin" },
         token: "demo-token",
       }))
-      navigate('/app/transparencyexplainability/', { replace: true })
+      navigate('/app/fairnessandondiscrimination/', { replace: true })
 
     },
   });

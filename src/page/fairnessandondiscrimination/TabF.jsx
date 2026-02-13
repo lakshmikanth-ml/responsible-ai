@@ -221,7 +221,7 @@ const TabF = () => {
 
                                     <TableCell>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-                                            <StatusIcon sx={{ fontSize: 18, color: statusColor.accent }} />
+                                            {/* <StatusIcon sx={{ fontSize: 18, color: statusColor.accent }} /> */}
                                             <Chip
                                                 label={gate.status}
                                                 size="small"
@@ -259,9 +259,9 @@ const TabF = () => {
                                         <Typography variant="caption" sx={{ fontWeight: 600, color: '#1a1a1a' }}>
                                             {gate.requiredApprovals}
                                         </Typography>
-                                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
+                                        {/* <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
                                             Approved: {gate.approved.length} / {gate.approvers.length}
-                                        </Typography>
+                                        </Typography> */}
                                     </TableCell>
                                 </TableRow>
                             );

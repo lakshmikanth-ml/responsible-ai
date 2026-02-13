@@ -355,6 +355,7 @@ const TabC = ({ projectContext = {}, onStatusMessage }) => {
                                     DFA JSON Input
                                 </Typography>
                                 <TextField
+                                    label={'Paste DFA JSON (file analysis or database profiling)'}
                                     fullWidth
                                     multiline
                                     rows={10}

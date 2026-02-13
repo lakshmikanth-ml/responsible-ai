@@ -24,168 +24,184 @@ import {
     InputLabel,
     Select,
     MenuItem,
+    Chip,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import EditIcon from '@mui/icons-material/Edit';
 
 const TabG = ({ projectContext = {}, onStatusMessage }) => {
-    const [projectCtx, setProjectCtx] = useState({
-        project: projectContext?.project || '',
-        modelVersion: projectContext?.modelVersion || '',
-        endpoint: projectContext?.endpoint || '',
-        decisionRole: projectContext?.decisionRole || 'Decision-support',
-        sensitivity: projectContext?.sensitivity || 'Tier 4 — Regulated (PII/PHI/PCI)',
-        hostingBoundary: projectContext?.hostingBoundary || 'Client VPC/VNet (Private)',
-    });
-    const [evidenceData, setEvidenceData] = useState({
-        items: [],
-    });
+    // Evidence Checklist Data
+    const [evidenceItems, setEvidenceItems] = useState([
+        { id: 1, evidenceItem: 'DFA Privacy Readiness Report', source: 'DFA run artifact', owner: 'Head of Data Science', approval: 'Pending', notes: 'File + DB profiling attached' },
+        { id: 2, evidenceItem: 'Privacy/PII Leakage Test Report', source: 'Evaluation Suite', owner: 'Privacy Officer / DPO', approval: 'Pending', notes: 'Must be PASS for release' },
+        { id: 3, evidenceItem: 'Security Test Report (Injection/Exfil)', source: 'Evaluation Suite', owner: 'CISO / Security Lead', approval: 'Pending', notes: 'Must show block rate >= threshold' },
+        { id: 4, evidenceItem: 'Guardian Policy Pack (Privacy)', source: 'Guardian config export', owner: 'Head of Platform Engineering', approval: 'Pending', notes: 'Generated from this pillar' },
+        { id: 5, evidenceItem: 'RBAC / Entitlement Proof', source: 'IAM config evidence', owner: 'Head of Platform Engineering', approval: 'Pending', notes: 'Role->repo mapping sign-off' },
+        { id: 6, evidenceItem: 'Release Sign-off Record', source: 'Section D approvals', owner: 'Responsible AI Officer', approval: 'Pending', notes: 'Privacy + Security approvals' },
+    ]);
+
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [editingId, setEditingId] = useState(null);
     const [statusMessage, setStatusMessage] = useState('');
-    const [evidenceDialog, setEvidenceDialog] = useState(false);
-    const [newEvidence, setNewEvidence] = useState({
+    const [formData, setFormData] = useState({
         evidenceItem: '',
         source: '',
         owner: '',
         approval: 'Pending',
-        notes: ''
-    });
-    const [evidenceErrors, setEvidenceErrors] = useState({
-        evidenceItem: false,
-        source: false,
-        owner: false,
+        notes: '',
     });
 
-    const evidenceItems = [
+    const evidenceItemOptions = [
+        'DFA Privacy Readiness Report',
+        'Privacy/PII Leakage Test Report',
+        'Security Test Report (Injection/Exfil)',
         'Guardian Policy Pack (Privacy)',
-        'DFA Report (Data Foundation Analysis)',
-        'Security Test Report',
-        'Access Control Proof (RBAC audit)',
-        'Privacy Approval Sign-off',
-        'Security Review Approval',
+        'RBAC / Entitlement Proof',
+        'Release Sign-off Record',
         'Redaction Correctness Report',
         'Prompt Injection Test Results',
+        'Secrets Detection Report',
+        'Cross-tenant Isolation Proof',
     ];
+
     const sourceOptions = [
-        'Guardian config export',
         'DFA run artifact',
-        'Evaluation & QA service',
-        'Access control audit',
+        'Evaluation Suite',
+        'Guardian config export',
+        'IAM config evidence',
+        'Section D approvals',
         'Manual upload',
-        'Other'
     ];
+
     const ownerOptions = [
+        'Head of Data Science',
+        'Privacy Officer / DPO',
         'CISO / Security Lead',
         'Head of Platform Engineering',
-        'Privacy Officer / DPO',
-        'Head of Data Science',
         'Responsible AI Officer',
-        'Legal Counsel'
+        'Legal Counsel',
+        'Compliance Lead',
     ];
+
     const approvalStatuses = ['Pending', 'Approved', 'Rejected', 'Needs Review'];
 
+    // Load saved data on mount
     useEffect(() => {
-        const saved = localStorage.getItem('privacy_tabG_data');
+        const saved = localStorage.getItem('privacySecurity_tabG_data');
         if (saved) {
             try {
-                setEvidenceData(JSON.parse(saved));
+                const parsed = JSON.parse(saved);
+                setEvidenceItems(parsed);
             } catch (e) {
                 console.error('Error loading TabG data:', e);
             }
         }
-        const savedCtx = localStorage.getItem('privacy_projectContext');
-        if (savedCtx) {
-            try {
-                setProjectCtx(JSON.parse(savedCtx));
-            } catch (e) {
-                console.error('Error loading project context:', e);
-            }
-        }
     }, []);
 
-    const handleContextChange = (field, value) => {
-        setProjectCtx(prev => ({ ...prev, [field]: value }));
-    };
-
-    const handleSaveContext = () => {
-        try {
-            localStorage.setItem('privacy_projectContext', JSON.stringify(projectCtx));
-            setStatusMessage('✓ Project Context saved');
-            setTimeout(() => setStatusMessage(''), 2000);
-            if (onStatusMessage) onStatusMessage('✓ Project Context saved');
-        } catch (e) {
-            setStatusMessage('✗ Error saving context');
-        }
-    };
-
-    const handleResetDemo = () => {
-        if (window.confirm('Reset demo data for Evidence?')) {
-            localStorage.removeItem('privacy_tabG_data');
-            localStorage.removeItem('privacy_projectContext');
-            setEvidenceData({ items: [] });
-            setProjectCtx({ project: '', modelVersion: '', endpoint: '', decisionRole: 'Decision-support', sensitivity: 'Tier 4 — Regulated (PII/PHI/PCI)', hostingBoundary: 'Client VPC/VNet (Private)' });
-            setStatusMessage('✓ Demo reset');
-            if (onStatusMessage) onStatusMessage('✓ Demo reset');
-        }
-    };
-
-    const handleLoadSample = () => {
-        const sampleEvidence = {
-            items: [
-                { id: 1, evidenceItem: 'Guardian Policy Pack (Privacy)', source: 'Guardian config export', owner: 'Head of Platform Engineering', approval: 'Pending', notes: 'Generated from Privacy & Data Security pillar' },
-                { id: 2, evidenceItem: 'DFA Report (Data Foundation Analysis)', source: 'DFA run artifact', owner: 'Head of Data Science', approval: 'Approved', notes: 'Latest DFA scan showing PII patterns' },
-                { id: 3, evidenceItem: 'Security Test Report', source: 'Evaluation & QA service', owner: 'CISO / Security Lead', approval: 'Approved', notes: 'All critical tests passed' },
-                { id: 4, evidenceItem: 'Access Control Proof (RBAC audit)', source: 'Access control audit', owner: 'Head of Platform Engineering', approval: 'Approved', notes: 'Entitlement mappings validated' },
-            ]
-        };
-        setEvidenceData(sampleEvidence);
-        setStatusMessage('✓ Sample evidence loaded');
-        setTimeout(() => setStatusMessage(''), 2000);
-    };
-
+    // Handle Save
     const handleSave = () => {
         try {
-            localStorage.setItem('privacy_tabG_data', JSON.stringify(evidenceData));
-            setStatusMessage('✓ G Evidence checklist saved');
+            localStorage.setItem('privacySecurity_tabG_data', JSON.stringify(evidenceItems));
+            setStatusMessage('✓ Evidence checklist saved successfully');
             setTimeout(() => setStatusMessage(''), 2000);
+            if (onStatusMessage) onStatusMessage('✓ G Evidence saved');
         } catch (e) {
             setStatusMessage('✗ Error saving data');
         }
     };
 
-    const handleAddEvidence = () => {
-        const errors = {
-            evidenceItem: !newEvidence.evidenceItem.trim(),
-            source: !newEvidence.source.trim(),
-            owner: !newEvidence.owner.trim(),
-        };
-        setEvidenceErrors(errors);
-        const hasError = Object.values(errors).some(Boolean);
-        if (hasError) return;
+    // Handle Load Sample
+    const handleLoadSample = () => {
+        const sampleData = [
+            { id: 1, evidenceItem: 'DFA Privacy Readiness Report', source: 'DFA run artifact', owner: 'Head of Data Science', approval: 'Approved', notes: 'File + DB profiling attached' },
+            { id: 2, evidenceItem: 'Privacy/PII Leakage Test Report', source: 'Evaluation Suite', owner: 'Privacy Officer / DPO', approval: 'Approved', notes: 'Must be PASS for release' },
+            { id: 3, evidenceItem: 'Security Test Report (Injection/Exfil)', source: 'Evaluation Suite', owner: 'CISO / Security Lead', approval: 'Approved', notes: 'Must show block rate >= threshold' },
+            { id: 4, evidenceItem: 'Guardian Policy Pack (Privacy)', source: 'Guardian config export', owner: 'Head of Platform Engineering', approval: 'Approved', notes: 'Generated from this pillar' },
+            { id: 5, evidenceItem: 'RBAC / Entitlement Proof', source: 'IAM config evidence', owner: 'Head of Platform Engineering', approval: 'Approved', notes: 'Role->repo mapping sign-off' },
+            { id: 6, evidenceItem: 'Release Sign-off Record', source: 'Section D approvals', owner: 'Responsible AI Officer', approval: 'Approved', notes: 'Privacy + Security approvals' },
+        ];
+        setEvidenceItems(sampleData);
+        setStatusMessage('✓ Sample evidence loaded');
+        setTimeout(() => setStatusMessage(''), 2000);
+    };
 
-        setEvidenceData(prev => ({
-            ...prev,
-            items: [...prev.items, { id: Date.now(), ...newEvidence }]
-        }));
-        setNewEvidence({
+    // Handle Dialog Open
+    const handleOpenDialog = (item = null) => {
+        if (item) {
+            setEditingId(item.id);
+            setFormData({ ...item });
+        } else {
+            setEditingId(null);
+            setFormData({
+                evidenceItem: '',
+                source: '',
+                owner: '',
+                approval: 'Pending',
+                notes: '',
+            });
+        }
+        setDialogOpen(true);
+    };
+
+    // Handle Dialog Close
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+        setEditingId(null);
+        setFormData({
             evidenceItem: '',
             source: '',
             owner: '',
             approval: 'Pending',
-            notes: ''
+            notes: '',
         });
-        setEvidenceErrors({ evidenceItem: false, source: false, owner: false });
-        setEvidenceDialog(false);
     };
 
-    const handleRemoveEvidence = (id) => {
-        setEvidenceData(prev => ({
-            ...prev,
-            items: prev.items.filter(e => e.id !== id)
-        }));
+    // Handle Form Submit
+    const handleSubmit = () => {
+        if (!formData.evidenceItem || !formData.source || !formData.owner) {
+            setStatusMessage('✗ Please fill all required fields');
+            return;
+        }
+
+        if (editingId) {
+            // Update existing
+            setEvidenceItems(prev =>
+                prev.map(item => item.id === editingId ? { ...item, ...formData } : item)
+            );
+            setStatusMessage('✓ Evidence item updated');
+        } else {
+            // Add new
+            setEvidenceItems(prev => [...prev, { id: Date.now(), ...formData }]);
+            setStatusMessage('✓ Evidence item added');
+        }
+        setTimeout(() => setStatusMessage(''), 2000);
+        handleCloseDialog();
     };
 
+    // Handle Delete
+    const handleDelete = (id) => {
+        if (window.confirm('Delete this evidence item?')) {
+            setEvidenceItems(prev => prev.filter(item => item.id !== id));
+            setStatusMessage('✓ Evidence item deleted');
+            setTimeout(() => setStatusMessage(''), 2000);
+        }
+    };
+
+    // Handle Approval Toggle
+    const handleToggleApproval = (id, currentStatus) => {
+        const statusCycle = ['Pending', 'Approved', 'Rejected', 'Needs Review'];
+        const nextIndex = (statusCycle.indexOf(currentStatus) + 1) % statusCycle.length;
+        const nextStatus = statusCycle[nextIndex];
+
+        setEvidenceItems(prev =>
+            prev.map(item => item.id === id ? { ...item, approval: nextStatus } : item)
+        );
+    };
+
+    // Get approval color
     const getApprovalColor = (status) => {
         switch (status) {
             case 'Approved': return '#2e7d32';
@@ -196,303 +212,209 @@ const TabG = ({ projectContext = {}, onStatusMessage }) => {
         }
     };
 
-    // KPI Dashboard
-    const approvedCount = evidenceData.items.filter(e => e.approval === 'Approved').length;
-    const totalCount = evidenceData.items.length;
-    const completionRate = totalCount > 0 ? Math.round((approvedCount / totalCount) * 100) : 0;
+    // Get approval badge
+    const getApprovalBadge = (status) => {
+        switch (status) {
+            case 'Approved': return 'success';
+            case 'Pending': return 'warning';
+            case 'Rejected': return 'error';
+            case 'Needs Review': return 'info';
+            default: return 'default';
+        }
+    };
 
-    const kpiCards = [
-        { label: 'Total Evidence Items', value: totalCount, color: '#1976d2' },
-        { label: 'Approved', value: approvedCount, color: '#2e7d32' },
-        { label: 'Completion %', value: `${completionRate}%`, color: completionRate >= 75 ? '#2e7d32' : '#f57c00' },
-    ];
+    // Calculate KPIs
+    const approved = evidenceItems.filter(e => e.approval === 'Approved').length;
+    const pending = evidenceItems.filter(e => e.approval === 'Pending').length;
+    const completionRate = evidenceItems.length > 0 ? Math.round((approved / evidenceItems.length) * 100) : 0;
 
     return (
-        <Grid container spacing={2} sx={{ p: 0 }}>
-            {/* LEFT PANEL: PROJECT CONTEXT */}
-            <Grid size={{ xs: 12, md: 4, }}
-            >
-                <Box sx={{ border: '1px solid rgba(117, 117, 117, 0.2)', borderRadius: 2, p: 2, mb: 3 }}>
-
-                    <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
-                        Project Context
+        <Box sx={{ p: 0 }}>
+            {/* Section Header */}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 3, mb: 3 }}>
+                <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>
+                        G. Evidence (What We Must Prove)
                     </Typography>
-
-                    {statusMessage && (
-                        <Card variant="outlined" sx={{ mb: 2, bgcolor: '#c8e6c9', borderColor: '#4caf50' }}>
-                            <CardContent sx={{ p: 1, '&:last-child': { pb: 1 } }}>
-                                <Typography variant="caption" sx={{ color: '#2e7d32', fontWeight: 600 }}>
-                                    {statusMessage}
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    )}
-
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                        <TextField
-                            label="Project"
-                            variant="outlined"
-                            size="small"
-                            fullWidth
-                            value={projectCtx.project}
-                            onChange={(e) => handleContextChange('project', e.target.value)}
-                            placeholder="e.g., Carrier A — UW Copilot"
-                        />
-                        <TextField
-                            label="Model Version"
-                            variant="outlined"
-                            size="small"
-                            fullWidth
-                            value={projectCtx.modelVersion}
-                            onChange={(e) => handleContextChange('modelVersion', e.target.value)}
-                            placeholder="e.g., v1.2.0"
-                        />
-                        <TextField
-                            label="Endpoint"
-                            variant="outlined"
-                            size="small"
-                            fullWidth
-                            value={projectCtx.endpoint}
-                            onChange={(e) => handleContextChange('endpoint', e.target.value)}
-                            placeholder="e.g., /uw/assistant"
-                        />
-                        <FormControl size="small" fullWidth>
-                            <InputLabel>Decision Role</InputLabel>
-                            <Select
-                                value={projectCtx.decisionRole}
-                                onChange={(e) => handleContextChange('decisionRole', e.target.value)}
-                                label="Decision Role"
-                            >
-                                <MenuItem value="Advisory only">Advisory only</MenuItem>
-                                <MenuItem value="Decision-support">Decision-support</MenuItem>
-                                <MenuItem value="Automated (restricted)">Automated (restricted)</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <FormControl size="small" fullWidth>
-                            <InputLabel>Data Sensitivity Tier</InputLabel>
-                            <Select
-                                value={projectCtx.sensitivity}
-                                onChange={(e) => handleContextChange('sensitivity', e.target.value)}
-                                label="Data Sensitivity Tier"
-                            >
-                                <MenuItem value="Tier 1 — Public / Low sensitivity">Tier 1 — Public / Low sensitivity</MenuItem>
-                                <MenuItem value="Tier 2 — Internal">Tier 2 — Internal</MenuItem>
-                                <MenuItem value="Tier 3 — Confidential">Tier 3 — Confidential</MenuItem>
-                                <MenuItem value="Tier 4 — Regulated (PII/PHI/PCI)">Tier 4 — Regulated (PII/PHI/PCI)</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <FormControl size="small" fullWidth>
-                            <InputLabel>Hosting Boundary</InputLabel>
-                            <Select
-                                value={projectCtx.hostingBoundary}
-                                onChange={(e) => handleContextChange('hostingBoundary', e.target.value)}
-                                label="Hosting Boundary"
-                            >
-                                <MenuItem value="Client VPC/VNet (Private)">Client VPC/VNet (Private)</MenuItem>
-                                <MenuItem value="Enkefalos managed (Dedicated)">Enkefalos managed (Dedicated)</MenuItem>
-                                <MenuItem value="Hybrid">Hybrid</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-
-                    <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
-                        <Button
-                            variant="outlined"
-                            size="small"
-                            startIcon={<RestartAltIcon />}
-                            onClick={handleResetDemo}
-                            fullWidth
-                        >
-                            Reset Data
-                        </Button>
-                        <Button
-                            variant="contained"
-                            size="small"
-                            startIcon={<SaveIcon />}
-                            onClick={handleSaveContext}
-                            fullWidth
-                        >
-                            Save
-                        </Button>
-                    </Box>
-
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 2, fontStyle: 'italic' }}>
-                        Data persists locally (browser localStorage) for demo realism.
+                    <Typography variant="body2" sx={{ color: 'text.secondary', maxWidth: 600 }}>
+                        Evidence items are required for audits and client sign-off: DFA report, security test report, Guardian policy pack, access control proof, and approvals.
                     </Typography>
                 </Box>
-            </Grid>
-
-            {/* RIGHT PANEL: Evidence Checklist */}
-            <Grid size={{ xs: 12, md: 8 }} sx={{
-                p: 2,
-                borderRadius: 2,
-                border: {
-                    xs: 'none',
-                    md: '1px solid rgba(117, 117, 117, 0.2)',
-                }
-            }} >
-
-
-                {/* G: Evidence Checklist */}
-                <Card variant="outlined" sx={{
-                    mb: 2,
-                    textAlign: "-khtml-right"
-                }}>
-                    <CardContent>
-                        <Box sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center', mb: 2
-                        }}>
-                            <Typography variant="h6"
-                                sx={{ fontWeight: 600 }}>
-                                G Evidence Checklist
-                            </Typography>
-                            <Button
-                                size="small"
-                                variant="outlined"
-                                startIcon={<AddIcon />}
-                                onClick={() => setEvidenceDialog(true)}
-                            >
-                                Add Item
-                            </Button>
-                        </Box>
-
-                        {evidenceData.items.length > 0 ? (
-                            <TableContainer component={Paper} variant="outlined" sx={{ maxHeight: 400, overflow: 'auto' }}>
-                                <Table size="small" stickyHeader>
-                                    <TableHead sx={{ bgcolor: '#f5f5f5' }}>
-                                        <TableRow>
-                                            <TableCell sx={{ fontWeight: 600, minWidth: 160 }}>Evidence Item</TableCell>
-                                            <TableCell sx={{ fontWeight: 600, minWidth: 140 }}>Source</TableCell>
-                                            <TableCell sx={{ fontWeight: 600, minWidth: 140 }}>Owner</TableCell>
-                                            <TableCell sx={{ fontWeight: 600, minWidth: 120 }}>Approval</TableCell>
-                                            <TableCell sx={{ fontWeight: 600, minWidth: 150 }}>Notes</TableCell>
-                                            <TableCell align="right" sx={{ fontWeight: 600 }}>Action</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {evidenceData.items.map(item => (
-                                            <TableRow key={item.id}>
-                                                <TableCell sx={{ fontSize: '0.85rem' }}>{item.evidenceItem}</TableCell>
-                                                <TableCell sx={{ fontSize: '0.85rem' }}>{item.source}</TableCell>
-                                                <TableCell sx={{ fontSize: '0.85rem' }}>{item.owner}</TableCell>
-                                                <TableCell>
-                                                    <Typography
-                                                        variant="caption"
-                                                        sx={{
-                                                            fontWeight: 600,
-                                                            color: getApprovalColor(item.approval),
-                                                            display: 'inline-block',
-                                                            px: 1,
-                                                            py: 0.5,
-                                                            bgcolor: getApprovalColor(item.approval) + '15',
-                                                            borderRadius: 1,
-                                                        }}
-                                                    >
-                                                        {item.approval}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell sx={{ fontSize: '0.85rem', maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.notes}</TableCell>
-                                                <TableCell align="right">
-                                                    <IconButton
-                                                        size="small"
-                                                        onClick={() => handleRemoveEvidence(item.id)}
-                                                    >
-                                                        <DeleteIcon fontSize="small" />
-                                                    </IconButton>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        ) : (
-                            <Typography variant="body2" color="text.secondary" sx={{ py: 2, textAlign: 'center' }}>
-                                No evidence items added yet. Click "Add Item" or "Load Sample Evidence" to begin.
-                            </Typography>
-                        )}
-                    </CardContent>
-                </Card>
-
-                {/* Action Buttons */}
-                <Box sx={{
-                    display: 'flex', justifyContent:
-                        'flex-end', gap: 2
-                }}>
+                <Box sx={{ display: 'flex', gap: 1, flexShrink: 0 }}>
                     <Button
                         variant="outlined"
                         size="small"
-                        startIcon={<AddIcon />}
                         onClick={handleLoadSample}
+                        sx={{ textTransform: 'none', fontWeight: 600 }}
                     >
                         Load Sample Evidence
                     </Button>
                     <Button
                         variant="contained"
-                        startIcon={<SaveIcon />}
+                        size="small"
                         onClick={handleSave}
-                        sx={{ bgcolor: '#2e7d32' }}
+                        sx={{ textTransform: 'none', fontWeight: 600 }}
                     >
-                        Save Evidence
+                        Save G
                     </Button>
                 </Box>
+            </Box>
 
-                {/* Evidence Dialog */}
+            {/* Status Message */}
+            {statusMessage && (
+                <Card variant="outlined" sx={{ mb: 2, bgcolor: '#c8e6c9', borderColor: '#4caf50' }}>
+                    <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
+                        <Typography variant="caption" sx={{ color: '#2e7d32', fontWeight: 600 }}>
+                            {statusMessage}
+                        </Typography>
+                    </CardContent>
+                </Card>
+            )}
 
-            </Grid>
-            <Dialog open={evidenceDialog} onClose={() => setEvidenceDialog(false)} maxWidth="sm" fullWidth>
-                <DialogTitle>Add Evidence Item</DialogTitle>
-                <DialogContent
-                    sx={{
-                        pt: 0, pb: 2,
-                        display: 'flex',
-                        flexDirection: 'column', gap: 2,
-                        '&.MuiDialogContent-root': { pt: 1 }
-                    }}
-                    onClose={() => setEvidenceDialog(false)}
-                >
+            {/* Card: Evidence Checklist */}
+            <Card variant="outlined">
+                <CardContent>
+                    <Box sx={{ mb: 2, pb: 2, borderBottom: '1px solid #e0e0e0' }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                                Evidence Checklist
+                            </Typography>
+                            <Button
+                                variant="outlined"
+                                size="small"
+                                startIcon={<AddIcon />}
+                                onClick={() => handleOpenDialog()}
+                                sx={{ textTransform: 'none' }}
+                            >
+                                Add Item
+                            </Button>
+                        </Box>
+                    </Box>
+
+                   
+
+                    {/* Evidence Table */}
+                    <TableContainer sx={{ mb: 2 }}>
+                        <Table size="small" stickyHeader>
+                            <TableHead>
+                                <TableRow sx={{ bgcolor: '#f5f5f5' }}>
+                                    <TableCell sx={{ fontWeight: 700, width: 260 }}>Evidence Item</TableCell>
+                                    <TableCell sx={{ fontWeight: 700, width: 200 }}>Source</TableCell>
+                                    <TableCell sx={{ fontWeight: 700, width: 180 }}>Owner</TableCell>
+                                    <TableCell sx={{ fontWeight: 700, width: 160 }}>Approval</TableCell>
+                                    <TableCell sx={{ fontWeight: 700 }}>Notes</TableCell>
+                                    <TableCell sx={{ fontWeight: 700, width: 120, textAlign: 'center' }}>Action</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {evidenceItems.length > 0 ? (
+                                    evidenceItems.map((item) => (
+                                        <TableRow key={item.id} sx={{ '&:hover': { bgcolor: '#fafafa' } }}>
+                                            <TableCell sx={{ fontSize: '0.9rem' }}>{item.evidenceItem}</TableCell>
+                                            <TableCell sx={{ fontSize: '0.9rem' }}>{item.source}</TableCell>
+                                            <TableCell sx={{ fontSize: '0.9rem' }}>{item.owner}</TableCell>
+                                            <TableCell>
+                                                <Chip
+                                                    label={item.approval}
+                                                    size="small"
+                                                    variant="outlined"
+                                                    color={getApprovalBadge(item.approval)}
+                                                    onClick={() => handleToggleApproval(item.id, item.approval)}
+                                                    sx={{
+                                                        cursor: 'pointer',
+                                                        fontWeight: 600,
+                                                        fontSize: '0.75rem'
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell sx={{ fontSize: '0.9rem', color: 'text.secondary' }}>
+                                                {item.notes}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <Button
+                                                    size="small"
+                                                    variant="text"
+                                                    onClick={() => handleToggleApproval(item.id, item.approval)}
+                                                    sx={{ textTransform: 'none', fontWeight: 600, color: '#1976d2' }}
+                                                >
+                                                    Toggle
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell colSpan={6} align="center" sx={{ py: 4, color: 'text.secondary' }}>
+                                            No evidence items added yet. Click "Add Item" or "Load Sample Evidence" to begin.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </CardContent>
+            </Card>
+
+            {/* Hint Message */}
+            <Box sx={{ mt: 2, p: 1.5, bgcolor: '#f2f6ff', borderRadius: 1, border: '1px solid #90caf9' }}>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
+                    ℹ️ When you click "Generate Policy Pack (for Guardian)" in other sections, it should automatically attach as an evidence item here in production.
+                </Typography>
+            </Box>
+
+            {/* Add/Edit Evidence Dialog */}
+            <Dialog open={dialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+                <DialogTitle sx={{ fontWeight: 700 }}>
+                    {editingId ? 'Edit Evidence Item' : 'Add Evidence Item'}
+                </DialogTitle>
+                <DialogContent sx={{ pt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <Autocomplete
-                        options={evidenceItems}
-                        value={newEvidence.evidenceItem}
-                        onChange={(_, value) => {
-                            setNewEvidence(prev => ({ ...prev, evidenceItem: value || '' }));
-                            if (evidenceErrors.evidenceItem) setEvidenceErrors(prev => ({ ...prev, evidenceItem: false }));
-                        }}
-                        renderInput={(params) => (
-                            <TextField {...params} label="Evidence Item*" variant="outlined" size="small" error={evidenceErrors.evidenceItem} helperText={evidenceErrors.evidenceItem ? 'Required' : ''} />
-                        )}
+                        options={evidenceItemOptions}
+                        value={formData.evidenceItem}
+                        onChange={(_, value) => setFormData(prev => ({ ...prev, evidenceItem: value || '' }))}
                         freeSolo
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Evidence Item *"
+                                variant="outlined"
+                                size="small"
+                            />
+                        )}
                     />
                     <Autocomplete
                         options={sourceOptions}
-                        value={newEvidence.source}
-                        onChange={(_, value) => {
-                            setNewEvidence(prev => ({ ...prev, source: value || '' }));
-                            if (evidenceErrors.source) setEvidenceErrors(prev => ({ ...prev, source: false }));
-                        }}
-                        renderInput={(params) => (
-                            <TextField {...params} label="Source*" variant="outlined" size="small" error={evidenceErrors.source} helperText={evidenceErrors.source ? 'Required' : ''} />
-                        )}
+                        value={formData.source}
+                        onChange={(_, value) => setFormData(prev => ({ ...prev, source: value || '' }))}
                         freeSolo
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Source *"
+                                variant="outlined"
+                                size="small"
+                            />
+                        )}
                     />
                     <Autocomplete
                         options={ownerOptions}
-                        value={newEvidence.owner}
-                        onChange={(_, value) => {
-                            setNewEvidence(prev => ({ ...prev, owner: value || '' }));
-                            if (evidenceErrors.owner) setEvidenceErrors(prev => ({ ...prev, owner: false }));
-                        }}
-                        renderInput={(params) => (
-                            <TextField {...params} label="Owner*" variant="outlined" size="small" error={evidenceErrors.owner} helperText={evidenceErrors.owner ? 'Required' : ''} />
-                        )}
+                        value={formData.owner}
+                        onChange={(_, value) => setFormData(prev => ({ ...prev, owner: value || '' }))}
                         freeSolo
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Owner *"
+                                variant="outlined"
+                                size="small"
+                            />
+                        )}
                     />
                     <FormControl fullWidth size="small">
                         <InputLabel>Approval Status</InputLabel>
                         <Select
-                            value={newEvidence.approval}
-                            onChange={(e) => setNewEvidence(prev => ({ ...prev, approval: e.target.value }))}
+                            value={formData.approval}
+                            onChange={(e) => setFormData(prev => ({ ...prev, approval: e.target.value }))}
                             label="Approval Status"
                         >
                             {approvalStatuses.map(status => (
@@ -504,23 +426,22 @@ const TabG = ({ projectContext = {}, onStatusMessage }) => {
                         label="Notes (optional)"
                         variant="outlined"
                         size="small"
-                        fullWidth
                         multiline
-                        rows={2}
-                        value={newEvidence.notes}
-                        onChange={(e) => setNewEvidence(prev => ({ ...prev, notes: e.target.value }))}
-                        placeholder="e.g., Generated from Privacy & Data Security pillar"
+                        rows={3}
+                        fullWidth
+                        value={formData.notes}
+                        onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
+                        placeholder="Add relevant notes about this evidence item..."
                     />
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => {
-                        setEvidenceDialog(false);
-                        setEvidenceErrors({ evidenceItem: false, source: false, owner: false });
-                    }}>Cancel</Button>
-                    <Button onClick={handleAddEvidence} variant="contained">Add</Button>
+                <DialogActions sx={{ p: 2 }}>
+                    <Button onClick={handleCloseDialog}>Cancel</Button>
+                    <Button onClick={handleSubmit} variant="contained">
+                        {editingId ? 'Update' : 'Add'}
+                    </Button>
                 </DialogActions>
             </Dialog>
-        </Grid >
+        </Box>
     );
 };
 

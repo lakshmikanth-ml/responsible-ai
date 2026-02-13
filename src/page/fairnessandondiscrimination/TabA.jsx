@@ -284,7 +284,14 @@ const TabA = () => {
     return (
         <Box sx={{ p: 2 }}>
 
+            <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 1 }}>
+                A. Objectives & Scope
 
+            </Typography>
+            <Typography variant="body2"
+                color="text.secondary" sx={{ mb: 2 }}>
+                Define what “fairness” means for this use case and document impacted groups.
+            </Typography>
             {/* KPI Dashboard - Reusable */}
             <Box sx={{
                 display: 'grid',
@@ -340,6 +347,32 @@ const TabA = () => {
                             />
                         </Grid>
                         <Grid size={{
+                            xs: 12, sm: 12,
+                            md: 6
+                        }}>
+                            <Autocomplete
+                                fullWidth
+                                size="small"
+                                options={jurisdictionOptions}
+                                value={formData.jurisdiction || null}
+                                onChange={(event, newValue) => handleFormChange('jurisdiction', newValue || '')}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Jurisdiction / Market"
+                                        variant="outlined"
+                                    />
+                                )}
+                                noOptionsText="No options"
+                                clearIcon={null}
+                                slotProps={{
+                                    paper: {
+                                        sx: { mt: 1 }
+                                    }
+                                }}
+                            />
+                        </Grid>
+                        <Grid size={{
                             xs: 12,
                             sm: 12, md: 6
                         }}>
@@ -363,21 +396,6 @@ const TabA = () => {
                                         sx: { mt: 1 }
                                     }
                                 }}
-                            />
-                        </Grid>
-                        <Grid size={{
-                            xs: 12, sm: 12,
-                            md: 6
-                        }}>
-                            <TextField
-                                fullWidth
-                                label="Business Rationale (required)"
-                                placeholder="Why is fairness required? What harm are we preventing?"
-                                multiline
-                                rows={4}
-                                value={formData.businessRationale}
-                                onChange={(e) => handleFormChange('businessRationale', e.target.value)}
-                                size="small"
                             />
                         </Grid>
                         <Grid size={{
@@ -437,29 +455,17 @@ const TabA = () => {
                             xs: 12, sm: 12,
                             md: 6
                         }}>
-                            <Autocomplete
+                            <TextField
                                 fullWidth
+                                label="Business Rationale (required)"
+                                placeholder="Why is fairness required? What harm are we preventing?"
+                                multiline
+                                rows={4}
+                                value={formData.businessRationale}
+                                onChange={(e) => handleFormChange('businessRationale', e.target.value)}
                                 size="small"
-                                options={jurisdictionOptions}
-                                value={formData.jurisdiction || null}
-                                onChange={(event, newValue) => handleFormChange('jurisdiction', newValue || '')}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="Jurisdiction / Market"
-                                        variant="outlined"
-                                    />
-                                )}
-                                noOptionsText="No options"
-                                clearIcon={null}
-                                slotProps={{
-                                    paper: {
-                                        sx: { mt: 1 }
-                                    }
-                                }}
                             />
                         </Grid>
-
                         <Grid size={{
                             xs: 12, sm: 12,
                             md: 6
@@ -469,12 +475,18 @@ const TabA = () => {
                                 label="Scope Notes (optional)"
                                 placeholder="Constraints, exclusions, internal governance notes"
                                 multiline
-                                rows={2}
+                                rows={4}
                                 value={formData.scopeNotes}
                                 onChange={(e) => handleFormChange('scopeNotes', e.target.value)}
                                 size="small"
                             />
                         </Grid>
+
+
+
+
+
+
                     </Grid>
 
                     <Box sx={{ display: 'flex', gap: 1, mt: 2, flexWrap: 'wrap' }}>
@@ -482,7 +494,7 @@ const TabA = () => {
                             Save Objectives
                         </Button>
                         <Button variant="outlined" onClick={() => downloadTemplate('Fairness_Objectives_Template.docx')}>
-                            <DownloadIcon sx={{ mr: 1 }} /> Download Template
+                            <DownloadIcon sx={{ mr: 1 }} /> Download  Objectives Template
                         </Button>
                     </Box>
 

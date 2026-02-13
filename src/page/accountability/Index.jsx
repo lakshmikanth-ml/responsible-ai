@@ -28,7 +28,6 @@ import InfoIcon from '@mui/icons-material/Info';
 
 // Import Privacy & Data Security Tab Components
 
-import TabH from '../privacyanddataSecurity/TabH';
 
 // Import Accountability Tab Components
 import PartA from './PartA';
@@ -45,6 +44,71 @@ const DECISION_ROLE_OPTIONS = [
     { value: 'decision_support', label: 'Decision-support' },
     { value: 'decision_influencing', label: 'Decision-influencing' },
 ];
+
+const PILL_ITEMS = [
+    {
+        label: "Lifecycle Controlled",
+        tone: "slate",
+        backgroundColor: "rgba(25, 118, 210, 0.12)",
+        borderColor: "rgba(25, 118, 210, 0.35)",
+        dotColor: "#1976d2",
+    },
+    { label: "Coverage: 31%", tone: "slate", backgroundColor: "#f1f5f9", },
+    { label: "Evidence: 0/6 approved", tone: "slate", backgroundColor: "#f1f5f9" },
+    {
+        label: "Risks: 2 critical open", tone: "slate", backgroundColor: "#f1f5f9",
+        dotColor: "red",
+    },
+];
+
+const Pill = ({
+    label,
+    tone = "primary",
+    backgroundColor,
+    borderColor,
+    dotColor,
+}) => {
+    const palette = {
+        primary: { bg: "primary.50", border: "primary.200", dot: "primary.main" },
+        slate: { bg: "grey.50", border: "grey.200", dot: "primary.main" },
+        warn: { bg: "warning.50", border: "warning.200", dot: "warning.main" },
+    };
+    const base = palette[tone] || palette.primary;
+    const colors = {
+        bg: backgroundColor || base.bg,
+        border: borderColor || base.border,
+        dot: dotColor || base.dot,
+    };
+
+    return (
+        <Box
+            sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 1,
+                px: 1.5,
+                py: 0.75,
+                borderRadius: "999px",
+                bgcolor: colors.bg,
+                border: "1px solid",
+                borderColor: colors.border,
+                minHeight: 34,
+            }}
+        >
+            <Box
+                sx={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    bgcolor: colors.dot,
+                }}
+            />
+            <Typography variant="caption" fontWeight={700}>
+                {label}
+            </Typography>
+        </Box>
+    );
+};
 
 const ProjectContextCard = ({
     context,
@@ -337,9 +401,11 @@ const Index = () => {
             case 'F':
                 return <PartF projectContext={projectContext} onStatusMessage={setStatusMessage} />;
             case 'G':
-                return <PartG projectContext={projectContext} onStatusMessage={setStatusMessage} />;
+                return <PartG projectContext={projectContext}
+                    onStatusMessage={setStatusMessage} />;
             case 'H':
-                return <PartH projectContext={projectContext} onStatusMessage={setStatusMessage} />;
+                return <PartH projectContext={projectContext}
+                    onStatusMessage={setStatusMessage} />;
             default:
                 return <PartA projectContext={projectContext} onStatusMessage={setStatusMessage} />;
         }
@@ -347,71 +413,7 @@ const Index = () => {
 
     return (
         <Box >
-            {/* Gate Cards Row */}
-            <Box
-                sx={{
-                    display: 'grid',
-                    gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' },
-                    gap: 2,
-                    mb: 2,
-                }}
-            >
-                {[
-                    {
-                        title: 'Pre-Training Gate',
-                        status: gateStatuses.preTraining,
-                        hint: 'Missing required owners or DFA readiness signals.',
-                        color: gateStatuses.preTraining === 'BLOCKED' ? '#d32f2f' : '#2e7d32',
-                    },
-                    {
-                        title: 'Release Gate',
-                        status: gateStatuses.release,
-                        hint: 'Release blocked until incident process + evidence minimum is met.',
-                        color: gateStatuses.release === 'BLOCKED' ? '#d32f2f' : '#2e7d32',
-                    },
-                    {
-                        title: 'Production Gate',
-                        status: gateStatuses.production,
-                        hint: 'Production blocked because release gate is blocked.',
-                        color: gateStatuses.production === 'BLOCKED' ? '#d32f2f' : '#2e7d32',
-                    },
-                    {
-                        title: 'Guardian Health',
-                        status: gateStatuses.guardianHealth,
-                        hint: 'Derived from runtime signals configured in Tab H.',
-                        color: gateStatuses.guardianHealth === 'UNKNOWN' ? '#f57c00' : '#2e7d32',
-                    },
-                ].map((gate, idx) => (
-                    <Card key={idx} variant="outlined" sx={{ p: 2 }}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                            {gate.title}
-                        </Typography>
-                        <Box sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1,
-                            mb: 1.5,
-                            p: 1,
-                            bgcolor: gate.color + '15',
-                            borderRadius: '50px',
-                            width: 'fit-content',
-                        }}>
-                            <Box sx={{
-                                width: 10,
-                                height: 10,
-                                borderRadius: '50%',
-                                bgcolor: gate.color,
-                            }} />
-                            <Typography variant="caption" sx={{ fontWeight: 700, color: gate.color }}>
-                                {gate.status}
-                            </Typography>
-                        </Box>
-                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.5 }}>
-                            {gate.hint}
-                        </Typography>
-                    </Card>
-                ))}
-            </Box>
+
 
             {/* Main Card with Header + Content */}
             <Card elevation={1} sx={{ m: 0 }}>
@@ -458,16 +460,86 @@ const Index = () => {
                         </Box>
                     </Box>
 
-                    {/* Status Chips */}
-                    <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mb: 3 }}>
-                        <Chip label="Lifecycle Controlled" variant="outlined" size="small" sx={{ fontWeight: 600 }} />
-                        <Chip label={`Coverage: ${kpis.coverage}`} variant="outlined" size="small" sx={{ fontWeight: 600 }} />
-                        <Chip label={`Evidence: ${kpis.evidenceApproved} approved`} variant="outlined" size="small" sx={{ fontWeight: 600 }} />
-                        <Chip label={`Risks: ${kpis.risksOpen}`} variant="outlined" size="small" sx={{ fontWeight: 600 }} />
-                    </Box>
+                    <Stack
+                        mt={2}
+                        direction="row"
+                        spacing={1}
+                        flexWrap="wrap"
+                        alignItems="center"
+                        useFlexGap
+                    >
+                        {PILL_ITEMS.map((pill) => (
+                            <Pill key={pill.label} {...pill} />
+                        ))}
+                    </Stack>
+
                 </Box>
 
-
+                {/* Gate Cards Row */}
+                <Box
+                    sx={{
+                        display: 'grid',
+                        gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' },
+                        gap: 2,
+                        mx: 2,
+                    }}
+                >
+                    {[
+                        {
+                            title: 'Pre-Training Gate',
+                            status: gateStatuses.preTraining,
+                            hint: 'Project Context incomplete (Project/Model Version/Endpoint/Decision Role required).',
+                            color: gateStatuses.preTraining === 'BLOCKED' ? '#d32f2f' : '#2e7d32',
+                        },
+                        {
+                            title: 'Release Gate',
+                            status: gateStatuses.release,
+                            hint: 'Pre-Training Gate is not passing.',
+                            color: gateStatuses.release === 'BLOCKED' ? '#d32f2f' : '#2e7d32',
+                        },
+                        {
+                            title: 'Production Gate',
+                            status: gateStatuses.production,
+                            hint: 'Release Gate is not passing.',
+                            color: gateStatuses.production === 'BLOCKED' ? '#d32f2f' : '#2e7d32',
+                        },
+                        {
+                            title: 'Guardian Health',
+                            status: gateStatuses.guardianHealth,
+                            hint: 'No runtime signals loaded (sample or pasted).',
+                            color: gateStatuses.guardianHealth === 'UNKNOWN' ? '#f57c00' : '#2e7d32',
+                        },
+                    ].map((gate, idx) => (
+                        <Card key={idx} variant="outlined" sx={{ p: 2 }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                                {gate.title}
+                            </Typography>
+                            <Box sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1,
+                                mb: 1.5,
+                                p: 1,
+                                bgcolor: gate.color + '15',
+                                borderRadius: '50px',
+                                width: 'fit-content',
+                            }}>
+                                <Box sx={{
+                                    width: 10,
+                                    height: 10,
+                                    borderRadius: '50%',
+                                    bgcolor: gate.color,
+                                }} />
+                                <Typography variant="caption" sx={{ fontWeight: 700, color: gate.color }}>
+                                    {gate.status}
+                                </Typography>
+                            </Box>
+                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.5 }}>
+                                {gate.hint}
+                            </Typography>
+                        </Card>
+                    ))}
+                </Box>
 
                 {/* Main Content Grid: Left Sidebar + Right Tab Content */}
                 <Grid container>
@@ -478,7 +550,8 @@ const Index = () => {
                         {/* Tab Navigation */}
                         <Tabs
                             value={activeTab}
-                            onChange={(e, newValue) => setActiveTab(newValue)}
+                            onChange={(e, newValue) =>
+                                setActiveTab(newValue)}
                             variant="scrollable"
                             scrollButtons="auto"
                             sx={{
@@ -507,14 +580,14 @@ const Index = () => {
                 </Grid>
             </Card>
             <Box mt={2}>
-        <ProjectContextCard
-          context={projectContext}
-          onFieldChange={handleFieldChange}
-          onSave={handleSaveContext}
-          onReset={handleResetDemo}
-          statusMessage={statusMessage}
-        />
-      </Box>
+                <ProjectContextCard
+                    context={projectContext}
+                    onFieldChange={handleFieldChange}
+                    onSave={handleSaveContext}
+                    onReset={handleResetDemo}
+                    statusMessage={statusMessage}
+                />
+            </Box>
         </Box>
     );
 };

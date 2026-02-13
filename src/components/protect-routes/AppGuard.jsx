@@ -13,7 +13,7 @@ export default function AppGuard({ children }) {
 
     useEffect(() => {
         if (isLoggedIn) {
-            navigate("/app/transparencyexplainability", { replace: true });
+            navigate("/app/fairnessandondiscrimination", { replace: true });
         } else {
             navigate("/", { replace: true });
         }

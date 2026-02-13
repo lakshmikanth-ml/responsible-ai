@@ -111,6 +111,37 @@ export default function TabCTrainingReadiness() {
         setReadinessAuto(true);
     };
 
+    /* Helper to determine status color */
+    const getStatusColor = (label, value) => {
+        if (label === "Contains PII") return value === "NO" ? "success" : "warning";
+        if (label === "Consent / Approval") return value === "approved" ? "success" : "warning";
+        if (label === "Data Lineage") return value === "verified" ? "success" : "warning";
+        if (label === "Access Controls") return value === "role-based" ? "success" : "warning";
+        if (label === "Quality Score") {
+            if (value >= 80) return "success";
+            if (value >= 50) return "warning";
+            return "error";
+        }
+        if (label === "Missing Fields (%)" || label === "Anomaly Rate (%)") {
+            if (value <= 5) return "success";
+            if (value <= 15) return "warning";
+            return "error";
+        }
+        return "default";
+    };
+
+    const renderStatusChip = (label, value) => {
+        const color = getStatusColor(label, value);
+        return (
+            <Chip
+                label={String(value)}
+                color={color}
+                size="small"
+                variant="outlined"
+            />
+        );
+    };
+
     /* ------------------ AUDIT ------------------ */
     const canAdd = Boolean(actor && note.trim());
     const addNote = () => {
@@ -143,97 +174,90 @@ export default function TabCTrainingReadiness() {
                 <Divider sx={{ my: 2 }} />
 
                 {/* ================= INGEST ================= */}
-                <Card variant="outlined">
-                    <CardContent>
-                        <Stack direction="row" justifyContent="space-between">
-                            <Typography fontWeight={600}>Ingest DFA JSON
-                                <Typography variant="body2" color="text.secondary" gutterBottom>
-                                    Paste DFA output JSON (from the Data Foundation Analyzer app) and ingest to populate readiness fields.
-                                </Typography>
+                <Box className="block" sx={{ mt: 2, border: '1px solid #e0e0e0', borderRadius: 1, p: 2 }}>
+                    {/* Block Title */}
+                    <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Box>
+                            <Typography variant="h6" fontWeight={700}>
+                                Ingest DFA JSON
                             </Typography>
-                            <Chip
-                                label={dfaIngested ? "INGESTED" : "MISSING"}
-                                color={dfaIngested ? "success" : "warning"}
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                                Paste DFA output JSON (from the Data Foundation Analyzer app) and ingest to populate readiness fields.
+                            </Typography>
+                        </Box>
+                        <Chip
+                            label={dfaIngested ? "INGESTED" : "MISSING"}
+                            color={dfaIngested ? "success" : "warning"}
+                            size="small"
+                        />
+                    </Box>
+
+                    {/* Fields Row */}
+                    <Grid container spacing={2} sx={{ mb: 2 }}>
+                        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                            <Typography variant="body2" fontWeight={600} sx={{ mb: 1 }}>
+                                Training Readiness Owner
+                            </Typography>
+                            <TextField
+                                select
+                                fullWidth
                                 size="small"
-                            />
-                        </Stack>
-
-                        <Grid container spacing={2} mt={1}>
-                            <Grid size={{ xs: 12, md: 4 }}>
-                                <Autocomplete
-                                    options={OWNER_ROLES}
-                                    value={ownerRole}
-                                    onChange={(_, v) => setOwnerRole(v)}
-                                    isOptionEqualToValue={(o, v) => o === v}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            size="small"
-                                            label="Training Readiness Owner"
-                                        />
-                                    )}
-                                />
-                            </Grid>
-
-                            <Grid size={{ xs: 12, md: 4 }}>
-                                <Autocomplete
-                                    options={["Missing", "Partial", "Ready"]}
-                                    value={readiness}
-                                    disabled={!dfaIngested}
-                                    onChange={(_, v) => {
-                                        if (!v) return;
-                                        setReadiness(v);
-                                        setReadinessAuto(false);
-                                    }}
-                                    isOptionEqualToValue={(o, v) => o === v}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            size="small"
-                                            label="Training Readiness Interpretation"
-                                            helperText={
-                                                !dfaIngested
-                                                    ? "Ingest DFA to compute readiness"
-                                                    : readinessAuto
-                                                        ? "Auto-computed from DFA"
-                                                        : "Manually overridden"
-                                            }
-                                        />
-                                    )}
-                                />
-                            </Grid>
-
-                            <Grid size={{ xs: 12, md: 4 }}
-                                sx={{
-                                    border: "1px solid rgba(0, 0, 0, 0.14)",
-                                    padding: "9px 10px",
-                                    borderRadius: "4px",
-                                }}
+                                value={ownerRole}
+                                onChange={(e) => setOwnerRole(e.target.value)}
                             >
-                                <Stack
-                                    direction="row"
-                                    justifyContent="space-between"
-
-
-                                >
-                                    <Typography sx={{
-                                        alignItems: "center",
-                                        display: "flex",
-                                    }}>DFA Ingested</Typography>
-                                    <Switch checked={dfaIngested} disabled />
-                                </Stack>
-                            </Grid>
+                                {OWNER_ROLES.map((role) => (
+                                    <option key={role} value={role}>{role}</option>
+                                ))}
+                            </TextField>
                         </Grid>
 
-                        <Divider sx={{ my: 2 }} />
+                        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                            <Typography variant="body2" fontWeight={600} sx={{ mb: 1 }}>
+                                Training Readiness Interpretation
+                            </Typography>
+                            <TextField
+                                select
+                                fullWidth
+                                size="small"
+                                disabled={!dfaIngested}
+                                value={readiness}
+                                onChange={(e) => {
+                                    setReadiness(e.target.value);
+                                    setReadinessAuto(false);
+                                }}
+                            >
+                                {["Missing", "Partial", "Ready"].map((status) => (
+                                    <option key={status} value={status}>{status}</option>
+                                ))}
+                            </TextField>
+                        </Grid>
 
-                        <Grid container spacing={2}>
-                            <Grid size={{ xs: 12, md: 6 }}>
+                        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ p: 1.5, border: '1px solid #e0e0e0', borderRadius: 1, height: '100%' }}>
+                                <Box>
+                                    <Typography fontWeight={600} variant="body2">DFA Ingested</Typography>
+                                    <Typography variant="caption" color="text.secondary">Must be true to pass Pre-Training Gate.</Typography>
+                                </Box>
+                                <Switch checked={dfaIngested} disabled />
+                            </Stack>
+                        </Grid>
+                    </Grid>
+
+                    <Box sx={{ height: '10px' }} />
+
+                    {/* Split Layout: Paste Box + Summary Table */}
+                    <Grid container spacing={2}>
+                        {/* Left: JSON Paste Box */}
+                        <Grid size={{ xs: 12, md: 6 }}>
+                            <Box>
+                                <Typography variant="body2" fontWeight={600} sx={{ mb: 1 }}>
+                                    DFA JSON Paste Box
+                                </Typography>
                                 <TextField
                                     multiline
-                                    minRows={8}
+                                    minRows={10}
                                     fullWidth
-                                    label="DFA JSON Paste Box"
+                                    placeholder='Paste DFA JSON here (e.g., {"datasetName":"...","qualityScore":82,...})'
                                     value={dfaJson}
                                     onChange={(e) => {
                                         setDfaJson(e.target.value);
@@ -243,56 +267,82 @@ export default function TabCTrainingReadiness() {
                                         setReadinessAuto(true);
                                     }}
                                 />
-
-                                <Stack direction="row" spacing={1} mt={1}>
+                                <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
                                     <Button variant="contained" onClick={ingestDfa}>Ingest DFA JSON</Button>
                                     <Button variant="outlined" onClick={loadSample}>Load DFA Sample</Button>
                                 </Stack>
-                            </Grid>
-
-                            <Grid size={{ xs: 12, md: 6 }}>
-                                <Typography fontWeight={600}>DFA Readiness Summary</Typography>
-
-                                <Table size="small" sx={{
-                                    mt: 2,
-                                    borderColor: "#ccc", borderRadius: 8,
-                                }} border={1}>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Signal</TableCell>
-                                            <TableCell>Value</TableCell>
-                                            <TableCell>Implication</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {summary ? (
-                                            [
-                                                ["Dataset", summary.dataset],
-                                                ["Contains PII", summary.containsPII],
-                                                ["Consent / Approval", summary.consent],
-                                                ["Data Lineage", summary.lineage],
-                                                ["Access Controls", summary.access],
-                                                ["Quality Score", summary.qualityScore],
-                                                ["Missing Fields (%)", summary.missingPct],
-                                                ["Anomaly Rate (%)", summary.anomalyRate],
-                                            ].map(([label, value]) => (
-                                                <TableRow key={label}>
-                                                    <TableCell>{label}</TableCell>
-                                                    <TableCell>{value}</TableCell>
-                                                    <TableCell>—</TableCell>
-                                                </TableRow>
-                                            ))
-                                        ) : (
-                                            <TableRow>
-                                                <TableCell colSpan={3} align="center">No DFA ingested yet.</TableCell>
-                                            </TableRow>
-                                        )}
-                                    </TableBody>
-                                </Table>
-                            </Grid>
+                                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+                                    In real deployment: this would be fetched from DFA via API. Demo uses paste + sample.
+                                </Typography>
+                            </Box>
                         </Grid>
-                    </CardContent>
-                </Card>
+
+                        {/* Right: Summary Table */}
+                        <Grid size={{ xs: 12, md: 6 }}>
+                            <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: 2 }}>
+                                <Typography variant="h6" fontWeight={700} sx={{ mb: 0.5 }}>
+                                    DFA Readiness Summary
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 2 }}>
+                                    Populated after ingest.
+                                </Typography>
+
+                                <Box sx={{ overflowX: 'auto', width: '100%' }}>
+                                    <Table size="small" sx={{ border: '1px solid #ccc', minWidth: 400 }}>
+                                        <TableHead>
+                                            <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+                                                <TableCell fontWeight={600}>Signal</TableCell>
+                                                <TableCell fontWeight={600}>Value</TableCell>
+                                                <TableCell fontWeight={600}>Implication</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {summary ? (
+                                                [
+                                                    ["Dataset", summary.dataset, "Used to establish traceability for training inputs."],
+                                                    ["Contains PII", summary.containsPII, "PII requires stronger controls; affects safety in failure modes."],
+                                                    ["Consent / Approval", summary.consent, "Training on unapproved data is a release blocker."],
+                                                    ["Data Lineage", summary.lineage, "Unknown lineage increases audit risk and instability under edge cases."],
+                                                    ["Access Controls", summary.access, "Weak controls elevate operational and safety risk."],
+                                                    ["Quality Score", summary.qualityScore, "Low quality can cause unpredictable outputs; impacts reliability."],
+                                                    ["Missing Fields (%)", summary.missingPct, "Missing data often triggers failure modes under real usage."],
+                                                    ["Anomaly Rate (%)", summary.anomalyRate, "Higher anomalies require robust fallback and edge-case testing."],
+                                                ].map(([label, value, implication]) => (
+                                                    <TableRow key={label}>
+                                                        <TableCell>{label}</TableCell>
+                                                        <TableCell>{renderStatusChip(label, value)}</TableCell>
+                                                        <TableCell sx={{ fontSize: '0.85rem' }}>{implication}</TableCell>
+                                                    </TableRow>
+                                                ))
+                                            ) : (
+                                                [
+                                                    ["Dataset", "—", "Used to establish traceability for training inputs."],
+                                                    ["Contains PII", "NO", "PII requires stronger controls; affects safety in failure modes."],
+                                                    ["Consent / Approval", "unknown", "Training on unapproved data is a release blocker."],
+                                                    ["Data Lineage", "unknown", "Unknown lineage increases audit risk and instability under edge cases."],
+                                                    ["Access Controls", "unknown", "Weak controls elevate operational and safety risk."],
+                                                    ["Quality Score", "0", "Low quality can cause unpredictable outputs; impacts reliability."],
+                                                    ["Missing Fields (%)", "0", "Missing data often triggers failure modes under real usage."],
+                                                    ["Anomaly Rate (%)", "0", "Higher anomalies require robust fallback and edge-case testing."],
+                                                ].map(([label, value, implication]) => (
+                                                    <TableRow key={label}>
+                                                        <TableCell>{label}</TableCell>
+                                                        <TableCell>{renderStatusChip(label, value)}</TableCell>
+                                                        <TableCell sx={{ fontSize: '0.85rem' }}>{implication}</TableCell>
+                                                    </TableRow>
+                                                ))
+                                            )}
+                                        </TableBody>
+                                    </Table>
+                                </Box>
+
+                                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 2 }}>
+                                    Gate logic uses DFA ingestion + key readiness indicators to compute Pre-Training gate status.
+                                </Typography>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Box>
 
                 {/* ================= AUDIT ================= */}
                 <Card variant="outlined" sx={{ mt: 2 }}>

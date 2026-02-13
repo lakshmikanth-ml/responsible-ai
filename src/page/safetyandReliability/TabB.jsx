@@ -173,29 +173,80 @@ export default function TabBCoverage() {
                 {/* ================= STANDARDS ================= */}
                 <Card variant="outlined" sx={{ mt: 2 }}>
                     <CardContent>
-                        <Typography fontWeight={600}>Safety Standards Alignment</Typography>
+                        <Typography variant="h6" fontWeight={600} mb={0.5}>
+                            Safety Standards Alignment
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary" display="block" mb={2}>
+                            Select applicable standards and domain safety considerations.
+                        </Typography>
 
-                        <Grid container spacing={2} mt={1}>
-                            {toggle("ISO 27001", standards.iso27001, (v) =>
-                                setStandards({ ...standards, iso27001: v })
-                            )}
-                            {toggle("ISO 9001", standards.iso9001, (v) =>
-                                setStandards({ ...standards, iso9001: v })
-                            )}
-                            {toggle("SOC 2", standards.soc2, (v) =>
-                                setStandards({ ...standards, soc2: v })
-                            )}
-                            {toggle("Local Regulations", standards.localReg, (v) =>
-                                setStandards({ ...standards, localReg: v })
-                            )}
+                        <Grid container spacing={2} mb={2}>
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <Stack direction="row" justifyContent="space-between" alignItems="center" p={1.5} sx={{ border: '1px solid #e0e0e0', borderRadius: 1 }}>
+                                    <Box>
+                                        <Typography fontWeight={600} variant="body2">ISO 27001 (security controls)</Typography>
+                                        <Typography variant="caption" color="text.secondary">Common requirement for enterprise insurers.</Typography>
+                                    </Box>
+                                    <Switch checked={standards.iso27001} onChange={(e) => setStandards({ ...standards, iso27001: e.target.checked })} />
+                                </Stack>
+                            </Grid>
 
-                            {selectField(formik, "complianceTool", "Compliance Tool", COMPLIANCE_TOOLS)}
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <Stack direction="row" justifyContent="space-between" alignItems="center" p={1.5} sx={{ border: '1px solid #e0e0e0', borderRadius: 1 }}>
+                                    <Box>
+                                        <Typography fontWeight={600} variant="body2">ISO 9001 (quality management)</Typography>
+                                        <Typography variant="caption" color="text.secondary">Supports process rigor and QA culture.</Typography>
+                                    </Box>
+                                    <Switch checked={standards.iso9001} onChange={(e) => setStandards({ ...standards, iso9001: e.target.checked })} />
+                                </Stack>
+                            </Grid>
+
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <Stack direction="row" justifyContent="space-between" alignItems="center" p={1.5} sx={{ border: '1px solid #e0e0e0', borderRadius: 1 }}>
+                                    <Box>
+                                        <Typography fontWeight={600} variant="body2">SOC 2 alignment</Typography>
+                                        <Typography variant="caption" color="text.secondary">Often requested for vendor risk assessments.</Typography>
+                                    </Box>
+                                    <Switch checked={standards.soc2} onChange={(e) => setStandards({ ...standards, soc2: e.target.checked })} />
+                                </Stack>
+                            </Grid>
+
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <Stack direction="row" justifyContent="space-between" alignItems="center" p={1.5} sx={{ border: '1px solid #e0e0e0', borderRadius: 1 }}>
+                                    <Box>
+                                        <Typography fontWeight={600} variant="body2">Local insurance safety regulations</Typography>
+                                        <Typography variant="caption" color="text.secondary">Jurisdiction-specific practices; impacts audits.</Typography>
+                                    </Box>
+                                    <Switch checked={standards.localReg} onChange={(e) => setStandards({ ...standards, localReg: e.target.checked })} />
+                                </Stack>
+                            </Grid>
+                        </Grid>
+
+                        <Divider sx={{ my: 2 }} />
+
+                        <Grid container spacing={2}>
+                            {selectField(formik, "complianceTool", "Compliance Tracking Tool", COMPLIANCE_TOOLS)}
                             {selectField(formik, "domainSafety", "Domain Safety Focus", DOMAIN_SAFETY)}
                         </Grid>
 
-                        <Typography variant="caption" color="text.secondary" mt={2}>
-                            Benchmarks and standards drive monitoring and release gates.
-                        </Typography>
+                        <Box sx={{
+                            mt: 2, p: 1.5,
+
+                            bgcolor: '#f5f5f5',
+                            background: "linear-gradient(180deg, #f5f8ff 0%, #f2f6ff 100%)",
+                            color: " #0b2a70",
+                            borderRadius: 2,
+                        }}>
+                            <Typography variant="caption"
+                                sx={{
+                                    color: "#0b2a70;",
+                                    fontSize: "14px",
+                                    fontWeight: 500,
+                                    borderRadius: 1,
+                                }}>
+                                Reliability benchmarks + standards alignment drive monitoring thresholds and alert routes in Tab H, and influence release readiness gates.
+                            </Typography>
+                        </Box>
                     </CardContent>
                 </Card>
 
@@ -203,7 +254,10 @@ export default function TabBCoverage() {
                 <Card variant="outlined" sx={{ mt: 2 }}>
                     <CardContent>
                         <Stack direction="row" justifyContent="space-between">
+
+
                             <Typography fontWeight={600}>Audit Trail Notes</Typography>
+
                             <Button size="small" onClick={addNote} disabled={!canAddNote}>
                                 Add Note
                             </Button>

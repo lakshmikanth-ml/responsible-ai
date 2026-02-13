@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
+    Stack,
     Box,
     TextField,
     Button,
     Card,
     CardContent,
     Typography,
-    Grid,
+    Grid, Chip,
     Table,
     TableBody,
     TableCell,
@@ -30,6 +31,36 @@ import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 import WarningIcon from '@mui/icons-material/Warning';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import RiskRegisterCard from './RiskTable';
+
+
+
+const severityOptions = ["Low", "Medium", "High", "Critical"];
+
+const riskTypes = [
+    "Data Protection Gap",
+    "Model Governance Risk",
+    "Security Control Missing",
+    "Evaluation Coverage Gap",
+];
+
+const statusOptions = [
+    "Open",
+    "Mitigating",
+    "Blocked",
+    "Resolved",
+];
+
+const emptyRisk = () => ({
+    id: Date.now(),
+    severity: "Medium",
+    type: riskTypes[0],
+    details: "",
+    owner: "",
+    status: "Open",
+});
+
+
 
 const TabE = ({ projectContext = {}, onStatusMessage }) => {
     const [projectCtx, setProjectCtx] = useState({
@@ -48,6 +79,7 @@ const TabE = ({ projectContext = {}, onStatusMessage }) => {
     const [riskDialog, setRiskDialog] = useState(false);
     const [newRisk, setNewRisk] = useState({ description: '', severity: 'High', owner: '', mitigation: '' });
     const [riskErrors, setRiskErrors] = useState({ description: false, owner: false });
+    const [risks, setRisks] = React.useState([]);
 
     const severities = ['Critical', 'High', 'Medium', 'Low'];
 
@@ -277,132 +309,53 @@ const TabE = ({ projectContext = {}, onStatusMessage }) => {
 
 
 
-                {/* E.1: Identified Gaps */}
                 <Card variant="outlined" sx={{ mb: 2 }}>
                     <CardContent>
-                        <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
-                            E.1 Identified Gaps
-                        </Typography>
-                        <TextField
-                            label="Add Gap Description"
-                            variant="outlined"
-                            size="small"
-                            fullWidth
-                            multiline
-                            rows={2}
-                            placeholder="e.g., Encryption not enabled for data at rest"
-                            sx={{ mb: 2 }}
-                            onKeyPress={(e) => {
-                                if (e.key === 'Enter' && e.target.value.trim()) {
-                                    setRiskData(prev => ({
-                                        ...prev,
-                                        gaps: [...prev.gaps, { id: Date.now(), description: e.target.value }]
-                                    }));
-                                    e.target.value = '';
-                                }
-                            }}
-                        />
-                        {riskData.gaps.length > 0 && (
-                            <Box sx={{ mt: 2 }}>
-                                {riskData.gaps.map((gap) => (
-                                    <Card key={gap.id} variant="outlined" sx={{ mb: 1, bgcolor: '#f5f5f5' }}>
-                                        <CardContent sx={{ p: 1.5 }}>
-                                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                                                <Typography variant="body2">{gap.description}</Typography>
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={() => setRiskData(prev => ({
-                                                        ...prev,
-                                                        gaps: prev.gaps.filter(g => g.id !== gap.id)
-                                                    }))}
-                                                >
-                                                    <DeleteIcon fontSize="small" />
-                                                </IconButton>
-                                            </Box>
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                            </Box>
-                        )}
-                    </CardContent>
-                </Card>
 
-                {/* E.2: Associated Risks */}
-                <Card variant="outlined" sx={{ mb: 2 }}>
-                    <CardContent>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                            <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                                E.2 Associated Risks
-                            </Typography>
-                            <Button
-                                size="small"
-                                variant="outlined"
-                                startIcon={<AddIcon />}
-                                onClick={() => setRiskDialog(true)}
-                            >
-                                Add Risk
-                            </Button>
+                        {/* HEADER */}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "flex-start",
+                                mb: 2,
+                            }}
+                        >
+                            <Box>
+                                <Typography variant="h6" fontWeight={700}>
+                                    E. Gaps & Risks (Auto + Manual)
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                    Auto-generated risks come from DFA and missing coverage/evaluation. You can also add controlled “manual risks” using dropdowns (no free text unless needed).
+                                </Typography>
+                            </Box>
+
+
                         </Box>
 
-                        {riskData.risks.length > 0 ? (
-                            <TableContainer component={Paper}
-                                variant="outlined"
-                                sx={{ maxHeight: 300, overflow: 'auto' }}>
-                                <Table size="small"
-                                    stickyHeader
-                                    aria-label="risks-table">
-                                    <TableHead
-                                        sx={{ bgcolor: '#f5f5f5' }}>
-                                        <TableRow>
-                                            <TableCell sx={{ fontWeight: 600 }}>Description</TableCell>
-                                            <TableCell sx={{ fontWeight: 600 }}>Severity</TableCell>
-                                            <TableCell sx={{ fontWeight: 600 }}>Owner</TableCell>
-                                            <TableCell sx={{ fontWeight: 600 }}>Mitigation</TableCell>
-                                            <TableCell align="right" sx={{ fontWeight: 600 }}>Action</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {riskData.risks.map(risk => (
-                                            <TableRow key={risk.id}>
-                                                <TableCell>{risk.description}</TableCell>
-                                                <TableCell>
-                                                    <Typography
-                                                        variant="caption"
-                                                        sx={{
-                                                            fontWeight: 600,
-                                                            color: getSeverityColor(risk.severity),
-                                                            display: 'inline-block',
-                                                            px: 1,
-                                                            py: 0.5,
-                                                            bgcolor: getSeverityColor(risk.severity) + '15',
-                                                            borderRadius: 1,
-                                                        }}
-                                                    >
-                                                        {risk.severity}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>{risk.owner || '—'}</TableCell>
-                                                <TableCell>{risk.mitigation ? '✓' : '—'}</TableCell>
-                                                <TableCell align="right">
-                                                    <IconButton
-                                                        size="small"
-                                                        onClick={() => handleRemoveRisk(risk.id)}
-                                                    >
-                                                        <DeleteIcon fontSize="small" />
-                                                    </IconButton>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        ) : (
-                            <Typography variant="body2" color="text.secondary" sx={{ py: 2, textAlign: 'center' }}>
-                                No risks identified yet
+
+                        {/* TABLE */}
+                        <RiskRegisterCard />
+
+
+                        {/* FOOTER NOTE */}
+                        <Box
+                            sx={{
+                                mt: 2,
+                                p: 1.5,
+                                borderRadius: 2,
+                                background: "#f8fafc",
+                                borderLeft: "4px solid #184ea4",
+                            }}
+                        >
+                            <Typography variant="body2" color="text.secondary">
+                                This register should be exportable into audits and used during client workshops (“here is what blocks training/release and why”).
                             </Typography>
-                        )}
+                        </Box>
+
                     </CardContent>
                 </Card>
+
 
                 {/* Save Button */}
                 <Box sx={{ textAlign: 'right' }}>

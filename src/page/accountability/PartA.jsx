@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+    Autocomplete,
     Box,
     Button,
     Card,
@@ -23,6 +24,69 @@ import SaveIcon from '@mui/icons-material/Save';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import AddIcon from '@mui/icons-material/Add';
 
+
+
+const purposeOptions = [
+    "Audit defensibility",
+    "Regulatory readiness",
+    "Operational control",
+    "Incident escalation clarity",
+    "Vendor risk governance"
+];
+
+
+const jurisdictionOptions = [
+    "US — multi-state",
+    "US — CA focus",
+    "US — NY focus",
+    "EU — GDPR regulated",
+    "APAC — AU focus"
+];
+
+
+const ownerOptions = [
+    "Head of Data Science (Accountable)",
+    "Model Risk Owner (Accountable)",
+    "Compliance Officer",
+    "Privacy Officer",
+    "Underwriting SME Approver",
+    "Claims SME Approver",
+    "Incident Manager (Ops/SRE)",
+    "Security Lead",
+    "Product Manager",
+    "Data Engineering Lead",
+    "Legal Counsel"
+];
+
+
+const impactOptions = [
+    "Low (internal helper)",
+    "Medium (advisory on decisions)",
+    "High (influences money/outcomes)",
+    "Critical (can deny/approve/settle)"
+];
+
+
+const standardOptions = [
+    "All decision-influencing outputs must be traceable to logs + approvals; overrides must be recorded; incidents must route within SLA.",
+    "Audit logs must capture who/when/input/output/rules/override/approvals; compliance can export within 24 hours.",
+    "If confidence is low or violations occur, route to SME review; do not auto-act without approval."
+];
+
+
+const narrativeOptions = [
+    "Claims triage assistant recommends next action; adjuster approves before customer impact",
+    "Underwriting assistant summarizes submission; underwriter decides and logs approval",
+    "Policy compliance scan flags missing clauses; compliance reviews and signs off",
+    "Fraud assistant highlights suspicious signals; investigator confirms before escalation"
+];
+
+
+const badOptions = [
+    "AI output used for denial/settlement without human approval",
+];
+
+
 const PartA = ({ projectContext = {}, onStatusMessage }) => {
     // Form data
     const [formData, setFormData] = useState({
@@ -39,7 +103,7 @@ const PartA = ({ projectContext = {}, onStatusMessage }) => {
             operational: false,
         },
     });
-
+    const [values, setValues] = useState({});
     // DFA & Policy data
     const [dfaJson, setDfaJson] = useState('');
     const [policyPreview, setPolicyPreview] = useState('');
@@ -50,6 +114,25 @@ const PartA = ({ projectContext = {}, onStatusMessage }) => {
 
     // Status message
     const [statusMessage, setStatusMessage] = useState('');
+    const setField = (key, value) =>
+        setValues(prev => ({ ...prev, [key]: value }));
+
+    const autoField = (label, key, options, helper) => (
+        <Autocomplete
+            size='small'
+            options={options}
+            value={values[key] || null}
+            onChange={(_, v) => setField(key, v)}
+            renderInput={params => (
+                <TextField
+                    {...params}
+                    label={label}
+                    helperText={helper}
+                    fullWidth
+                />
+            )}
+        />
+    );
 
     // Load saved data on mount
     useEffect(() => {
@@ -208,12 +291,11 @@ const PartA = ({ projectContext = {}, onStatusMessage }) => {
                                 Load Sample
                             </Button>
                             <Button variant="contained" size="small" onClick={handleIngestDFA}>
-                                Ingest
+                                Ingest DFA JSON
                             </Button>
                         </Box>
                         <Typography variant="caption" sx={{ display: 'block', mb: 1, color: 'text.secondary' }}>
-                            Paste DFA JSON from the Data Foundation Analyzer app. This populates Tab C and influences gates.
-                        </Typography>
+                            Paste DFA JSON from the separate Data Foundation Analyzer app. This populates Tab C and influences gates.                        </Typography>
                         <TextField
                             multiline
                             minRows={4}
@@ -221,12 +303,18 @@ const PartA = ({ projectContext = {}, onStatusMessage }) => {
                             fullWidth
                             size="small"
                             variant="outlined"
-                            placeholder="Paste DFA JSON here..."
+                            placeholder="Paste DFA JSON here (e.g., {&quot;datasetOwnership&quot;:...})"
                             value={dfaJson}
                             onChange={(e) => setDfaJson(e.target.value)}
                             sx={{ fontFamily: 'monospace', fontSize: '0.75rem', mb: 1 }}
                         />
-                        <Typography variant="caption" sx={{ display: 'block', bgcolor: '#fafafa', p: 1, borderRadius: 1, color: 'text.secondary' }}>
+                        <Typography variant="caption"
+                            sx={{
+                                display: 'block',
+                                bgcolor: '#f2f6ff',
+                                border: "1px solid #dbe4ff",
+                                p: 1, borderRadius: 1, color: 'text.secondary'
+                            }}>
                             💡 <strong>Tip:</strong> For demo, use <code>Load DFA Sample</code>, then <code>Ingest</code>. In production, this would be an API integration.
                         </Typography>
                     </CardContent>
@@ -240,7 +328,7 @@ const PartA = ({ projectContext = {}, onStatusMessage }) => {
                                 Policy Pack Preview
                             </Typography>
                             <Button variant="outlined" size="small" onClick={handleCopyPolicy}>
-                                Copy
+                                Copy  JSON
                             </Button>
                         </Box>
                         <TextField
@@ -263,11 +351,27 @@ const PartA = ({ projectContext = {}, onStatusMessage }) => {
                 {/* Snapshot Export Card */}
                 <Card variant="outlined">
                     <CardContent>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                            Snapshot Export
-                        </Typography>
+                        <Box display={"flex"}
+                            alignItems={"center"}
+                            justifyContent={"space-between"}
+                            mb={1}     >
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600, }}>
+                                Snapshot Export
+                            </Typography>
+                            <Button
+
+                                variant="contained"
+                                size="small"
+
+                            // onClick={handleExportJSON}
+                            >
+                                Export HTML Report
+                            </Button>
+                        </Box>
+
                         <Typography variant="caption" sx={{ display: 'block', mb: 2, color: 'text.secondary' }}>
-                            Exports JSON snapshot and HTML report for audits and stakeholder reviews.
+                            Exports a simple JSON snapshot and an HTML report (download). Useful for audit packets and stakeholder reviews.
+
                         </Typography>
                         <Button
                             fullWidth
@@ -276,7 +380,7 @@ const PartA = ({ projectContext = {}, onStatusMessage }) => {
                             startIcon={<CloudDownloadIcon />}
                             onClick={handleExportJSON}
                         >
-                            Export JSON
+                            Export JSON snapshot
                         </Button>
                     </CardContent>
                 </Card>
@@ -331,162 +435,46 @@ const PartA = ({ projectContext = {}, onStatusMessage }) => {
                                 Use Save + Recompute Gates after updates.
                             </Typography>
                         </Box>
+                        <Grid container spacing={2}>
+                            <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+                                {autoField("Primary Purpose", "purpose", purposeOptions, "Why accountability is required")}
+                            </Grid>
+                            <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+                                {autoField("Jurisdiction / Market", "jurisdiction", jurisdictionOptions, "Where this runs")}
+                            </Grid>
+                            <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+                                {autoField("Accountable Owner", "owner", ownerOptions, "Single accountable role")}
+                            </Grid>
 
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 2, mb: 3 }}>
-                            <FormControl fullWidth size="small">
-                                <InputLabel>Primary Purpose</InputLabel>
-                                <Select
-                                    value={formData.purpose}
-                                    label="Primary Purpose"
-                                    onChange={(e) => handleFormChange('purpose', e.target.value)}
-                                >
-                                    <MenuItem value="">Select…</MenuItem>
-                                    <MenuItem value="Audit defensibility">Audit defensibility</MenuItem>
-                                    <MenuItem value="Regulatory readiness">Regulatory readiness</MenuItem>
-                                    <MenuItem value="Operational control">Operational control</MenuItem>
-                                    <MenuItem value="Incident escalation clarity">Incident escalation clarity</MenuItem>
-                                    <MenuItem value="Vendor risk governance">Vendor risk governance</MenuItem>
-                                </Select>
-                            </FormControl>
+                            <Grid size={{ xs: 12, md: 6, }}>
+                                {autoField("Decision Impact", "impact", impactOptions, "Used to set rigor")}
+                            </Grid>
+                            <Grid size={{ xs: 12, md: 6, }}>
+                                {autoField("Minimum Accountability Standard", "standard", standardOptions, "Contract summary")}
+                            </Grid>
 
-                            <FormControl fullWidth size="small">
-                                <InputLabel>Jurisdiction / Market</InputLabel>
-                                <Select
-                                    value={formData.jurisdiction}
-                                    label="Jurisdiction / Market"
-                                    onChange={(e) => handleFormChange('jurisdiction', e.target.value)}
-                                >
-                                    <MenuItem value="">Select…</MenuItem>
-                                    <MenuItem value="US — multi-state">US — multi-state</MenuItem>
-                                    <MenuItem value="US — CA focus">US — CA focus</MenuItem>
-                                    <MenuItem value="US — NY focus">US — NY focus</MenuItem>
-                                    <MenuItem value="EU — GDPR regulated">EU — GDPR regulated</MenuItem>
-                                    <MenuItem value="APAC — AU focus">APAC — AU focus</MenuItem>
-                                </Select>
-                            </FormControl>
+                            <Grid size={{ xs: 12, md: 6, }}>
+                                {autoField("Use Case Narrative", "narrative", narrativeOptions, "Keep it short")}
+                            </Grid>
+                            <Grid size={{ xs: 12, md: 6, }}>
+                                {autoField("Unacceptable Outcomes", "bad", badOptions, "Structured examples")}
+                            </Grid>
+                        </Grid>
 
-                            <FormControl fullWidth size="small">
-                                <InputLabel>Accountable Owner (Role)</InputLabel>
-                                <Select
-                                    value={formData.owner}
-                                    label="Accountable Owner (Role)"
-                                    onChange={(e) => handleFormChange('owner', e.target.value)}
-                                >
-                                    <MenuItem value="">Select owner role…</MenuItem>
-                                    <MenuItem value="Head of Data Science (Accountable)">Head of Data Science (Accountable)</MenuItem>
-                                    <MenuItem value="Model Risk Owner (Accountable)">Model Risk Owner (Accountable)</MenuItem>
-                                    <MenuItem value="Compliance Officer">Compliance Officer</MenuItem>
-                                    <MenuItem value="Privacy Officer">Privacy Officer</MenuItem>
-                                    <MenuItem value="Underwriting SME Approver">Underwriting SME Approver</MenuItem>
-                                    <MenuItem value="Claims SME Approver">Claims SME Approver</MenuItem>
-                                    <MenuItem value="Incident Manager (Ops/SRE)">Incident Manager (Ops/SRE)</MenuItem>
-                                    <MenuItem value="Security Lead">Security Lead</MenuItem>
-                                    <MenuItem value="Product Manager">Product Manager</MenuItem>
-                                    <MenuItem value="Data Engineering Lead">Data Engineering Lead</MenuItem>
-                                    <MenuItem value="Legal Counsel">Legal Counsel</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
-
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2, mb: 3 }}>
-                            <FormControl fullWidth size="small">
-                                <InputLabel>Decision Impact Level</InputLabel>
-                                <Select
-                                    value={formData.impactLevel}
-                                    label="Decision Impact Level"
-                                    onChange={(e) => handleFormChange('impactLevel', e.target.value)}
-                                >
-                                    <MenuItem value="">Select…</MenuItem>
-                                    <MenuItem value="Low (internal helper)">Low (internal helper)</MenuItem>
-                                    <MenuItem value="Medium (advisory on decisions)">Medium (advisory on decisions)</MenuItem>
-                                    <MenuItem value="High (influences money/outcomes)">High (influences money/outcomes)</MenuItem>
-                                    <MenuItem value="Critical (can deny/approve/settle)">Critical (can deny/approve/settle)</MenuItem>
-                                </Select>
-                            </FormControl>
-
-                            <FormControl fullWidth size="small">
-                                <InputLabel>Minimum Accountability Standard</InputLabel>
-                                <Select
-                                    value={formData.standard}
-                                    label="Minimum Accountability Standard"
-                                    onChange={(e) => handleFormChange('standard', e.target.value)}
-                                >
-                                    <MenuItem value="">Select…</MenuItem>
-                                    <MenuItem value="All decision-influencing outputs must be traceable to logs + approvals; overrides must be recorded; incidents must route within SLA.">
-                                        Traceable outputs + approvals + overrides + SLA routing
-                                    </MenuItem>
-                                    <MenuItem value="Audit logs must capture who/when/input/output/rules/override/approvals; compliance can export within 24 hours.">
-                                        Audit logs with 24-hour export capability
-                                    </MenuItem>
-                                    <MenuItem value="If confidence is low or violations occur, route to SME review; do not auto-act without approval.">
-                                        SME review routing on low confidence
-                                    </MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
-
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2, mb: 3 }}>
-                            <FormControl fullWidth size="small">
-                                <InputLabel>Use Case Narrative</InputLabel>
-                                <Select
-                                    value={formData.narrative}
-                                    label="Use Case Narrative"
-                                    onChange={(e) => handleFormChange('narrative', e.target.value)}
-                                >
-                                    <MenuItem value="">Select…</MenuItem>
-                                    <MenuItem value="Claims triage assistant recommends next action; adjuster approves before customer impact">
-                                        Claims triage assistant
-                                    </MenuItem>
-                                    <MenuItem value="Underwriting assistant summarizes submission; underwriter decides and logs approval">
-                                        Underwriting assistant
-                                    </MenuItem>
-                                    <MenuItem value="Policy compliance scan flags missing clauses; compliance reviews and signs off">
-                                        Policy compliance scan
-                                    </MenuItem>
-                                    <MenuItem value="Fraud assistant highlights suspicious signals; investigator confirms before escalation">
-                                        Fraud detection assistant
-                                    </MenuItem>
-                                </Select>
-                            </FormControl>
-
-                            <FormControl fullWidth size="small">
-                                <InputLabel>Unacceptable Outcomes</InputLabel>
-                                <Select
-                                    value={formData.unacceptable}
-                                    label="Unacceptable Outcomes"
-                                    onChange={(e) => handleFormChange('unacceptable', e.target.value)}
-                                >
-                                    <MenuItem value="">Select…</MenuItem>
-                                    <MenuItem value="AI output used for denial/settlement without human approval">
-                                        No human approval
-                                    </MenuItem>
-                                    <MenuItem value="No audit log for a customer-impacting decision">
-                                        No audit log
-                                    </MenuItem>
-                                    <MenuItem value="Override happens but is not recorded">
-                                        Unrecorded override
-                                    </MenuItem>
-                                    <MenuItem value="Incident reported but no owner responds within SLA">
-                                        SLA miss
-                                    </MenuItem>
-                                    <MenuItem value="Compliance cannot export logs for audit within 24 hours">
-                                        Export failure
-                                    </MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
-
-                        <Box sx={{ mb: 3 }}>
+                        <Box sx={{ mb: 3, mt: 2 }}>
                             <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1.5 }}>
                                 Risk Drivers (check all that apply)
                             </Typography>
-                            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 2 }}>
+                            <Box sx={{
+                                display: 'grid',
+                                gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 2
+                            }}>
                                 {[
                                     { key: 'audit', label: 'Audit / Regulator', desc: 'Required evidence + traceability' },
                                     { key: 'customer', label: 'Customer Outcomes', desc: 'Disputes + complaints risk' },
                                     { key: 'operational', label: 'Operational Risk', desc: 'SLA impact + override rate' },
                                 ].map((driver) => (
-                                    <Card key={driver.key} variant="outlined" sx={{ p: 1.5 }}>
+                                    <Card key={driver.key} variant="outlined" sx={{ p: 1 }}>
                                         <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
                                             <Checkbox
                                                 checked={formData.riskDrivers[driver.key]}
@@ -552,19 +540,21 @@ const PartA = ({ projectContext = {}, onStatusMessage }) => {
                                 </Table>
                             ) : (
                                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', textAlign: 'center', py: 2 }}>
-                                    No notes yet. Add a short note when decisions are made.
+                                    No notes yet. Add a short note when decisions are made (e.g., owners assigned, evidence approved).
                                 </Typography>
                             )}
                         </Box>
 
                         {/* Why This Matters */}
-                        <Card variant="outlined" sx={{ p: 2, bgcolor: '#fafafa' }}>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                        <Card variant="outlined" sx={{
+                            p: 1, border: "1px solid #dbe4ff",
+                            background: " #f2f6ff"
+                        }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1, color: "#0f172a" }}>
                                 Why this matters
                             </Typography>
                             <Typography variant="caption" sx={{ color: 'text.secondary', lineHeight: 1.6 }}>
-                                Accountability becomes the model's operational contract: who approves releases, who responds to incidents, and what proof is retained. Clear definitions prevent decision paralysis, disputes, and regulatory blind spots.
-                            </Typography>
+                                Accountability becomes the model’s operational contract: who approves releases, who responds to incidents, and what proof is retained.                            </Typography>
                         </Card>
                     </CardContent>
                 </Card>

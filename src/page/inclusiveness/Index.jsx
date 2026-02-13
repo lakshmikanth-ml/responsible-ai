@@ -496,42 +496,42 @@ export default function InclusivenessFormikPage() {
                     label: "Critical user groups selected",
                     status: "miss",
                     owner: "product",
-                    notes: "",
+                    notes: "Groups selected and validated for customer quote journey.",
                 },
                 {
                     key: "underserved_representation",
                     label: "Underserved community representation included",
                     status: "miss",
                     owner: "design",
-                    notes: "",
+                    notes: "Workshops scheduled with rural + older adult participants.",
                 },
                 {
                     key: "localization_plan",
                     label: "Localization plan defined",
                     status: "miss",
                     owner: "product",
-                    notes: "",
+                    notes: "Spanish output planned for key quote explanations.",
                 },
                 {
                     key: "keyboard_navigation",
                     label: "Keyboard-only navigation supported",
                     status: "miss",
                     owner: "design",
-                    notes: "",
+                    notes: "Keyboard focus states implemented; needs QA validation.",
                 },
                 {
                     key: "screen_reader_labels",
                     label: "Screen-reader labels validated",
                     status: "miss",
                     owner: "qa",
-                    notes: "",
+                    notes: "Validate ARIA labels on critical actions and forms.",
                 },
                 {
                     key: "low_bandwidth",
                     label: "Low-bandwidth mode tested",
                     status: "miss",
                     owner: "engineering",
-                    notes: "",
+                    notes: "Verify journey completion under constrained network.",
                 },
             ],
 
@@ -812,49 +812,46 @@ export default function InclusivenessFormikPage() {
                         </Button>
                     </Box>
                 </Box>
-                <Card sx={{ mb: 2 }}>
-                    <CardContent>
-                        <Stack direction="row" spacing={1} mt={2} mb={2} flexWrap="wrap">
-                            <Chip color="primary" label="Lifecycle Controlled" />
-                            <Chip color="error" label="Coverage: 3%" />
-                            <Chip color="warning" label="Evidence: 0/6 approved" />
-                            <Chip color="error" label="Risks: 3 critical open" />
-                        </Stack>
 
-                        <Grid container spacing={2}>
-                            <Grid size={{ xs: 12, md: 3 }}>
-                                <GateCard
-                                    title="Pre-Training Gate"
-                                    status="PASS"
-                                    description="Pre-training inclusiveness prerequisites met (DFA ingested + groups + WCAG scope)."
-                                />
-                            </Grid>
+                <Stack direction="row" spacing={1} mt={2} mb={2} flexWrap="wrap">
+                    <Chip color="primary" label="Lifecycle Controlled" />
+                    <Chip color="error" label="Coverage: 3%" />
+                    <Chip color="warning" label="Evidence: 0/6 approved" />
+                    <Chip color="error" label="Risks: 3 critical open" />
+                </Stack>
 
-                            <Grid size={{ xs: 12, md: 3 }}>
-                                <GateCard
-                                    title="Release Gate"
-                                    status="BLOCKED"
-                                    description="Accessibility testing and/or diverse testing and/or evidence approvals incomplete; critical risks may be open."
-                                />
-                            </Grid>
+                <Grid container spacing={2} mb={2}>
+                    <Grid size={{ xs: 12, md: 3 }}>
+                        <GateCard
+                            title="Pre-Training Gate"
+                            status="PASS"
+                            description="Pre-training inclusiveness prerequisites met (DFA ingested + groups + WCAG scope)."
+                        />
+                    </Grid>
 
-                            <Grid size={{ xs: 12, md: 3 }}>
-                                <GateCard
-                                    title="Production Gate"
-                                    status="BLOCKED"
-                                    description="Production blocked because release gate is blocked or monitoring configuration is incomplete."
-                                />
-                            </Grid>
-                            <Grid size={{ xs: 12, md: 3 }}>
-                                <GateCard
-                                    title="Guardian Health"
-                                    status="DEGRADED"
-                                    description="Guardian indicates repeated inclusiveness/usability issues. Route to owner for remediation."
-                                />
-                            </Grid>
-                        </Grid>
-                    </CardContent>
-                </Card>
+                    <Grid size={{ xs: 12, md: 3 }}>
+                        <GateCard
+                            title="Release Gate"
+                            status="BLOCKED"
+                            description="Accessibility testing and/or diverse testing and/or evidence approvals incomplete; critical risks may be open."
+                        />
+                    </Grid>
+
+                    <Grid size={{ xs: 12, md: 3 }}>
+                        <GateCard
+                            title="Production Gate"
+                            status="BLOCKED"
+                            description="Production blocked because release gate is blocked or monitoring configuration is incomplete."
+                        />
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 3 }}>
+                        <GateCard
+                            title="Guardian Health"
+                            status="DEGRADED"
+                            description="Guardian indicates repeated inclusiveness/usability issues. Route to owner for remediation."
+                        />
+                    </Grid>
+                </Grid>
 
                 {statusMessage && (
                     <Alert

@@ -111,12 +111,20 @@ export default function TabFMitigation() {
                                                 Add Action
                                             </Button>
                                             <Button
-                                                variant="contained"
+                                                variant="outlined"
 
                                                 type="submit"
                                             >
                                                 Save F
                                             </Button>
+                                            <Button
+                                                variant="contained"
+
+                                                type="submit"
+                                            >
+                                                Enforce Re-check Rules
+                                            </Button>
+
                                         </Stack>
 
                                         {/* <Divider sx={{ mb: 2 }} /> */}

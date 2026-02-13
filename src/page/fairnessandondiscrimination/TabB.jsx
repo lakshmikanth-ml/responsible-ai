@@ -232,6 +232,14 @@ const TabB = () => {
         <Box sx={{ p: 2 }}>
 
 
+            <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 1 }}>
+                B. Signals & Measurements
+
+            </Typography>
+            <Typography variant="body2"
+                color="text.secondary" sx={{ mb: 2 }}>
+                Select fairness metrics, configure policy thresholds, and run baseline fairness evaluation.
+            </Typography>
             {/* KPI Dashboard */}
             <Box sx={{
                 display: 'grid',
@@ -353,11 +361,15 @@ const TabB = () => {
                                     <Autocomplete
                                         fullWidth
                                         label="Evaluation Dataset"
+
                                         size="small"
                                         options={evalDatasetOptions}
                                         value={metricsData.evalDataset || null}
                                         onChange={(event, newValue) => handleFieldChange('evalDataset', newValue || '')}
-                                        renderInput={(params) => <TextField {...params} variant="outlined" />}
+                                        renderInput={(params) => <TextField {...params}
+                                            variant="outlined"
+                                            label="Evaluation Dataset"
+                                        />}
                                     />
 
 

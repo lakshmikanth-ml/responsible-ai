@@ -159,12 +159,12 @@ export default function TransparencyExplainabilityContainer() {
         gap: 3,
       }}
     >
-      <Card variant="outlined" sx={{ p: 2 }}>
+      {/* <Card variant="outlined" sx={{ p: 2 }}>
         <KpiGateRow />
-      </Card>
-      <Card variant="outlined" sx={{ p: 2 }}>
-        <TabPanel />
-      </Card>
+      </Card> */}
+      {/* <Card variant="outlined" sx={{ p: 2 }}> */}
+      <TabPanel />
+      {/* </Card> */}
       <Box mt={0}>
         <ProjectContextCard
           context={projectContext}

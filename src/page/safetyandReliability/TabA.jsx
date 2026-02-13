@@ -213,109 +213,104 @@ export default function ObjectiveTabA() {
                                 </Grid>
 
                                 <Typography variant="caption" color="text.secondary" mt={2}>
-                                    This defines the Safety & Reliability Contract for the model.
+
+
+                                    This section defines the “Safety & Reliability
+                                    Contract” for the model version.
+                                    It is used in gates and in the Guardian policy pack.
                                 </Typography>
                             </CardContent>
                         </Card>
 
-                        {/* ---- Audit Trail ---- */}
-                        {/* <Card variant="outlined" sx={{ mt: 2 }}>
-                        <CardContent>
-                            <Stack direction="row" justifyContent="space-between">
-                                <Typography fontWeight={600}>Audit Trail Notes</Typography>
-                                <Button variant="outlined" size="small" onClick={addNote}>
-                                    Add Note
-                                </Button>
-                            </Stack>
 
-                            <Grid container spacing={2} mt={1}>
-                                <Grid size={{ xs: 12, md: 4 }}>
-                                    <TextField
-                                        size="small"
-                                        select
-                                        fullWidth
-                                        label="Actor Role"
-                                        value={noteActor}
-                                        onChange={(e) => setNoteActor(e.target.value)}
-                                    >
-                                        {OWNER_ROLES.map((o) => (
-                                            <MenuItem key={o.v} value={o.v}>
-                                                {o.l}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
-                                </Grid>
-
-                                <Grid size={{ xs: 12, md: 8 }}>
-                                    <TextField
-                                        size="small"
-                                        fullWidth
-                                        label="Note"
-                                        value={noteText}
-                                        onChange={(e) => setNoteText(e.target.value)}
-                                    />
-                                </Grid>
-                            </Grid>
-
-                            <Table size="small" sx={{ mt: 2 }}>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Timestamp</TableCell>
-                                        <TableCell>Entry</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {notes.length === 0 ? (
-                                        <TableRow>
-                                            <TableCell colSpan={2} align="center">
-                                                No audit notes yet.
-                                            </TableCell>
-                                        </TableRow>
-                                    ) : (
-                                        notes.map((n, i) => (
-                                            <TableRow key={i}>
-                                                <TableCell>{n.ts}</TableCell>
-                                                <TableCell>{n.text}</TableCell>
-                                            </TableRow>
-                                        ))
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </CardContent>
-                    </Card> */}
 
 
                     </Grid>
 
 
-                    {/* ================= RIGHT COLUMN ================= */}
+                    {/* ================= RIGHT COLUMN: Quick Checks ================= */}
                     <Grid size={{ xs: 12, md: 4 }}>
-                        <Card variant="outlined">
+                        <Card variant="outlined" sx={{ height: '100%' }}>
                             <CardContent>
-                                <Typography fontWeight={600}>Quick Checks</Typography>
+                                {/* Block Title */}
+                                <Box sx={{ mb: 2.5 }}>
+                                    <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>
+                                        Quick Checks
+                                    </Typography>
+                                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                                        Fast validation for PMs before progressing.
+                                    </Typography>
+                                </Box>
 
-
-                                <Stack direction="row" justifyContent="space-between" alignItems="center" mt={2}>
-                                    <Typography>Human oversight enabled</Typography>
+                                {/* Toggle 1: Human Oversight */}
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 2, mb: 2, p: 1.5, border: '1px solid #e0e0e0', borderRadius: 1 }}>
+                                    <Box>
+                                        <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.25 }}>
+                                            Human oversight is enabled
+                                        </Typography>
+                                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                                            Recommended for insurance decision workflows.
+                                        </Typography>
+                                    </Box>
                                     <Switch
                                         checked={oversightEnabled}
                                         onChange={(e) => setOversightEnabled(e.target.checked)}
+                                        disabled
+                                        sx={{ mt: 0.5 }}
                                     />
-                                </Stack>
+                                </Box>
 
+                                {/* Spacer */}
+                                <Box sx={{ height: 10 }} />
 
-                                <Stack direction="row" justifyContent="space-between" alignItems="center" mt={2}>
-                                    <Typography>Incident owners assigned</Typography>
+                                {/* Toggle 2: Incident Owners */}
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 2, mb: 2, p: 1.5, border: '1px solid #e0e0e0', borderRadius: 1 }}>
+                                    <Box>
+                                        <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.25 }}>
+                                            Incident escalation owners assigned
+                                        </Typography>
+                                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                                            Safety owner + Reliability owner are set.
+                                        </Typography>
+                                    </Box>
                                     <Switch
                                         checked={ownersAssigned}
                                         onChange={(e) => setOwnersAssigned(e.target.checked)}
+                                        disabled
+                                        sx={{ mt: 0.5 }}
                                     />
-                                </Stack>
+                                </Box>
 
+                                {/* Muted Callout */}
+                                <Card variant="outlined" sx={{ bgcolor: '#fafafa', border: 'none', mb: 2 }}>
+                                    <CardContent sx={{ py: 1, px: 1.5, '&:last-child': { pb: 1 } }}>
+                                        <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.8rem' }}>
+                                            These switches are read-only indicators; set values using dropdowns.
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
 
-                                <Button sx={{ mt: 2 }} fullWidth variant="outlined" onClick={handleGenerate}>
-                                    Generate Risks & Actions
+                                {/* Divider */}
+                                <Divider sx={{ my: 2 }} />
+
+                                {/* Generate Button */}
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    onClick={handleGenerate}
+                                    sx={{ mb: 1.5, textTransform: 'none', fontWeight: 600 }}
+                                >
+                                    Generate Risks &amp; Actions
                                 </Button>
+
+                                {/* Muted Callout */}
+                                <Card variant="outlined" sx={{ bgcolor: '#fafafa', border: 'none' }}>
+                                    <CardContent sx={{ py: 1, px: 1.5, '&:last-child': { pb: 1 } }}>
+                                        <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.8rem' }}>
+                                            Generates a risk register and mitigation plan based on missing items across tabs.
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
                             </CardContent>
                         </Card>
                     </Grid>

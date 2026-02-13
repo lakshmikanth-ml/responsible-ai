@@ -322,7 +322,7 @@ th { background: #f5f5f5; text-align: left; }
                                         Artifact
                                     </TableCell>
                                     <TableCell sx={{ fontWeight: 700, minWidth: 130, color: '#1a1a1a' }}>
-                                        Stage
+                                        Required   Stage
                                     </TableCell>
                                     <TableCell sx={{ fontWeight: 700, minWidth: 130, color: '#1a1a1a' }}>
                                         Status
@@ -348,6 +348,9 @@ th { background: #f5f5f5; text-align: left; }
                                                 </Typography>
                                                 <Typography variant="caption" color="text.secondary">
                                                     ID: {artifact.id}
+                                                </Typography> &nbsp;
+                                                <Typography variant="caption" color="text.secondary">
+                                                    Status : {artifact.stage}
                                                 </Typography>
                                             </TableCell>
 

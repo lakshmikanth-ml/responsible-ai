@@ -34,6 +34,7 @@ import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import TabFMitigation from './MitigationTable';
 
 const TabF = ({ projectContext = {}, onStatusMessage }) => {
     const [projectCtx, setProjectCtx] = useState({
@@ -327,9 +328,11 @@ const TabF = ({ projectContext = {}, onStatusMessage }) => {
                     border: '1px solid rgba(117, 117, 117, 0.2)', borderRadius: 2
                 }}>
 
+                <TabFMitigation
 
+                />
                 {/* F.1: Mitigation Actions */}
-                <Card variant="outlined" sx={{ mb: 3 }}>
+                {/* <Card variant="outlined" sx={{ mb: 3 }}>
                     <CardContent>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                             <Typography variant="h6" sx={{ fontWeight: 600 }}>
@@ -400,10 +403,10 @@ const TabF = ({ projectContext = {}, onStatusMessage }) => {
                             </Typography>
                         )}
                     </CardContent>
-                </Card>
+                </Card> */}
 
                 {/* Save Button */}
-                <Box sx={{ textAlign: "right" }} >
+                {/* <Box sx={{ textAlign: "right" }} >
                     <Button
                         variant="contained"
                         startIcon={<SaveIcon />}
@@ -412,7 +415,7 @@ const TabF = ({ projectContext = {}, onStatusMessage }) => {
                     >
                         Save Metrics & Actions
                     </Button>
-                </Box>
+                </Box> */}
 
                 {/* Action Dialog */}
                 <Dialog open={actionDialog} onClose={() => {

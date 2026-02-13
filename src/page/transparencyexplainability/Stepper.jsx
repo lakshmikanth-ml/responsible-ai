@@ -25,6 +25,7 @@ import TabERisks from "./StepE";
 import TabFMitigation from "./StepF";
 import TabGEvidenceAudit from "./StepG";
 import TabHLifecycleMonitoring from "./StepH";
+import KpiGateRow from "./cards";
 
 const TABS = [
     "A. Objective",
@@ -45,9 +46,12 @@ const PILL_ITEMS = [
         borderColor: "rgba(25, 118, 210, 0.35)",
         dotColor: "#1976d2",
     },
-    { label: "Coverage: 100%", tone: "slate" },
-    { label: "Evidence: 0/4 approved", tone: "slate" },
-    { label: "Risks: 2 critical open", tone: "slate" },
+    { label: "Coverage: 100%", tone: "slate", backgroundColor: "#f1f5f9", },
+    { label: "Evidence: 0/4 approved", tone: "slate", backgroundColor: "#f1f5f9" },
+    {
+        label: "Risks: 2 critical open", tone: "slate", backgroundColor: "#f1f5f9",
+        dotColor: "red",
+    },
 ];
 
 const Pill = ({
@@ -401,7 +405,7 @@ export default function TransparencyExplainabilityHeader() {
 
     return (
         <>
-            <Card sx={{ mt: 2 }}>
+            <Card sx={{ mt: 0 }}>
                 <CardContent sx={{ p: { xs: 2, sm: 2 } }}>
                     <Box sx={{
                         display: 'flex',
@@ -448,6 +452,11 @@ export default function TransparencyExplainabilityHeader() {
                             <Pill key={pill.label} {...pill} />
                         ))}
                     </Stack>
+
+
+                    {/* <Card variant="outlined" sx={{ p: 2 }}> */}
+                    <KpiGateRow />
+                    {/* </Card> */}
 
 
                     <Tabs

@@ -25,18 +25,22 @@ import DownloadIcon from "@mui/icons-material/Download";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
+
+
+
 const SAMPLE_GATES = [
     {
         gate: "Pre-Training Gate",
-        status: "BLOCKED",
-        color: "error",
-        reason: "DFA indicates citation sources are not ready (conflicts/OCR/outdated). Fix before training.",
+        status: "CONDITIONAL",
+
+        color: "warning",
+        reason: "Citations required but no DFA snapshot loaded. Recommended to ingest DFA before training.",
     },
     {
         gate: "Release Gate",
         status: "BLOCKED",
         color: "error",
-        reason: "2 critical release risk(s) open. Resolve before release.",
+        reason: "Explainability Owner is missing in section A.",
     },
     {
         gate: "Production Gate",
@@ -46,17 +50,7 @@ const SAMPLE_GATES = [
     },
 ];
 
-const SAMPLE_GUARDIAN = `{
-  "count": 4,
-  "missing_citation": 2,
-  "missing_citation_rate": 0.5,
-  "unclear_explanations": 2,
-  "unclear_rate": 0.5,
-  "fabricated_citations": 0,
-  "why_questions": 2,
-  "overrides": 1,
-  "health": "critical"
-}`;
+const SAMPLE_GUARDIAN = '';
 
 const MONITOR_POLICY = `{
   "missing_citation_rate_warn": 0.05,

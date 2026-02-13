@@ -56,30 +56,9 @@ const defaultRisksData = {
             type: 'AUTO',
             description: 'Run B.2 evaluation to produce evidence and identify parity failures.',
         },
-        {
-            id: 'risk_manual_70b99623',
-            title: 'Potential proxy discrimination risk',
-            severity: 'Warning',
-            source: 'Manual',
-            type: 'MANUAL',
-            description: 'Example: zip code proxies could correlate with protected characteristics.',
-        },
-        {
-            id: 'risk_a3_partial',
-            title: 'Regulatory context incomplete',
-            severity: 'Warning',
-            source: 'A3 Policy Mapping',
-            type: 'AUTO',
-            description: 'Select jurisdiction and at least one framework to support audit mapping.',
-        },
-        {
-            id: 'risk_release_evidence_missing',
-            title: 'Release evidence missing',
-            severity: 'Warning',
-            source: 'Evidence Vault',
-            type: 'AUTO',
-            description: 'Release readiness requires: Bias Mitigation Plan, Release Fairness Sign-off.',
-        },
+
+
+
     ],
 };
 
@@ -237,7 +216,7 @@ const TabC = () => {
                 color="text.secondary" sx={{ mb: 2 }}>
                 Auto-generated from A/B completeness, evaluation results, missing evidence, and open mitigation actions.
             </Typography>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mb: 2, flexWrap: 'wrap' }}>
+            {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mb: 2, flexWrap: 'wrap' }}>
                 <Button variant="outlined" startIcon={<AddIcon />} onClick={addManualRisk}>
                     Add Risk
                 </Button>
@@ -247,7 +226,7 @@ const TabC = () => {
                 <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave}>
                     Save C
                 </Button>
-            </Stack>
+            </Stack> */}
 
             {/* KPI Dashboard - Risk Counts */}
             <Box sx={{
@@ -256,7 +235,12 @@ const TabC = () => {
             }}>
                 {[
                     { label: 'Critical Risks', count: riskCounts.Critical, desc: 'Must be addressed to pass Baseline.', bg: '#ffebee', border: '#ef5350', accent: '#d32f2f' },
-                    { label: 'Warnings', count: riskCounts.Warning, desc: 'May cause conditional release.', bg: '#fff3e0', border: '#ffb74d', accent: '#f57c00' },
+                    {
+                        label: 'Warnings', count:
+                            riskCounts.Warning,
+                        desc: 'May cause conditional release.', bg: '#fff3e0',
+                        border: '#ffb74d', accent: '#f57c00'
+                    },
                     { label: 'Info', count: riskCounts.Info, desc: 'Tracked for continuous improvement.', bg: '#e3f2fd', border: '#64b5f6', accent: '#1976d2' },
                 ].map((kpi) => (
                     <Card
@@ -430,7 +414,7 @@ const TabC = () => {
                                 '&:hover': { bgcolor: '#1565c0' }
                             }}
                         >
-                            + Add Risk Manually
+                            Add Risk Manually
                         </Button>
                         <Button
                             variant="outlined"
@@ -443,7 +427,7 @@ const TabC = () => {
                                 textTransform: 'none',
                             }}
                         >
-                            ⟲ Refresh Auto-Risks
+                            Refresh Auto-Risks
                         </Button>
                     </Box>
 

@@ -321,6 +321,7 @@ const PartG = ({ projectContext = {}, onStatusMessage }) => {
                     </Card>
                 )}
 
+
                 {/* DFA Ingestion Card */}
                 <Card variant="outlined" sx={{ mb: 2 }}>
                     <CardContent>
@@ -332,12 +333,11 @@ const PartG = ({ projectContext = {}, onStatusMessage }) => {
                                 Load Sample
                             </Button>
                             <Button variant="contained" size="small" onClick={handleIngestDFA}>
-                                Ingest
+                                Ingest DFA JSON
                             </Button>
                         </Box>
                         <Typography variant="caption" sx={{ display: 'block', mb: 1, color: 'text.secondary' }}>
-                            Paste DFA JSON from the separate Data Foundation Analyzer app. This populates Tab F and influences gates.
-                        </Typography>
+                            Paste DFA JSON from the separate Data Foundation Analyzer app. This populates Tab C and influences gates.                        </Typography>
                         <TextField
                             multiline
                             minRows={4}
@@ -345,13 +345,19 @@ const PartG = ({ projectContext = {}, onStatusMessage }) => {
                             fullWidth
                             size="small"
                             variant="outlined"
-                            placeholder="Paste DFA JSON here..."
+                            placeholder="Paste DFA JSON here (e.g., {&quot;datasetOwnership&quot;:...})"
                             value={dfaJson}
                             onChange={(e) => setDfaJson(e.target.value)}
                             sx={{ fontFamily: 'monospace', fontSize: '0.75rem', mb: 1 }}
                         />
-                        <Typography variant="caption" sx={{ display: 'block', bgcolor: '#fafafa', p: 1, borderRadius: 1, color: 'text.secondary' }}>
-                            💡 <strong>Tip:</strong> For demo, use <code>Load Sample</code>, then <code>Ingest</code>. In production, this would be an API integration.
+                        <Typography variant="caption"
+                            sx={{
+                                display: 'block',
+                                bgcolor: '#f2f6ff',
+                                border: "1px solid #dbe4ff",
+                                p: 1, borderRadius: 1, color: 'text.secondary'
+                            }}>
+                            💡 <strong>Tip:</strong> For demo, use <code>Load DFA Sample</code>, then <code>Ingest</code>. In production, this would be an API integration.
                         </Typography>
                     </CardContent>
                 </Card>
@@ -364,7 +370,7 @@ const PartG = ({ projectContext = {}, onStatusMessage }) => {
                                 Policy Pack Preview
                             </Typography>
                             <Button variant="outlined" size="small" onClick={handleCopyPolicy}>
-                                Copy
+                                Copy  JSON
                             </Button>
                         </Box>
                         <TextField
@@ -379,7 +385,7 @@ const PartG = ({ projectContext = {}, onStatusMessage }) => {
                             sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}
                         />
                         <Typography variant="caption" sx={{ display: 'block', mt: 1, color: 'text.secondary' }}>
-                            This preview indicates it would be pushed to Guardian.
+                            This preview indicates it would be pushed to Guardian as a policy pack.
                         </Typography>
                     </CardContent>
                 </Card>
@@ -387,11 +393,27 @@ const PartG = ({ projectContext = {}, onStatusMessage }) => {
                 {/* Snapshot Export Card */}
                 <Card variant="outlined">
                     <CardContent>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                            Snapshot Export
-                        </Typography>
+                        <Box display={"flex"}
+                            alignItems={"center"}
+                            justifyContent={"space-between"}
+                            mb={1}     >
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600, }}>
+                                Snapshot Export
+                            </Typography>
+                            <Button
+
+                                variant="contained"
+                                size="small"
+
+                            // onClick={handleExportJSON}
+                            >
+                                Export HTML Report
+                            </Button>
+                        </Box>
+
                         <Typography variant="caption" sx={{ display: 'block', mb: 2, color: 'text.secondary' }}>
-                            Exports JSON snapshot and HTML report for audits.
+                            Exports a simple JSON snapshot and an HTML report (download). Useful for audit packets and stakeholder reviews.
+
                         </Typography>
                         <Button
                             fullWidth
@@ -400,7 +422,7 @@ const PartG = ({ projectContext = {}, onStatusMessage }) => {
                             startIcon={<CloudDownloadIcon />}
                             onClick={handleExportJSON}
                         >
-                            Export JSON
+                            Export JSON snapshot
                         </Button>
                     </CardContent>
                 </Card>
@@ -464,13 +486,15 @@ const PartG = ({ projectContext = {}, onStatusMessage }) => {
                         }}>
                             <Typography variant="body2"
                                 sx={{
-                                    color: '#1565c0',
+
                                     background: '#f2f6ff',
                                     padding: '4px 8px',
                                     borderRadius: '4px',
                                     border: '1px solid #90caf9',
                                 }}>
-                                <b>Evidence rules</b>
+                                <b style={{
+                                    color: "#1e2b6b"
+                                }}>Evidence rules</b>
                                 <br />
                                 For demo, evidence files are stored as metadata (filename + timestamp). In production, this connects to your Evidence Vault storage + approvals workflow.
                             </Typography>
@@ -626,14 +650,14 @@ const PartG = ({ projectContext = {}, onStatusMessage }) => {
                         </Box>
 
                         {/* Why This Matters */}
-                        <Card variant="outlined" sx={{ bgcolor: '#fafafa', p: 2 }}>
+                        {/* <Card variant="outlined" sx={{ bgcolor: '#fafafa', p: 2 }}>
                             <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
                                 Why this matters
                             </Typography>
                             <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
                                 A mitigation plan with assigned owners and clear success criteria turns identified risks into concrete work. Without tracking, mitigations get lost and gaps resurface during audits.
                             </Typography>
-                        </Card>
+                        </Card> */}
                     </CardContent>
                 </Card >
             </Grid >

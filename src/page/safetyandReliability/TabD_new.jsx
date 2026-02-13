@@ -146,10 +146,7 @@ export default function TabDEvaluation() {
                     {/* Toggle Row 1: Testing Completions */}
                     <Grid container spacing={2} sx={{ mb: 2 }}>
                         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                            <Stack direction="row"
-                            justifyContent="space-between"
-                             alignItems="center"
-                             sx={{ p: 1, border: '1px solid #e0e0e0', borderRadius: 1, height: '100%' }}>
+                            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ p: 1.5, border: '1px solid #e0e0e0', borderRadius: 1, height: '100%' }}>
                                 <Box>
                                     <Typography fontWeight={600} variant="body2">Stress / Load Testing Completed</Typography>
                                     <Typography variant="caption" color="text.secondary">Simulate peak volume (claims storms, broker rush).</Typography>
@@ -159,9 +156,7 @@ export default function TabDEvaluation() {
                         </Grid>
 
                         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-         <Stack direction="row"
-         justifyContent="space-between" alignItems="center"
-          sx={{ p: 1, border: '1px solid #e0e0e0', borderRadius: 1, height: '100%' }}>
+                            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ p: 1.5, border: '1px solid #e0e0e0', borderRadius: 1, height: '100%' }}>
                                 <Box>
                                     <Typography fontWeight={600} variant="body2">Chaos / Failure Testing Completed</Typography>
                                     <Typography variant="caption" color="text.secondary">Inject failures (timeouts, downstream outage) to validate resilience.</Typography>
@@ -171,9 +166,7 @@ export default function TabDEvaluation() {
                         </Grid>
 
                         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-              <Stack direction="row"
-               justifyContent="space-between"
-               alignItems="center" sx={{ p: 1, border: '1px solid #e0e0e0', borderRadius: 1, height: '100%' }}>
+                            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ p: 1.5, border: '1px solid #e0e0e0', borderRadius: 1, height: '100%' }}>
                                 <Box>
                                     <Typography fontWeight={600} variant="body2">Edge Case Suite Executed</Typography>
                                     <Typography variant="caption" color="text.secondary">Unusual inputs, missing fields, outliers, adversarial prompts.</Typography>
@@ -188,9 +181,7 @@ export default function TabDEvaluation() {
                     {/* Toggle Row 2: UAT + Metrics */}
                     <Grid container spacing={2} sx={{ mb: 2 }}>
                         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-         <Stack direction="row"
-         justifyContent="space-between" alignItems="center"
-          sx={{ p: 1, border: '1px solid #e0e0e0', borderRadius: 1, height: '100%' }}>
+                            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ p: 1.5, border: '1px solid #e0e0e0', borderRadius: 1, height: '100%' }}>
                                 <Box>
                                     <Typography fontWeight={600} variant="body2">UAT Sign-off Completed</Typography>
                                     <Typography variant="caption" color="text.secondary">Business acceptance confirms behavior under realistic usage.</Typography>
@@ -370,27 +361,3 @@ export default function TabDEvaluation() {
         </Card>
     );
 }
-
-const toggle = (label, description, checked, onChange) => (
-    <Grid size={{ xs: 12, md: 4 }}>
-        <Box
-            sx={{
-                border: "1px solid",
-                borderColor: "divider",
-                borderRadius: 2,
-                p: 2,
-                height: "100%",
-            }}
-        >
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Box>
-                    <Typography fontWeight={500}>{label}</Typography>
-                    <Typography variant="caption" color="text.secondary">
-                        {description}
-                    </Typography>
-                </Box>
-                <Switch checked={checked} onChange={(e) => onChange(e.target.checked)} />
-            </Stack>
-        </Box>
-    </Grid>
-);

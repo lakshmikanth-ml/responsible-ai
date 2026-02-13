@@ -237,35 +237,51 @@ const Index = () => {
                         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                             <Chip
                                 label="HIGH RISK"
-                                color="error"
-                                variant="filled"
                                 size="small"
-                                sx={{ fontWeight: 600 }}
+                                sx={{
+                                    fontWeight: 700,
+                                    bgcolor: '#ffebee',
+                                    color: '#c62828',
+                                }}
                             />
+
                             <Chip
                                 label="Blocks Training"
-                                color="primary"
-                                variant="outlined"
                                 size="small"
+                                sx={{
+                                    bgcolor: '#e3f2fd',
+                                    color: '#1565c0',
+                                }}
                             />
+
                             <Chip
-                                label="Completeness: 0%"
-                                variant="outlined"
+                                label="Completeness: 22%"
                                 size="small"
+                                sx={{
+                                    bgcolor: '#ffebee',
+                                    color: '#c62828',
+                                }}
                             />
+
                             <Chip
                                 label="Last saved: —"
-                                color="primary"
-                                variant="outlined"
                                 size="small"
+                                sx={{
+                                    bgcolor: '#e3f2fd',
+                                    color: '#1565c0',
+                                }}
                             />
+
                             <Chip
                                 label="Version: v1"
-                                color="primary"
-                                variant="outlined"
                                 size="small"
+                                sx={{
+                                   bgcolor: '#e3f2fd',
+                                    color: '#1565c0',
+                                }}
                             />
                         </Box>
+
                     </Box>
 
                     {/* Right Callout Box */}

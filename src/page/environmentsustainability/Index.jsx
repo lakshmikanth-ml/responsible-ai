@@ -21,7 +21,7 @@ import {
     Stack,
     FormControl,
     InputLabel,
-    Alert,
+    Alert, Autocomplete
 } from "@mui/material";
 import RefreshIcon from '@mui/icons-material/Refresh';
 
@@ -41,6 +41,11 @@ const DECISION_ROLE_OPTIONS = [
     { value: "advisory", label: "Advisory only" },
     { value: "decision_support", label: "Decision-support" },
     { value: "decision_influencing", label: "Decision-influencing" },
+];
+
+const ENV_OPTIONS = [
+    { label: "Internal", value: "internal" },
+    { label: "Production", value: "production" },
 ];
 
 const ProjectContextCard = ({
@@ -74,29 +79,28 @@ const ProjectContextCard = ({
                     value={context.modelVersion}
                     onChange={(e) => onFieldChange("modelVersion", e.target.value)}
                 />
-                <TextField
+
+
+                <Autocomplete
+                    filterSelectedOptions
                     size="small"
                     fullWidth
-                    label="Endpoint"
-                    placeholder="e.g., /claims/triage"
-                    value={context.endpoint}
-                    onChange={(e) => onFieldChange("endpoint", e.target.value)}
+                    options={ENV_OPTIONS}
+                    value={
+                        context.decisionRole || null
+                    }
+                    onChange={(_, v) =>
+                        onFieldChange("decisionRole", v || "")
+                    }
+                    getOptionLabel={(option) => option.label}
+                    isOptionEqualToValue={(option, value) =>
+                        option.value === value.value
+                    }
+                    renderInput={(params) => (
+                        <TextField {...params} label="Environment" />
+                    )}
                 />
-                <FormControl fullWidth size="small">
-                    <InputLabel id="decision-role-label">Decision Role</InputLabel>
-                    <Select
-                        labelId="decision-role-label"
-                        label="Decision Role"
-                        value={context.decisionRole}
-                        onChange={(e) => onFieldChange("decisionRole", e.target.value)}
-                    >
-                        {DECISION_ROLE_OPTIONS.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+
             </Stack>
 
             <Stack direction="row" spacing={1} mt={2}>
@@ -126,8 +130,7 @@ export default function EnvironmentalSustainabilityTabs() {
     const [projectContext, setProjectContext] = useState({
         project: "Carrier A - Sustainability",
         modelVersion: "v1.0.0",
-        endpoint: "/sustainability",
-        decisionRole: "decision_support",
+        decisionRole: { label: "Production", value: "production" },
     });
     const [statusMessage, setStatusMessage] = useState("");
 
@@ -161,7 +164,7 @@ export default function EnvironmentalSustainabilityTabs() {
                 project: "",
                 modelVersion: "",
                 endpoint: "",
-                decisionRole: "decision_support",
+                decisionRole: "",
             });
             setStatusMessage("✓ Demo data reset");
             setTimeout(() => setStatusMessage(""), 2000);
@@ -314,7 +317,7 @@ function ObjectiveTab() {
                                     <MenuItem value="Measured">Measured (Advanced)</MenuItem>
                                 </Select>
                             </TableCell>
-                            <TableCell>Declared</TableCell>
+                            <TableCell style={{ color: "#92400e" }}>Declared</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Primary Intent</TableCell>
@@ -325,7 +328,7 @@ function ObjectiveTab() {
                                     <MenuItem value="Carbon">Carbon reduction commitment</MenuItem>
                                 </Select>
                             </TableCell>
-                            <TableCell>Declared</TableCell>
+                            <TableCell style={{ color: "#92400e" }}>Declared</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -352,7 +355,7 @@ function CoverageTab() {
                             <TableRow key={area}>
                                 <TableCell>{area}</TableCell>
                                 <TableCell>
-                                    <Select size="small" defaultValue="Yes">
+                                    <Select size="small" defaultValue="Yes" fullWidth>
                                         <MenuItem value="Yes">Yes</MenuItem>
                                         <MenuItem value="No">No</MenuItem>
                                     </Select>
@@ -382,7 +385,11 @@ function ReadinessTab() {
                     <TableBody>
                         <TableRow><TableCell>Energy Tracking</TableCell><TableCell>Not Measured</TableCell></TableRow>
                         <TableRow><TableCell>Carbon Accounting</TableCell><TableCell>Not Measured</TableCell></TableRow>
-                        <TableRow><TableCell>Cloud Sustainability Claims</TableCell><TableCell>Estimated</TableCell></TableRow>
+                        <TableRow><TableCell>Cloud Sustainability Claims</TableCell><TableCell
+                            style={{
+                                color: "#0369a1"
+                            }}
+                        >Estimated</TableCell></TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -398,7 +405,7 @@ function EvaluationTab() {
             <Typography variant="body2" color="text.secondary" mb={2}>
                 No quantitative sustainability testing required at baseline maturity.
             </Typography>
-            <Select size="small" defaultValue="Accepted">
+            <Select size="small" defaultValue="Accepted" fullWidth>
                 <MenuItem value="Accepted">Accepted as Baseline</MenuItem>
                 <MenuItem value="Planned">Improvement Planned</MenuItem>
             </Select>
@@ -421,7 +428,7 @@ function RisksTab() {
                     <TableBody>
                         <TableRow>
                             <TableCell>No direct sustainability measurement</TableCell>
-                            <TableCell>Low</TableCell>
+                            <TableCell style={{ color: "#92400e" }} >Low</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -447,7 +454,7 @@ function MitigationTab() {
                         <TableRow>
                             <TableCell>Annual sustainability posture review</TableCell>
                             <TableCell>
-                                <Select size="small" defaultValue="Platform">
+                                <Select size="small" defaultValue="Platform" fullWidth>
                                     <MenuItem value="Platform">Platform Lead</MenuItem>
                                     <MenuItem value="Cloud">Cloud Operations</MenuItem>
                                 </Select>
@@ -476,7 +483,7 @@ function EvidenceTab() {
                     <TableBody>
                         <TableRow>
                             <TableCell>Cloud provider sustainability statement</TableCell>
-                            <TableCell>Approved</TableCell>
+                            <TableCell style={{ color: "#92400e" }} >Approved</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>

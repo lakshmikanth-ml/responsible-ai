@@ -325,19 +325,7 @@ const TabH = () => {
 
     return (
         <Box sx={{ p: 2 }}>
-            {/* Demo Data Note */}
-            <Card variant="outlined" sx={{ mb: 3, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
-                <CardContent sx={{ pb: 2 }}>
-                    <Box>
-                        <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>
-                            v1 note:
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                            This file stores state in localStorage for demo purposes. Replace with GenAI Foundry backend APIs for enterprise deployments.
-                        </Typography>
-                    </Box>
-                </CardContent>
-            </Card>
+
 
             {/* Header */}
             <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, mb: 1 }}>
@@ -474,6 +462,21 @@ const TabH = () => {
                     <Typography variant="caption" sx={{ color: '#1976d2', lineHeight: 1.6, display: 'block', mt: 1 }}>
                         <strong>HTML Report:</strong> Human-readable comprehensive report suitable for stakeholder review and regulatory submission.
                     </Typography>
+                </CardContent>
+            </Card>
+
+
+            {/* Demo Data Note */}
+            <Card variant="outlined" sx={{ mt: 3, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
+                <CardContent sx={{ pb: 2 }}>
+                    <Box>
+                        <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>
+                            v1 note:
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                            This file stores state in localStorage for demo purposes. Replace with GenAI Foundry backend APIs for enterprise deployments.
+                        </Typography>
+                    </Box>
                 </CardContent>
             </Card>
         </Box>

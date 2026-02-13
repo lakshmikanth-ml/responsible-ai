@@ -369,135 +369,215 @@ const TabH = ({ projectContext = {}, onStatusMessage }) => {
                 </Box>
             </Grid>
 
-            <Grid size={{ xs: 12, md: 8 }} sx={{
-                p: 2, border:
-                    "1px solid rgba(117, 117, 117, 0.2)",
-                borderRadius: 2
-            }}>
+            <Grid size={{ xs: 12, md: 8 }} sx={{ p: 0 }}>
+                {/* Section Header */}
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 3, mb: 3 }}>
+                    <Box>
+                        <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>
+                            H. Gates &amp; Monitoring (Production Governance)
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: 'text.secondary', maxWidth: 600 }}>
+                            Define runtime KPIs and thresholds that Guardian must log and enforce. This is the "always-on" privacy protection after deployment.
+                        </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', gap: 1, flexShrink: 0 }}>
+                        <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={handleLoadSampleMonitoring}
+                            sx={{ textTransform: 'none', fontWeight: 600 }}
+                        >
+                            Load Sample Monitoring
+                        </Button>
+                        <Button
+                            variant="contained"
+                            size="small"
+                            onClick={handleSave}
+                            sx={{ textTransform: 'none', fontWeight: 600 }}
+                        >
+                            Save H
+                        </Button>
+                    </Box>
+                </Box>
 
+                {/* Status Message */}
+                {statusMessage && (
+                    <Card variant="outlined" sx={{ mb: 2, bgcolor: '#c8e6c9', borderColor: '#4caf50' }}>
+                        <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
+                            <Typography variant="caption" sx={{ color: '#2e7d32', fontWeight: 600 }}>
+                                {statusMessage}
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                )}
 
-                {/* Monitoring Controls: Signals + Thresholds (from HTML spec) */}
+                {/* 2-Column Grid: Signals + Thresholds */}
                 <Grid container spacing={2} sx={{ mb: 2 }}>
-                    <Grid size={{ xs: 12, sm: 6 }}
-                     sx={{ display: 'flex',
-                     justifyContent: 'space-between',
-                      alignItems: 'center'
-                      }}>
+                    {/* Guardian Runtime Signals */}
+                    <Grid size={{ xs: 12, md: 6 }}>
                         <Card variant="outlined">
                             <CardContent>
-                                <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>Guardian Runtime Signals (must log)</Typography>
-                                <Box sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    // gap: 0.5
-                                }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 2 }}>
+                                    Guardian Runtime Signals (must log)
+                                </Typography>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
                                     <FormControlLabel
-                                        control={<Checkbox checked={monitoringData.signals.pii} onChange={(e) => handleMonitoringChange('signals.pii', e.target.checked)} />} label="PII detections + redactions" />
-                                    <FormControlLabel control={<Checkbox checked={monitoringData.signals.secrets} onChange={(e) => handleMonitoringChange('signals.secrets', e.target.checked)} />} label="Secrets detections" />
-                                    <FormControlLabel control={<Checkbox checked={monitoringData.signals.injection} onChange={(e) => handleMonitoringChange('signals.injection', e.target.checked)} />} label="Prompt-injection flags" />
-                                    <FormControlLabel control={<Checkbox checked={monitoringData.signals.exfil} onChange={(e) => handleMonitoringChange('signals.exfil', e.target.checked)} />} label="Exfiltration intent flags" />
+                                        control={<Checkbox checked={monitoringData.signals.pii} onChange={(e) => handleMonitoringChange('signals.pii', e.target.checked)} />}
+                                        label="PII detections + redactions"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox checked={monitoringData.signals.secrets} onChange={(e) => handleMonitoringChange('signals.secrets', e.target.checked)} />}
+                                        label="Secrets detections"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox checked={monitoringData.signals.injection} onChange={(e) => handleMonitoringChange('signals.injection', e.target.checked)} />}
+                                        label="Prompt-injection flags"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox checked={monitoringData.signals.exfil} onChange={(e) => handleMonitoringChange('signals.exfil', e.target.checked)} />}
+                                        label="Exfiltration intent flags"
+                                    />
                                 </Box>
-                                <Box sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    //  gap: 1, mt: 1
-                                }}>
-                                    <FormControlLabel control={<Checkbox checked={monitoringData.signals.rbac} onChange={(e) => handleMonitoringChange('signals.rbac', e.target.checked)} />} label="Entitlement decisions (allow/deny)" />
-                                    <FormControlLabel control={<Checkbox checked={monitoringData.signals.toolCalls} onChange={(e) => handleMonitoringChange('signals.toolCalls', e.target.checked)} />} label="Tool calls (allowed/blocked)" />
-                                    <FormControlLabel control={<Checkbox checked={monitoringData.signals.overrides} onChange={(e) => handleMonitoringChange('signals.overrides', e.target.checked)} />} label="SME overrides" />
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, mt: 1 }}>
+                                    <FormControlLabel
+                                        control={<Checkbox checked={monitoringData.signals.rbac} onChange={(e) => handleMonitoringChange('signals.rbac', e.target.checked)} />}
+                                        label="Entitlement decisions (allow/deny)"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox checked={monitoringData.signals.toolCalls} onChange={(e) => handleMonitoringChange('signals.toolCalls', e.target.checked)} />}
+                                        label="Tool calls (allowed/blocked)"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox checked={monitoringData.signals.overrides} onChange={(e) => handleMonitoringChange('signals.overrides', e.target.checked)} />}
+                                        label="SME overrides"
+                                    />
                                 </Box>
                             </CardContent>
                         </Card>
                     </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
+
+                    {/* Production Thresholds */}
+                    <Grid size={{ xs: 12, md: 6 }}>
                         <Card variant="outlined">
                             <CardContent>
-                                <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>Production Thresholds (block / alert)</Typography>
-                                <Grid container spacing={2}>
-                                    <Grid size={{ xs: 12, }}>
-                                        <Autocomplete
-                                            freeSolo
-                                            fullWidth
-                                            options={['0 incidents / day (block)', '1 incident / day (block)', '1 incident / week (block)']}
-                                            value={monitoringData.thresholds.leakThresh}
-                                            onChange={(e, newValue) => handleMonitoringChange('thresholds.leakThresh', newValue)}
-                                            renderInput={(params) => <TextField {...params} label="Critical Leakage Threshold" size="small" />}
-                                        />
+                                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 2 }}>
+                                    Production Thresholds (block / alert)
+                                </Typography>
+                                <Grid container spacing={1.5} sx={{ mb: 1.5 }}>
+                                    <Grid size={{ xs: 12 }}>
+                                        <FormControl fullWidth size="small">
+                                            <InputLabel>Critical Leakage Threshold</InputLabel>
+                                            <Select
+                                                value={monitoringData.thresholds.leakThresh}
+                                                onChange={(e) => handleMonitoringChange('thresholds.leakThresh', e.target.value)}
+                                                label="Critical Leakage Threshold"
+                                            >
+                                                <MenuItem value="0 incidents / day (block)">0 incidents / day (block)</MenuItem>
+                                                <MenuItem value="1 incident / day (block)">1 incident / day (block)</MenuItem>
+                                                <MenuItem value="1 incident / week (block)">1 incident / week (block)</MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </Grid>
-                                    <Grid size={{ xs: 12, }}>
-                                        <Autocomplete
-                                            freeSolo
-                                            fullWidth
-                                            options={['< 1% (alert)', '< 3% (alert)', '< 5% (alert)']}
-                                            value={monitoringData.thresholds.injectRate}
-                                            onChange={(e, newValue) => handleMonitoringChange('thresholds.injectRate', newValue)}
-                                            renderInput={(params) => <TextField {...params} label="Injection Flag Rate" size="small" />}
-                                        />
+                                    <Grid size={{ xs: 12 }}>
+                                        <FormControl fullWidth size="small">
+                                            <InputLabel>Injection Flag Rate</InputLabel>
+                                            <Select
+                                                value={monitoringData.thresholds.injectRate}
+                                                onChange={(e) => handleMonitoringChange('thresholds.injectRate', e.target.value)}
+                                                label="Injection Flag Rate"
+                                            >
+                                                <MenuItem value="< 1% (alert)">&lt; 1% (alert)</MenuItem>
+                                                <MenuItem value="< 3% (alert)">&lt; 3% (alert)</MenuItem>
+                                                <MenuItem value="< 5% (alert)">&lt; 5% (alert)</MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </Grid>
-                                    <Grid size={{ xs: 12, }}>
-                                        <Autocomplete
-                                            freeSolo
-                                            fullWidth
-                                            options={['< 2% (review)', '< 5% (review)', '< 10% (review)']}
-                                            value={monitoringData.thresholds.denyRate}
-                                            onChange={(e, newValue) => handleMonitoringChange('thresholds.denyRate', newValue)}
-                                            renderInput={(params) => <TextField {...params} label="RBAC Deny Rate" size="small" />}
-                                        />
-                                    </Grid>
-                                    <Grid size={{ xs: 12, }}>
-                                        <Autocomplete
-                                            freeSolo
-                                            fullWidth
-                                            options={['Route to SME + hide sensitive spans', 'Route to SME (no hide)', 'Block response']}
-                                            value={monitoringData.thresholds.escRule}
-                                            onChange={(e, newValue) => handleMonitoringChange('thresholds.escRule', newValue)}
-                                            renderInput={(params) => <TextField {...params} label="Escalation Rule" size="small" />}
-                                        />
-                                    </Grid>
-                                    <Grid size={{ xs: 12, }}>
-                                        <Autocomplete
-                                            freeSolo
-                                            fullWidth
-                                            options={['Secure logs (PII removed)', 'Metadata only', 'Full logs (restricted)']}
-                                            value={monitoringData.thresholds.logMode}
-                                            onChange={(e, newValue) => handleMonitoringChange('thresholds.logMode', newValue)}
-                                            renderInput={(params) => <TextField {...params} label="Secure Logging Mode" size="small" />}
-                                        />
-                                    </Grid>
-                                    <Grid size={{ xs: 12, }}>
-                                        <Autocomplete
-                                            freeSolo
-                                            fullWidth
-                                            options={['Weekly', 'Monthly', 'Quarterly']}
-                                            value={monitoringData.thresholds.auditFreq}
-                                            onChange={(e, newValue) => handleMonitoringChange('thresholds.auditFreq', newValue)}
-                                            renderInput={(params) => <TextField {...params} label="Audit Export Frequency" size="small" />}
-                                        />
+                                    <Grid size={{ xs: 12 }}>
+                                        <FormControl fullWidth size="small">
+                                            <InputLabel>RBAC Deny Rate (expected)</InputLabel>
+                                            <Select
+                                                value={monitoringData.thresholds.denyRate}
+                                                onChange={(e) => handleMonitoringChange('thresholds.denyRate', e.target.value)}
+                                                label="RBAC Deny Rate (expected)"
+                                            >
+                                                <MenuItem value="< 2% (review)">&lt; 2% (review)</MenuItem>
+                                                <MenuItem value="< 5% (review)">&lt; 5% (review)</MenuItem>
+                                                <MenuItem value="< 10% (review)">&lt; 10% (review)</MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </Grid>
                                 </Grid>
+                                <Box sx={{ borderTop: '1px solid #e0e0e0', pt: 1.5 }}>
+                                    <Grid container spacing={1.5}>
+                                        <Grid size={{ xs: 12 }}>
+                                            <FormControl fullWidth size="small">
+                                                <InputLabel>Escalation Rule (low confidence)</InputLabel>
+                                                <Select
+                                                    value={monitoringData.thresholds.escRule}
+                                                    onChange={(e) => handleMonitoringChange('thresholds.escRule', e.target.value)}
+                                                    label="Escalation Rule (low confidence)"
+                                                >
+                                                    <MenuItem value="Route to SME + hide sensitive spans">Route to SME + hide sensitive spans</MenuItem>
+                                                    <MenuItem value="Route to SME (no hide)">Route to SME (no hide)</MenuItem>
+                                                    <MenuItem value="Block response">Block response</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </Grid>
+                                        <Grid size={{ xs: 12 }}>
+                                            <FormControl fullWidth size="small">
+                                                <InputLabel>Secure Logging Mode</InputLabel>
+                                                <Select
+                                                    value={monitoringData.thresholds.logMode}
+                                                    onChange={(e) => handleMonitoringChange('thresholds.logMode', e.target.value)}
+                                                    label="Secure Logging Mode"
+                                                >
+                                                    <MenuItem value="Secure logs (PII removed)">Secure logs (PII removed)</MenuItem>
+                                                    <MenuItem value="Metadata only">Metadata only</MenuItem>
+                                                    <MenuItem value="Full logs (restricted)">Full logs (restricted)</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </Grid>
+                                        <Grid size={{ xs: 12 }}>
+                                            <FormControl fullWidth size="small">
+                                                <InputLabel>Audit Export Frequency</InputLabel>
+                                                <Select
+                                                    value={monitoringData.thresholds.auditFreq}
+                                                    onChange={(e) => handleMonitoringChange('thresholds.auditFreq', e.target.value)}
+                                                    label="Audit Export Frequency"
+                                                >
+                                                    <MenuItem value="Weekly">Weekly</MenuItem>
+                                                    <MenuItem value="Monthly">Monthly</MenuItem>
+                                                    <MenuItem value="Quarterly">Quarterly</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </Grid>
+                                    </Grid>
+                                </Box>
                             </CardContent>
                         </Card>
                     </Grid>
                 </Grid>
 
-                {/* Guardian Health (runtime placeholder) */}
+                {/* Guardian Health Table */}
                 <Card variant="outlined" sx={{ mb: 2 }}>
                     <CardContent>
-                        <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>Guardian Health (runtime placeholder)</Typography>
-                        <TableContainer component={Paper} variant="outlined">
-                            <Table size="small">
+                        <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 2 }}>
+                            Guardian Health (runtime placeholder)
+                        </Typography>
+                        <TableContainer>
+                            <Table size="small" stickyHeader>
                                 <TableHead>
-                                    <TableRow>
-                                        <TableCell>Signal</TableCell>
-                                        <TableCell>Last 7 days</TableCell>
-                                        <TableCell>Status</TableCell>
-                                        <TableCell>Notes</TableCell>
+                                    <TableRow sx={{ bgcolor: '#f5f5f5' }}>
+                                        <TableCell sx={{ fontWeight: 700, width: 260 }}>Signal</TableCell>
+                                        <TableCell sx={{ fontWeight: 700, width: 160 }}>Last 7 days</TableCell>
+                                        <TableCell sx={{ fontWeight: 700, width: 160 }}>Status</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }}>Notes</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     <TableRow>
-                                        <TableCell>PII detections (blocked/redacted)</TableCell>
-                                        <TableCell>{monitoringData.health.pii}</TableCell>
+                                        <TableCell sx={{ fontSize: '0.9rem' }}>PII detections (blocked/redacted)</TableCell>
+                                        <TableCell sx={{ fontSize: '0.9rem' }}>{monitoringData.health.pii}</TableCell>
                                         <TableCell>
                                             <Typography
                                                 variant="caption"
@@ -514,11 +594,11 @@ const TabH = ({ projectContext = {}, onStatusMessage }) => {
                                                 {monitoringData.health.piiStatus}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell>Derived from Guardian runtime logs</TableCell>
+                                        <TableCell sx={{ fontSize: '0.9rem', color: 'text.secondary' }}>Derived from Guardian runtime logs</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell>Prompt injection flags</TableCell>
-                                        <TableCell>{monitoringData.health.injection}</TableCell>
+                                        <TableCell sx={{ fontSize: '0.9rem' }}>Prompt injection flags</TableCell>
+                                        <TableCell sx={{ fontSize: '0.9rem' }}>{monitoringData.health.injection}</TableCell>
                                         <TableCell>
                                             <Typography
                                                 variant="caption"
@@ -535,11 +615,11 @@ const TabH = ({ projectContext = {}, onStatusMessage }) => {
                                                 {monitoringData.health.injectionStatus}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell>Should not trend upward</TableCell>
+                                        <TableCell sx={{ fontSize: '0.9rem', color: 'text.secondary' }}>Should not trend upward</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell>Secrets detected</TableCell>
-                                        <TableCell>{monitoringData.health.secrets}</TableCell>
+                                        <TableCell sx={{ fontSize: '0.9rem' }}>Secrets detected</TableCell>
+                                        <TableCell sx={{ fontSize: '0.9rem' }}>{monitoringData.health.secrets}</TableCell>
                                         <TableCell>
                                             <Typography
                                                 variant="caption"
@@ -556,11 +636,11 @@ const TabH = ({ projectContext = {}, onStatusMessage }) => {
                                                 {monitoringData.health.secretsStatus}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell>Must be blocked</TableCell>
+                                        <TableCell sx={{ fontSize: '0.9rem', color: 'text.secondary' }}>Must be blocked</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell>RBAC denies</TableCell>
-                                        <TableCell>{monitoringData.health.rbacDenies}</TableCell>
+                                        <TableCell sx={{ fontSize: '0.9rem' }}>RBAC denies</TableCell>
+                                        <TableCell sx={{ fontSize: '0.9rem' }}>{monitoringData.health.rbacDenies}</TableCell>
                                         <TableCell>
                                             <Typography
                                                 variant="caption"
@@ -577,13 +657,20 @@ const TabH = ({ projectContext = {}, onStatusMessage }) => {
                                                 {monitoringData.health.rbacStatus}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell>Unexpected spikes indicate misconfigured entitlements</TableCell>
+                                        <TableCell sx={{ fontSize: '0.9rem', color: 'text.secondary' }}>Unexpected spikes indicate misconfigured entitlements</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
                         </TableContainer>
                     </CardContent>
                 </Card>
+
+                {/* Callout Message */}
+                <Box sx={{ p: 1.5, bgcolor: '#f2f6ff', borderRadius: 1, border: '1px solid #90caf9' }}>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
+                        ℹ️ This section is where Guardian "writes back" into Responsible AI: runtime metrics, violations, and audit exports. It keeps the pillar defensible over time.
+                    </Typography>
+                </Box>
 
 
 

@@ -195,44 +195,7 @@ const Index = () => {
 
     return (
         <Box>
-            {/* Gate Status Cards */}
-            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }, gap: 2, mb: 3 }}>
-                {[
-                    { name: 'Pre-Training Gate', status: 'BLOCKED', color: '#d32f2f', msg: 'Regulated data tier: Security Owner and Privacy Owner must be assigned in section A.' },
-                    { name: 'Release Gate', status: 'BLOCKED', color: '#d32f2f', msg: 'Evaluation has FAIL tests. All privacy/security tests must PASS before release.' },
-                    { name: 'Production Gate', status: 'BLOCKED', color: '#d32f2f', msg: 'Production blocked because release gate is blocked.' },
-                    { name: 'Guardian Health', status: '—', color: '#f57c00', msg: 'Derived from runtime signals ingested in section H.' },
-                ].map((gate, idx) => (
-                    <Card key={idx} variant="outlined" sx={{ p: 2 }}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                            {gate.name}
-                        </Typography>
-                        <Box sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1,
-                            mb: 1.5,
-                            p: 1,
-                            bgcolor: gate.color + '15',
-                            borderRadius: '50px',
-                            width: 'fit-content',
-                        }}>
-                            <Box sx={{
-                                width: 10,
-                                height: 10,
-                                borderRadius: '50%',
-                                bgcolor: gate.color,
-                            }} />
-                            <Typography variant="caption" sx={{ fontWeight: 700, color: gate.color }}>
-                                {gate.status}
-                            </Typography>
-                        </Box>
-                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.5 }}>
-                            {gate.msg}
-                        </Typography>
-                    </Card>
-                ))}
-            </Box>
+
 
             <Card elevation={1}>
                 {/* Header Section */}
@@ -271,7 +234,7 @@ const Index = () => {
                     </Box>
 
                     {/* Status Chips */}
-                    <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mb: 3 }}>
+                    <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mb: 0 }}>
                         <Chip
                             label="Lifecycle Controlled"
                             variant="outlined"
@@ -302,7 +265,52 @@ const Index = () => {
 
 
                 {/* Main Content Grid: Project Context (Left) + Tab Content (Right) */}
+                <Box sx={{
+                    display: 'grid',
+                    px: 2,
+                    gridTemplateColumns: {
+                        xs: '1fr', sm: '1fr 1fr',
+                        md: '1fr 1fr 1fr 1fr'
+                    }, gap: 2,
+                }}>
+                    {[
+                        { name: 'Pre-Training Gate', status: 'BLOCKED', color: '#d32f2f', msg: 'Regulated data tier: Security Owner and Privacy Owner must be assigned in section A.' },
+                        { name: 'Release Gate', status: 'BLOCKED', color: '#d32f2f', msg: 'Evaluation has FAIL tests. All privacy/security tests must PASS before release.' },
+                        { name: 'Production Gate', status: 'BLOCKED', color: '#d32f2f', msg: 'Production blocked because release gate is blocked.' },
+                        { name: 'Guardian Health', status: '—', color: '#f57c00', msg: 'Derived from runtime signals ingested in section H.' },
+                    ].map((gate, idx) => (
+                        <Card key={idx} variant="outlined" sx={{ p: 2 }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                                {gate.name}
+                            </Typography>
+                            <Box sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1,
+                                mb: 1.5,
+                                p: 1,
+                                bgcolor: gate.color + '15',
+                                borderRadius: '50px',
+                                width: 'fit-content',
+                            }}>
+                                <Box sx={{
+                                    width: 10,
+                                    height: 10,
+                                    borderRadius: '50%',
+                                    bgcolor: gate.color,
+                                }} />
+                                <Typography variant="caption" sx={{ fontWeight: 700, color: gate.color }}>
+                                    {gate.status}
+                                </Typography>
+                            </Box>
+                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.5 }}>
+                                {gate.msg}
+                            </Typography>
+                        </Card>
+                    ))}
+                </Box>
                 <Grid container>
+                    {/* Gate Status Cards */}
 
 
                     {/* Right Panel: Tabs */}
@@ -334,6 +342,9 @@ const Index = () => {
                         </Tabs>
 
                         {/* Tab Content */}
+                        <>
+
+                        </>
                         {renderTabContent()}
                     </Grid>
                 </Grid>

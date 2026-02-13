@@ -32,34 +32,34 @@ const GATES = [
         status: "CONDITIONAL",
         description:
             "Citations required but no DFA snapshot loaded. Recommended to ingest DFA before training.",
-        grid: { xs: 12, sm: 6, md: 4 },
+        grid: { xs: 12, sm: 6, md: 4, lg: 3 },
     },
     {
         id: "release",
         title: "Release Gate",
         status: "BLOCKED",
         description: "Explainability Owner is missing in section A.",
-        grid: { xs: 12, sm: 6, md: 4 },
+        grid: { xs: 12, sm: 6, md: 4, lg: 3 },
     },
     {
         id: "production",
         title: "Production Gate",
         status: "BLOCKED",
         description: "Production blocked because release gate is blocked.",
-        grid: { xs: 12, sm: 6, md: 4 },
+        grid: { xs: 12, sm: 6, md: 4, lg: 3 },
     },
     {
         id: "guardian",
         title: "Guardian Health",
-        value: "CRITICAL",
+        value: "-",
         description: "Derived from runtime signals ingested in section H.",
-        grid: { xs: 12 },
+        grid: { xs: 12, sm: 6, md: 4, lg: 3 },
     },
 ];
 
 export default function KpiGateRow() {
     return (
-        <Grid container spacing={2} alignItems="stretch">
+        <Grid container spacing={2} alignItems="stretch" mt={2}>
             {GATES.map((gate) => (
                 <Grid key={gate.id} size={gate.grid} display="flex">
                     <Card sx={{ flex: 1 }}>
@@ -82,7 +82,7 @@ export default function KpiGateRow() {
                                     mt={1}
                                     mb={1}
                                 >
-                                    <StatusChip status={gate.status}  />
+                                    <StatusChip status={gate.status} />
                                 </Stack>
                             )}
 

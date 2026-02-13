@@ -22,7 +22,7 @@ import {
     InputLabel,
     Alert,
     Tooltip,
-    IconButton,
+    IconButton, Autocomplete
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -79,6 +79,39 @@ const SAMPLE_ROWS = [
         justification: "Internal convenience output",
     },
 ];
+
+const depthOptions = [
+    { label: "Low (internal advisory)", value: "low" },
+    { label: "Medium (internal decisions)", value: "medium" },
+    { label: "High (customer / regulator)", value: "high" },
+];
+
+const citationOptions = [
+    {
+        label: "Citations required for mandatory outputs",
+        value: "required",
+    },
+    {
+        label: "Citations optional (not recommended)",
+        value: "optional",
+    },
+    {
+        label: "Citations restricted (PII or sensitive)",
+        value: "restricted",
+    },
+];
+
+const reasoningOptions = [
+    {
+        label: "Business-readable reasoning required",
+        value: "required",
+    },
+    {
+        label: "Reasoning optional",
+        value: "optional",
+    },
+];
+
 
 export default function TabBCoverage() {
     const [rows, setRows] = useState(SAMPLE_ROWS);
@@ -202,20 +235,36 @@ export default function TabBCoverage() {
                 </Stack>
                 <Grid container spacing={2} sx={{ mt: 3 }}>
                     <Grid size={{ xs: 12, md: 3 }}>
-                        <FormControl fullWidth size="small">
-                            <InputLabel>Default Explanation Depth</InputLabel>
-                            <Select
-                                label="Default Explanation Depth"
-                                value={policy.defaultDepth}
-                                onChange={(e) =>
-                                    persist(rows, { ...policy, defaultDepth: e.target.value })
-                                }
-                            >
-                                <MenuItem value="low">Low (internal advisory)</MenuItem>
-                                <MenuItem value="medium">Medium (internal decisions)</MenuItem>
-                                <MenuItem value="high">High (customer / regulator)</MenuItem>
-                            </Select>
-                        </FormControl>
+
+                        <Autocomplete
+                            size="small"
+                            fullWidth
+                            options={depthOptions}
+                            getOptionLabel={(option) => option.label}
+                            value={
+                                depthOptions.find(
+                                    (opt) => opt.value === policy.defaultDepth
+                                ) || null
+                            }
+                            onChange={(_, newValue) =>
+                                persist(rows, {
+                                    ...policy,
+                                    defaultDepth: newValue?.value || "",
+                                })
+                            }
+                            isOptionEqualToValue={(opt, val) =>
+                                opt.value === val.value
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Default Explanation Depth"
+                                />
+                            )}
+                        />
+
+
+
                     </Grid>
                     <Grid size={{ xs: 12, md: 3 }}>
                         <TextField
@@ -228,35 +277,61 @@ export default function TabBCoverage() {
                         />
                     </Grid>
                     <Grid size={{ xs: 12, md: 3 }}>
-                        <FormControl fullWidth size="small">
-                            <InputLabel>Citation Policy</InputLabel>
-                            <Select
-                                label="Citation Policy"
-                                value={policy.citationPolicy}
-                                onChange={(e) =>
-                                    persist(rows, { ...policy, citationPolicy: e.target.value })
-                                }
-                            >
-                                <MenuItem value="required">Citations required for mandatory outputs</MenuItem>
-                                <MenuItem value="optional">Citations optional (not recommended)</MenuItem>
-                                <MenuItem value="restricted">Citations restricted (PII or sensitive)</MenuItem>
-                            </Select>
-                        </FormControl>
+                        <Autocomplete
+                            size="small"
+                            fullWidth
+                            options={citationOptions}
+                            getOptionLabel={(option) => option.label}
+                            value={
+                                citationOptions.find(
+                                    (opt) => opt.value === policy.citationPolicy
+                                ) || null
+                            }
+                            onChange={(_, newValue) =>
+                                persist(rows, {
+                                    ...policy,
+                                    citationPolicy: newValue?.value || "",
+                                })
+                            }
+                            isOptionEqualToValue={(opt, val) =>
+                                opt.value === val.value
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Citation Policy"
+                                />
+                            )}
+                        />
+
                     </Grid>
                     <Grid size={{ xs: 12, md: 3 }}>
-                        <FormControl fullWidth size="small">
-                            <InputLabel>Reasoning Policy</InputLabel>
-                            <Select
-                                label="Reasoning Policy"
-                                value={policy.reasoningPolicy}
-                                onChange={(e) =>
-                                    persist(rows, { ...policy, reasoningPolicy: e.target.value })
-                                }
-                            >
-                                <MenuItem value="required">Business-readable reasoning required</MenuItem>
-                                <MenuItem value="optional">Reasoning optional</MenuItem>
-                            </Select>
-                        </FormControl>
+                        <Autocomplete
+                            size="small"
+                            fullWidth
+                            options={reasoningOptions}
+                            getOptionLabel={(option) => option.label}
+                            value={
+                                reasoningOptions.find(
+                                    (opt) => opt.value === policy.reasoningPolicy
+                                ) || null
+                            }
+                            onChange={(_, newValue) =>
+                                persist(rows, {
+                                    ...policy,
+                                    reasoningPolicy: newValue?.value || "",
+                                })
+                            }
+                            isOptionEqualToValue={(opt, val) =>
+                                opt.value === val.value
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Reasoning Policy"
+                                />
+                            )}
+                        />
                     </Grid>
                 </Grid>
 

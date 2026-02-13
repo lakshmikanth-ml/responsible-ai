@@ -24,11 +24,21 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
     const [risks, setRisks] = useState([
         {
             id: 'R-MAN-001',
-            title: 'Manual risk (edit me)',
-            trigger: 'Manual entry',
+            title: 'R-OWN-001 — No accountable owner assigned for the model version',
+            trigger: 'Trigger: Tab A: Accountable owner is empty',
             severity: 'Critical',
             phase: 'Pre-Training',
-            ownerRole: '',
+            ownerRole: 'Security Lead',
+            status: 'Open',
+            notes: '',
+        },
+        {
+            id: 'R-MAN-001',
+            title: 'R-DFA-001 — DFA not ingested (unknown data ownership/lineage)',
+            trigger: 'Trigger: Tab C: DFA not ingested',
+            severity: 'Critical',
+            phase: 'Pre-Training',
+            ownerRole: 'Security Lead',
             status: 'Open',
             notes: '',
         },
@@ -213,8 +223,10 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
 
     const criticalCount = risks.filter(r => r.severity === 'Critical').length;
     const openCount = risks.filter(r => r.status === 'Open').length;
-    const isFormComplete = risks.length > 0 && risks.some(r => r.ownerRole && r.status !== 'Open');
-    const statusColor = isFormComplete ? '#2e7d32' : '#d32f2f';
+    const isFormComplete = risks.length > 0 &&
+    risks.some(r => r.ownerRole && r.status !== 'Open');
+    const statusColor = isFormComplete ?
+     '#2e7d32' : '#d32f2f';
     const statusText = isFormComplete ? 'Complete' : 'Missing';
 
     const ownerOptions = [
@@ -245,6 +257,7 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
                     </Card>
                 )}
 
+
                 {/* DFA Ingestion Card */}
                 <Card variant="outlined" sx={{ mb: 2 }}>
                     <CardContent>
@@ -256,12 +269,11 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
                                 Load Sample
                             </Button>
                             <Button variant="contained" size="small" onClick={handleIngestDFA}>
-                                Ingest
+                                Ingest DFA JSON
                             </Button>
                         </Box>
                         <Typography variant="caption" sx={{ display: 'block', mb: 1, color: 'text.secondary' }}>
-                            Paste DFA JSON from the separate Data Foundation Analyzer app. This populates Tab E and influences gates.
-                        </Typography>
+                            Paste DFA JSON from the separate Data Foundation Analyzer app. This populates Tab C and influences gates.                        </Typography>
                         <TextField
                             multiline
                             minRows={4}
@@ -269,13 +281,19 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
                             fullWidth
                             size="small"
                             variant="outlined"
-                            placeholder="Paste DFA JSON here..."
+                            placeholder="Paste DFA JSON here (e.g., {&quot;datasetOwnership&quot;:...})"
                             value={dfaJson}
                             onChange={(e) => setDfaJson(e.target.value)}
                             sx={{ fontFamily: 'monospace', fontSize: '0.75rem', mb: 1 }}
                         />
-                        <Typography variant="caption" sx={{ display: 'block', bgcolor: '#fafafa', p: 1, borderRadius: 1, color: 'text.secondary' }}>
-                            💡 <strong>Tip:</strong> For demo, use <code>Load Sample</code>, then <code>Ingest</code>. In production, this would be an API integration.
+                        <Typography variant="caption"
+                            sx={{
+                                display: 'block',
+                                bgcolor: '#f2f6ff',
+                                border: "1px solid #dbe4ff",
+                                p: 1, borderRadius: 1, color: 'text.secondary'
+                            }}>
+                            💡 <strong>Tip:</strong> For demo, use <code>Load DFA Sample</code>, then <code>Ingest</code>. In production, this would be an API integration.
                         </Typography>
                     </CardContent>
                 </Card>
@@ -288,7 +306,7 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
                                 Policy Pack Preview
                             </Typography>
                             <Button variant="outlined" size="small" onClick={handleCopyPolicy}>
-                                Copy
+                                Copy  JSON
                             </Button>
                         </Box>
                         <TextField
@@ -303,7 +321,7 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
                             sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}
                         />
                         <Typography variant="caption" sx={{ display: 'block', mt: 1, color: 'text.secondary' }}>
-                            This preview indicates it would be pushed to Guardian.
+                            This preview indicates it would be pushed to Guardian as a policy pack.
                         </Typography>
                     </CardContent>
                 </Card>
@@ -311,11 +329,27 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
                 {/* Snapshot Export Card */}
                 <Card variant="outlined">
                     <CardContent>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                            Snapshot Export
-                        </Typography>
+                        <Box display={"flex"}
+                            alignItems={"center"}
+                            justifyContent={"space-between"}
+                            mb={1}     >
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600, }}>
+                                Snapshot Export
+                            </Typography>
+                            <Button
+
+                                variant="contained"
+                                size="small"
+
+                            // onClick={handleExportJSON}
+                            >
+                                Export HTML Report
+                            </Button>
+                        </Box>
+
                         <Typography variant="caption" sx={{ display: 'block', mb: 2, color: 'text.secondary' }}>
-                            Exports JSON snapshot and HTML report for audits.
+                            Exports a simple JSON snapshot and an HTML report (download). Useful for audit packets and stakeholder reviews.
+
                         </Typography>
                         <Button
                             fullWidth
@@ -324,7 +358,7 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
                             startIcon={<CloudDownloadIcon />}
                             onClick={handleExportJSON}
                         >
-                            Export JSON
+                            Export JSON snapshot
                         </Button>
                     </CardContent>
                 </Card>
@@ -368,7 +402,7 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
                                         width: 8,
                                         height: 8,
                                         borderRadius: '50%',
-                                        bgcolor: statusColor,
+                                 bgcolor: statusColor,
                                     }}
                                 />
                                 <Typography variant="caption" sx={{ fontWeight: 600, color: statusColor }}>
@@ -555,14 +589,14 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
                         </Box>
 
                         {/* Why This Matters */}
-                        <Card variant="outlined" sx={{ bgcolor: '#fafafa', p: 2 }}>
+                        {/* <Card variant="outlined" sx={{ bgcolor: '#fafafa', p: 2 }}>
                             <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
                                 Why this matters
                             </Typography>
                             <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
                                 A structured risk register documents known gaps and mitigation owners. Without clear accountability and tracking, risks slip through release gates and resurface as production incidents.
                             </Typography>
-                        </Card>
+                        </Card> */}
                     </CardContent>
                 </Card>
             </Grid>
