@@ -11,7 +11,7 @@ import {
     Table,
     TableHead,
     TableBody,
-    TableRow,
+    TableRow, TableContainer, Paper,
     TableCell,
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
@@ -224,9 +224,9 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
     const criticalCount = risks.filter(r => r.severity === 'Critical').length;
     const openCount = risks.filter(r => r.status === 'Open').length;
     const isFormComplete = risks.length > 0 &&
-    risks.some(r => r.ownerRole && r.status !== 'Open');
+        risks.some(r => r.ownerRole && r.status !== 'Open');
     const statusColor = isFormComplete ?
-     '#2e7d32' : '#d32f2f';
+        '#2e7d32' : '#d32f2f';
     const statusText = isFormComplete ? 'Complete' : 'Missing';
 
     const ownerOptions = [
@@ -402,7 +402,7 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
                                         width: 8,
                                         height: 8,
                                         borderRadius: '50%',
-                                 bgcolor: statusColor,
+                                        bgcolor: statusColor,
                                     }}
                                 />
                                 <Typography variant="caption" sx={{ fontWeight: 600, color: statusColor }}>
@@ -437,105 +437,108 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
 
                         {/* Risks Table */}
                         <Box sx={{ overflowX: 'auto', mb: 3 }}>
-                            <Table size="small">
-                                <TableHead>
-                                    <TableRow sx={{ bgcolor: '#fafafa' }}>
-                                        <TableCell sx={{ fontWeight: 600, minWidth: 200 }}>Risk</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, minWidth: 100 }}>Severity</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, minWidth: 100 }}>Phase</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, minWidth: 150 }}>Owner Role</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, minWidth: 100 }}>Status</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, minWidth: 150 }}>Notes</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {risks.map((risk, idx) => (
-                                        <TableRow key={risk.id} sx={{ '&:hover': { bgcolor: '#fafafa' } }}>
-                                            <TableCell>
-                                                <Typography variant="caption" sx={{ fontWeight: 600, display: 'block' }}>
-                                                    {risk.id} — {risk.title}
-                                                </Typography>
-                                                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.5 }}>
-                                                    Trigger: {risk.trigger}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Autocomplete
-                                                    size="small"
-                                                    value={risk.severity}
-                                                    onChange={(e, val) => handleRiskChange(idx, 'severity', val)}
-                                                    options={['Critical', 'High', 'Medium', 'Low']}
-                                                    freeSolo
-                                                    sx={{ minWidth: 90 }}
-                                                    slotProps={{
-                                                        paper: {
-                                                            sx: { fontSize: '0.875rem' },
-                                                        },
-                                                    }}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Autocomplete
-                                                    size="small"
-                                                    value={risk.phase}
-                                                    onChange={(e, val) => handleRiskChange(idx, 'phase', val)}
-                                                    options={['Pre-Training', 'Release', 'Production']}
-                                                    freeSolo
-                                                    sx={{ minWidth: 90 }}
-                                                    slotProps={{
-                                                        paper: {
-                                                            sx: { fontSize: '0.875rem' },
-                                                        },
-                                                    }}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Autocomplete
-                                                    size="small"
-                                                    value={risk.ownerRole}
-                                                    onChange={(e, val) => handleRiskChange(idx, 'ownerRole', val || '')}
-                                                    options={ownerOptions}
-                                                    freeSolo
-                                                    sx={{ minWidth: 140 }}
-                                                    slotProps={{
-                                                        paper: {
-                                                            sx: { fontSize: '0.875rem' },
-                                                        },
-                                                    }}
-                                                    renderInput={(params) => <TextField {...params} placeholder="Select or type..." />}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Autocomplete
-                                                    size="small"
-                                                    value={risk.status}
-                                                    onChange={(e, val) => handleRiskChange(idx, 'status', val)}
-                                                    options={['Open', 'In Progress', 'Mitigated', 'Closed']}
-                                                    freeSolo
-                                                    sx={{ minWidth: 90 }}
-                                                    slotProps={{
-                                                        paper: {
-                                                            sx: { fontSize: '0.875rem' },
-                                                        },
-                                                    }}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <TextField
-                                                    size="small"
-                                                    value={risk.notes}
-                                                    onChange={(e) => handleRiskChange(idx, 'notes', e.target.value)}
-                                                    placeholder="Notes..."
-                                                    sx={{ width: '100%' }}
-                                                />
-                                            </TableCell>
+                            <TableContainer sx={{ mb: 0 }} component={Paper}>
+
+                                <Table size="small">
+                                    <TableHead>
+                                        <TableRow sx={{ bgcolor: '#fafafa' }}>
+                                            <TableCell sx={{ fontWeight: 600, minWidth: 200 }}>Risk</TableCell>
+                                            <TableCell sx={{ fontWeight: 600, minWidth: 100 }}>Severity</TableCell>
+                                            <TableCell sx={{ fontWeight: 600, minWidth: 100 }}>Phase</TableCell>
+                                            <TableCell sx={{ fontWeight: 600, minWidth: 150 }}>Owner Role</TableCell>
+                                            <TableCell sx={{ fontWeight: 600, minWidth: 100 }}>Status</TableCell>
+                                            <TableCell sx={{ fontWeight: 600, minWidth: 150 }}>Notes</TableCell>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                                    </TableHead>
+                                    <TableBody>
+                                        {risks.map((risk, idx) => (
+                                            <TableRow key={risk.id} sx={{ '&:hover': { bgcolor: '#fafafa' } }}>
+                                                <TableCell>
+                                                    <Typography variant="caption" sx={{ fontWeight: 600, display: 'block' }}>
+                                                        {risk.id} — {risk.title}
+                                                    </Typography>
+                                                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.5 }}>
+                                                        Trigger: {risk.trigger}
+                                                    </Typography>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Autocomplete
+                                                        size="small"
+                                                        value={risk.severity}
+                                                        onChange={(e, val) => handleRiskChange(idx, 'severity', val)}
+                                                        options={['Critical', 'High', 'Medium', 'Low']}
+                                                        freeSolo
+                                                        sx={{ minWidth: 90 }}
+                                                        slotProps={{
+                                                            paper: {
+                                                                sx: { fontSize: '0.875rem' },
+                                                            },
+                                                        }}
+                                                        renderInput={(params) => <TextField {...params} />}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Autocomplete
+                                                        size="small"
+                                                        value={risk.phase}
+                                                        onChange={(e, val) => handleRiskChange(idx, 'phase', val)}
+                                                        options={['Pre-Training', 'Release', 'Production']}
+                                                        freeSolo
+                                                        sx={{ minWidth: 90 }}
+                                                        slotProps={{
+                                                            paper: {
+                                                                sx: { fontSize: '0.875rem' },
+                                                            },
+                                                        }}
+                                                        renderInput={(params) => <TextField {...params} />}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Autocomplete
+                                                        size="small"
+                                                        value={risk.ownerRole}
+                                                        onChange={(e, val) => handleRiskChange(idx, 'ownerRole', val || '')}
+                                                        options={ownerOptions}
+                                                        freeSolo
+                                                        sx={{ minWidth: 140 }}
+                                                        slotProps={{
+                                                            paper: {
+                                                                sx: { fontSize: '0.875rem' },
+                                                            },
+                                                        }}
+                                                        renderInput={(params) => <TextField {...params} placeholder="Select or type..." />}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Autocomplete
+                                                        size="small"
+                                                        value={risk.status}
+                                                        onChange={(e, val) => handleRiskChange(idx, 'status', val)}
+                                                        options={['Open', 'In Progress', 'Mitigated', 'Closed']}
+                                                        freeSolo
+                                                        sx={{ minWidth: 90 }}
+                                                        slotProps={{
+                                                            paper: {
+                                                                sx: { fontSize: '0.875rem' },
+                                                            },
+                                                        }}
+                                                        renderInput={(params) => <TextField {...params} />}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <TextField
+                                                        size="small"
+                                                        value={risk.notes}
+                                                        onChange={(e) => handleRiskChange(idx, 'notes', e.target.value)}
+                                                        placeholder="Notes..."
+                                                        sx={{ width: '100%' }}
+                                                    />
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
                         </Box>
 
                         {/* Audit Trail */}
@@ -561,26 +564,28 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
                             </Box>
 
                             {auditNotes.length > 0 ? (
-                                <Table size="small">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell sx={{ fontWeight: 600 }}>Time</TableCell>
-                                            <TableCell sx={{ fontWeight: 600 }}>Note</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {auditNotes.map((note, idx) => (
-                                            <TableRow key={idx}>
-                                                <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
-                                                    {note.time}
-                                                </TableCell>
-                                                <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
-                                                    {note.text}
-                                                </TableCell>
+                                <TableContainer sx={{ mb: 0 }} component={Paper}>
+                                    <Table size="small">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell sx={{ fontWeight: 600 }}>Time</TableCell>
+                                                <TableCell sx={{ fontWeight: 600 }}>Note</TableCell>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
+                                        </TableHead>
+                                        <TableBody>
+                                            {auditNotes.map((note, idx) => (
+                                                <TableRow key={idx}>
+                                                    <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
+                                                        {note.time}
+                                                    </TableCell>
+                                                    <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
+                                                        {note.text}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
                             ) : (
                                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', textAlign: 'center', py: 2 }}>
                                     No notes yet. Add a short note when decisions are made (e.g., owners assigned, risks mitigated).

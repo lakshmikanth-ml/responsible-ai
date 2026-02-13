@@ -273,8 +273,7 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                                 </Button>
                             </Stack>
                         </Card>
-
-                        {/* Action Items */}
+{/* Action Items */}
                         <Card variant="outlined" sx={{ p: 2 }}>
                             <Typography fontWeight={600} mb={2}>Action Items</Typography>
                             <TableContainer sx={{ mb: 2 }} component={Paper}>
@@ -288,23 +287,32 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {actionItems.map((row, i) => (
-                                            <TableRow key={i}>
-                                                <TableCell>
-                                                    <Chip
-                                                        label={row.priority}
-                                                        color={priorityColor(row.priority)}
-                                                        size="small"
-                                                    />
+                                        {actionItems.length === 0 ? (
+                                            <TableRow>
+                                                <TableCell colSpan={3} align="center" sx={{ py: 2 }}>
+                                                    <Typography variant="body2" color="text.secondary">No data found</Typography>
                                                 </TableCell>
-                                                <TableCell>{row.action}</TableCell>
-                                                <TableCell>{row.owner}</TableCell>
                                             </TableRow>
-                                        ))}
+                                        ) : (
+                                            actionItems.map((row, i) => (
+                                                <TableRow key={i}>
+                                                    <TableCell>
+                                                        <Chip
+                                                            label={row.priority}
+                                                            color={priorityColor(row.priority)}
+                                                            size="small"
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>{row.action}</TableCell>
+                                                    <TableCell>{row.owner}</TableCell>
+                                                </TableRow>
+                                            ))
+                                        )}
                                     </TableBody>
                                 </Table>
                             </TableContainer>
                         </Card>
+
 
                         {/* Policy Pack Preview */}
                         <Card variant="outlined" sx={{ p: 2 }}>

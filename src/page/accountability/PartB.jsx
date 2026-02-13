@@ -17,7 +17,7 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    FormHelperText,
+    FormHelperText, TableContainer, Paper
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
@@ -536,26 +536,28 @@ const PartB = ({ projectContext = {}, onStatusMessage }) => {
                             </Box>
 
                             {auditNotes.length > 0 ? (
-                                <Table size="small">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell sx={{ fontWeight: 600 }}>Time</TableCell>
-                                            <TableCell sx={{ fontWeight: 600 }}>Note</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {auditNotes.map((note, idx) => (
-                                            <TableRow key={idx}>
-                                                <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
-                                                    {note.time}
-                                                </TableCell>
-                                                <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
-                                                    {note.text}
-                                                </TableCell>
+                                <TableContainer sx={{ mb: 0 }} component={Paper}>
+                                    <Table size="small">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell sx={{ fontWeight: 600 }}>Time</TableCell>
+                                                <TableCell sx={{ fontWeight: 600 }}>Note</TableCell>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
+                                        </TableHead>
+                                        <TableBody>
+                                            {auditNotes.map((note, idx) => (
+                                                <TableRow key={idx}>
+                                                    <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
+                                                        {note.time}
+                                                    </TableCell>
+                                                    <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
+                                                        {note.text}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
                             ) : (
                                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', textAlign: 'center', py: 2 }}>
                                     No notes yet. Add a short note when decisions are made (e.g., owners assigned, evidence approved).

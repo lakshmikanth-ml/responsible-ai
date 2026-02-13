@@ -12,7 +12,7 @@ import {
     TableHead,
     TableBody,
     TableRow,
-    TableCell, Select, MenuItem, Stack, Switch
+    TableCell, Select, MenuItem, Stack, Switch, TableContainer, Paper
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
@@ -504,97 +504,100 @@ const PartG = ({ projectContext = {}, onStatusMessage }) => {
 
                         {/* Actions Table */}
                         <Box sx={{ overflowX: 'auto', mb: 3 }}>
-                            <Table sx={{ mt: 2 }}>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Evidence Item</TableCell>
-                                        <TableCell>Owner Role</TableCell>
-                                        <TableCell>Status</TableCell>
-                                        <TableCell>File</TableCell>
-                                        <TableCell>Approved</TableCell>
-                                    </TableRow>
-                                </TableHead>
+                            <TableContainer sx={{ mb: 0 }} component={Paper}>
 
-                                <TableBody>
-                                    {rows?.map((r, i) => (
-                                        <TableRow key={r.name}>
-                                            {/* Evidence Item */}
-                                            <TableCell>
-                                                <Typography fontWeight={800} fontSize={12}>{r.name}</Typography>
-                                                <Typography fontSize={11} color="text.secondary" mt={0.5}>
-                                                    Last updated: {r.updatedAt ? r.updatedAt.toLocaleString() : "—"}
-                                                </Typography>
-                                            </TableCell>
-
-
-                                            {/* Owner Role (Autocomplete — FIXED) */}
-                                            <TableCell>
-                                                <Autocomplete
-                                                    options={OWNER_OPTIONS}
-                                                    value={r.owner}
-                                                    size="small"
-                                                    disableClearable
-                                                    getOptionLabel={(option) => option.label}
-                                                    isOptionEqualToValue={(option, value) =>
-                                                        option.label === value.label
-                                                    }
-                                                    onChange={(_, newValue) => update(i, "owner", newValue)}
-                                                    renderInput={(params) => (
-                                                        <TextField {...params} placeholder="Select…" />
-                                                    )}
-                                                />
-                                            </TableCell>
-
-
-                                            {/* Status */}
-                                            <TableCell>
-                                                <Select
-                                                    fullWidth
-                                                    size="small"
-                                                    value={r.status}
-                                                    onChange={(e) => update(i, "status", e.target.value)}
-                                                >
-                                                    <MenuItem value="Missing">Missing</MenuItem>
-                                                    <MenuItem value="Partial">Partial</MenuItem>
-                                                    <MenuItem value="Complete">Complete</MenuItem>
-                                                </Select>
-                                            </TableCell>
-
-
-                                            {/* File */}
-                                            <TableCell>
-                                                <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
-                                                    <input
-                                                        type="file"
-                                                        onChange={(e) => update(i, "file", e.target.files?.[0] || null)}
-                                                    />
-                                                    <Typography fontSize={11} color="text.secondary">
-                                                        {r.file ? r.file.name : "No file"}
-                                                    </Typography>
-                                                </Stack>
-                                            </TableCell>
-
-
-                                            {/* Approved */}
-                                            <TableCell>
-                                                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
-                                                    <Typography
-                                                        fontSize={11}
-                                                        fontWeight={800}
-                                                        sx={{ color: r.approved ? "#15803d" : "#92400e" }}
-                                                    >
-                                                        {r.approved ? "Approved" : "Not approved"}
-                                                    </Typography>
-                                                    <Switch
-                                                        checked={r.approved}
-                                                        onChange={(e) => update(i, "approved", e.target.checked)}
-                                                    />
-                                                </Stack>
-                                            </TableCell>
+                                <Table >
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Evidence Item</TableCell>
+                                            <TableCell>Owner Role</TableCell>
+                                            <TableCell>Status</TableCell>
+                                            <TableCell>File</TableCell>
+                                            <TableCell>Approved</TableCell>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                                    </TableHead>
+
+                                    <TableBody>
+                                        {rows?.map((r, i) => (
+                                            <TableRow key={r.name}>
+                                                {/* Evidence Item */}
+                                                <TableCell>
+                                                    <Typography fontWeight={800} fontSize={12}>{r.name}</Typography>
+                                                    <Typography fontSize={11} color="text.secondary" mt={0.5}>
+                                                        Last updated: {r.updatedAt ? r.updatedAt.toLocaleString() : "—"}
+                                                    </Typography>
+                                                </TableCell>
+
+
+                                                {/* Owner Role (Autocomplete — FIXED) */}
+                                                <TableCell>
+                                                    <Autocomplete
+                                                        options={OWNER_OPTIONS}
+                                                        value={r.owner}
+                                                        size="small"
+                                                        disableClearable
+                                                        getOptionLabel={(option) => option.label}
+                                                        isOptionEqualToValue={(option, value) =>
+                                                            option.label === value.label
+                                                        }
+                                                        onChange={(_, newValue) => update(i, "owner", newValue)}
+                                                        renderInput={(params) => (
+                                                            <TextField {...params} placeholder="Select…" />
+                                                        )}
+                                                    />
+                                                </TableCell>
+
+
+                                                {/* Status */}
+                                                <TableCell>
+                                                    <Select
+                                                        fullWidth
+                                                        size="small"
+                                                        value={r.status}
+                                                        onChange={(e) => update(i, "status", e.target.value)}
+                                                    >
+                                                        <MenuItem value="Missing">Missing</MenuItem>
+                                                        <MenuItem value="Partial">Partial</MenuItem>
+                                                        <MenuItem value="Complete">Complete</MenuItem>
+                                                    </Select>
+                                                </TableCell>
+
+
+                                                {/* File */}
+                                                <TableCell>
+                                                    <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+                                                        <input
+                                                            type="file"
+                                                            onChange={(e) => update(i, "file", e.target.files?.[0] || null)}
+                                                        />
+                                                        <Typography fontSize={11} color="text.secondary">
+                                                            {r.file ? r.file.name : "No file"}
+                                                        </Typography>
+                                                    </Stack>
+                                                </TableCell>
+
+
+                                                {/* Approved */}
+                                                <TableCell>
+                                                    <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+                                                        <Typography
+                                                            fontSize={11}
+                                                            fontWeight={800}
+                                                            sx={{ color: r.approved ? "#15803d" : "#92400e" }}
+                                                        >
+                                                            {r.approved ? "Approved" : "Not approved"}
+                                                        </Typography>
+                                                        <Switch
+                                                            checked={r.approved}
+                                                            onChange={(e) => update(i, "approved", e.target.checked)}
+                                                        />
+                                                    </Stack>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
 
 
                         </Box>
@@ -622,26 +625,29 @@ const PartG = ({ projectContext = {}, onStatusMessage }) => {
                             </Box>
 
                             {auditNotes.length > 0 ? (
-                                <Table size="small">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell sx={{ fontWeight: 600 }}>Time</TableCell>
-                                            <TableCell sx={{ fontWeight: 600 }}>Note</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {auditNotes.map((note, idx) => (
-                                            <TableRow key={idx}>
-                                                <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
-                                                    {note.time}
-                                                </TableCell>
-                                                <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
-                                                    {note.text}
-                                                </TableCell>
+                                <TableContainer sx={{ mb: 0 }} component={Paper}>
+
+                                    <Table size="small">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell sx={{ fontWeight: 600 }}>Time</TableCell>
+                                                <TableCell sx={{ fontWeight: 600 }}>Note</TableCell>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
+                                        </TableHead>
+                                        <TableBody>
+                                            {auditNotes.map((note, idx) => (
+                                                <TableRow key={idx}>
+                                                    <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
+                                                        {note.time}
+                                                    </TableCell>
+                                                    <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
+                                                        {note.text}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
                             ) : (
                                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', textAlign: 'center', py: 2 }}>
                                     No notes yet. Add a short note when decisions are made (e.g., owners assigned, milestones reached).

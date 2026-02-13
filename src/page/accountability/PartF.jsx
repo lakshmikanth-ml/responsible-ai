@@ -12,7 +12,7 @@ import {
     TableHead,
     TableBody,
     TableRow,
-    TableCell,
+    TableCell, TableContainer, Paper
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
@@ -277,7 +277,7 @@ const PartF = ({ projectContext = {}, onStatusMessage }) => {
                                 bgcolor: '#f2f6ff',
                                 border: "1px solid #dbe4ff",
                                 p: 1, borderRadius: 1,
-                                 color: 'text.secondary'
+                                color: 'text.secondary'
                             }}>
                             💡 <strong>Tip:</strong> For demo, use <code>Load DFA Sample</code>, then <code>Ingest</code>. In production, this would be an API integration.
                         </Typography>
@@ -425,86 +425,89 @@ const PartF = ({ projectContext = {}, onStatusMessage }) => {
 
                         {/* Actions Table */}
                         <Box sx={{ overflowX: 'auto', mb: 3 }}>
-                            <Table size="small">
-                                <TableHead>
-                                    <TableRow sx={{ bgcolor: '#fafafa' }}>
-                                        <TableCell sx={{ fontWeight: 600, minWidth: 200 }}>Action</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, minWidth: 150 }}>Owner Role</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, minWidth: 120 }}>Due Date</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, minWidth: 100 }}>Status</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, minWidth: 180 }}>Success Criteria</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {actions.map((action, idx) => (
-                                        <TableRow key={action.id} sx={{ '&:hover': { bgcolor: '#fafafa' } }}>
-                                            <TableCell>
-                                                <Typography variant="caption" sx={{ fontWeight: 600, display: 'block' }}>
-                                                    {action.id} — {action.title}
-                                                </Typography>
-                                                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.5 }}>
-                                                    Created: {action.createdDate}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Autocomplete
-                                                    size="small"
-                                                    value={action.ownerRole}
-                                                    onChange={(e, val) => handleActionChange(idx, 'ownerRole', val || '')}
-                                                    options={ownerOptions}
-                                                    freeSolo
-                                                    sx={{ minWidth: 140 }}
-                                                    slotProps={{
-                                                        paper: {
-                                                            sx: { fontSize: '0.875rem' },
-                                                        },
-                                                    }}
-                                                    renderInput={(params) => <TextField {...params} placeholder="Select or type..." />}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <TextField
-                                                    type="date"
-                                                    size="small"
-                                                    value={action.dueDate}
-                                                    onChange={(e) => handleActionChange(idx, 'dueDate', e.target.value)}
-                                                    sx={{ minWidth: 110 }}
-                                                    slotProps={{
-                                                        input: {
-                                                            sx: { fontSize: '0.875rem' },
-                                                        },
-                                                    }}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Autocomplete
-                                                    size="small"
-                                                    value={action.status}
-                                                    onChange={(e, val) => handleActionChange(idx, 'status', val)}
-                                                    options={['Planned', 'In Progress', 'Blocked', 'Done']}
-                                                    freeSolo
-                                                    sx={{ minWidth: 90 }}
-                                                    slotProps={{
-                                                        paper: {
-                                                            sx: { fontSize: '0.875rem' },
-                                                        },
-                                                    }}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <TextField
-                                                    size="small"
-                                                    value={action.successCriteria}
-                                                    onChange={(e) => handleActionChange(idx, 'successCriteria', e.target.value)}
-                                                    placeholder="Criteria..."
-                                                    sx={{ width: '100%' }}
-                                                />
-                                            </TableCell>
+                            <TableContainer sx={{ mb: 0 }} component={Paper}>
+
+                                <Table size="small">
+                                    <TableHead>
+                                        <TableRow sx={{ bgcolor: '#fafafa' }}>
+                                            <TableCell sx={{ fontWeight: 600, minWidth: 200 }}>Action</TableCell>
+                                            <TableCell sx={{ fontWeight: 600, minWidth: 150 }}>Owner Role</TableCell>
+                                            <TableCell sx={{ fontWeight: 600, minWidth: 120 }}>Due Date</TableCell>
+                                            <TableCell sx={{ fontWeight: 600, minWidth: 100 }}>Status</TableCell>
+                                            <TableCell sx={{ fontWeight: 600, minWidth: 180 }}>Success Criteria</TableCell>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                                    </TableHead>
+                                    <TableBody>
+                                        {actions.map((action, idx) => (
+                                            <TableRow key={action.id} sx={{ '&:hover': { bgcolor: '#fafafa' } }}>
+                                                <TableCell>
+                                                    <Typography variant="caption" sx={{ fontWeight: 600, display: 'block' }}>
+                                                        {action.id} — {action.title}
+                                                    </Typography>
+                                                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.5 }}>
+                                                        Created: {action.createdDate}
+                                                    </Typography>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Autocomplete
+                                                        size="small"
+                                                        value={action.ownerRole}
+                                                        onChange={(e, val) => handleActionChange(idx, 'ownerRole', val || '')}
+                                                        options={ownerOptions}
+                                                        freeSolo
+                                                        sx={{ minWidth: 140 }}
+                                                        slotProps={{
+                                                            paper: {
+                                                                sx: { fontSize: '0.875rem' },
+                                                            },
+                                                        }}
+                                                        renderInput={(params) => <TextField {...params} placeholder="Select or type..." />}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <TextField
+                                                        type="date"
+                                                        size="small"
+                                                        value={action.dueDate}
+                                                        onChange={(e) => handleActionChange(idx, 'dueDate', e.target.value)}
+                                                        sx={{ minWidth: 110 }}
+                                                        slotProps={{
+                                                            input: {
+                                                                sx: { fontSize: '0.875rem' },
+                                                            },
+                                                        }}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Autocomplete
+                                                        size="small"
+                                                        value={action.status}
+                                                        onChange={(e, val) => handleActionChange(idx, 'status', val)}
+                                                        options={['Planned', 'In Progress', 'Blocked', 'Done']}
+                                                        freeSolo
+                                                        sx={{ minWidth: 90 }}
+                                                        slotProps={{
+                                                            paper: {
+                                                                sx: { fontSize: '0.875rem' },
+                                                            },
+                                                        }}
+                                                        renderInput={(params) => <TextField {...params} />}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <TextField
+                                                        size="small"
+                                                        value={action.successCriteria}
+                                                        onChange={(e) => handleActionChange(idx, 'successCriteria', e.target.value)}
+                                                        placeholder="Criteria..."
+                                                        sx={{ width: '100%' }}
+                                                    />
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
                         </Box>
 
                         {/* Audit Trail */}
@@ -530,26 +533,28 @@ const PartF = ({ projectContext = {}, onStatusMessage }) => {
                             </Box>
 
                             {auditNotes.length > 0 ? (
-                                <Table size="small">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell sx={{ fontWeight: 600 }}>Time</TableCell>
-                                            <TableCell sx={{ fontWeight: 600 }}>Note</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {auditNotes.map((note, idx) => (
-                                            <TableRow key={idx}>
-                                                <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
-                                                    {note.time}
-                                                </TableCell>
-                                                <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
-                                                    {note.text}
-                                                </TableCell>
+                                <TableContainer sx={{ mb: 0 }} component={Paper}>
+                                    <Table size="small">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell sx={{ fontWeight: 600 }}>Time</TableCell>
+                                                <TableCell sx={{ fontWeight: 600 }}>Note</TableCell>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
+                                        </TableHead>
+                                        <TableBody>
+                                            {auditNotes.map((note, idx) => (
+                                                <TableRow key={idx}>
+                                                    <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
+                                                        {note.time}
+                                                    </TableCell>
+                                                    <TableCell variant="body2" sx={{ fontSize: '0.85rem' }}>
+                                                        {note.text}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
                             ) : (
                                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', textAlign: 'center', py: 2 }}>
                                     No notes yet. Add a short note when decisions are made (e.g., owners assigned, milestones reached).
