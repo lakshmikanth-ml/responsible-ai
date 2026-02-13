@@ -133,6 +133,7 @@ export default function GapsRisksTab({ initialValues, onSave, onGenerateRisks, o
                                     <TableRow key={row.key}>
                                         <TableCell>
                                             <TextField
+                                                fullWidth
                                                 select size="small"
                                                 value={row.severity}
                                                 onChange={(e) => formik.setFieldValue(`risks.${i}.severity`, e.target.value)}
@@ -145,6 +146,7 @@ export default function GapsRisksTab({ initialValues, onSave, onGenerateRisks, o
                                         <TableCell>{row.risk}</TableCell>
                                         <TableCell>
                                             <TextField
+                                                fullWidth
                                                 select size="small"
                                                 value={row.status}
                                                 onChange={(e) => formik.setFieldValue(`risks.${i}.status`, e.target.value)}
@@ -155,6 +157,7 @@ export default function GapsRisksTab({ initialValues, onSave, onGenerateRisks, o
                                         </TableCell>
                                         <TableCell>
                                             <TextField
+                                                fullWidth
                                                 select size="small"
                                                 value={row.owner}
                                                 onChange={(e) => formik.setFieldValue(`risks.${i}.owner`, e.target.value)}
@@ -194,7 +197,7 @@ export default function GapsRisksTab({ initialValues, onSave, onGenerateRisks, o
                                 </Button>
                             </Stack>
                         </Card>
-{/* Action Items */}
+                        {/* Action Items */}
                         <Card variant="outlined" sx={{ p: 2 }}>
                             <Typography fontWeight={600} mb={2}>Action Items</Typography>
                             <TableContainer sx={{ mb: 2 }} component={Paper}>

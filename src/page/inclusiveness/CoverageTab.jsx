@@ -242,6 +242,7 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                                             <TableCell>{row.label}</TableCell>
                                             <TableCell>
                                                 <TextField
+                                                    fullWidth
                                                     select
                                                     size="small"
                                                     value={row.status}
@@ -256,6 +257,7 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                                             </TableCell>
                                             <TableCell>
                                                 <TextField
+                                                    fullWidth
                                                     select
                                                     size="small"
                                                     value={row.owner}
@@ -271,6 +273,7 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                                             </TableCell>
                                             <TableCell>
                                                 <TextField
+                                                    fullWidth
                                                     size="small"
                                                     value={row.notes}
                                                     onChange={(e) =>
@@ -312,7 +315,7 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                             </Stack>
                         </Card>
 
-                      {/* Action Items */}
+                        {/* Action Items */}
                         <Card variant="outlined" sx={{ p: 2 }}>
                             <Typography fontWeight={600} mb={2}>Action Items</Typography>
                             <TableContainer sx={{ mb: 2 }} component={Paper}>

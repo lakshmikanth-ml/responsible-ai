@@ -213,6 +213,7 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                                             <TableCell>{row.scenario}</TableCell>
                                             <TableCell>
                                                 <TextField
+                                                    fullWidth
                                                     select size="small"
                                                     value={row.result}
                                                     onChange={(e) => formik.setFieldValue(`userTestingSessions.${i}.result`, e.target.value)}
@@ -224,6 +225,7 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                                             </TableCell>
                                             <TableCell>
                                                 <TextField
+                                                    fullWidth
                                                     select size="small"
                                                     value={row.owner}
                                                     onChange={(e) => formik.setFieldValue(`userTestingSessions.${i}.owner`, e.target.value)}
@@ -235,6 +237,7 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                                             </TableCell>
                                             <TableCell>
                                                 <TextField
+                                                    fullWidth
                                                     size="small"
                                                     placeholder="Observed issues"
                                                     value={row.notes}
@@ -273,7 +276,7 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                                 </Button>
                             </Stack>
                         </Card>
-{/* Action Items */}
+                        {/* Action Items */}
                         <Card variant="outlined" sx={{ p: 2 }}>
                             <Typography fontWeight={600} mb={2}>Action Items</Typography>
                             <TableContainer sx={{ mb: 2 }} component={Paper}>

@@ -56,6 +56,37 @@ const failureDefinitionOptions = [
     'Error messages not actionable or not plain-English',
 ];
 
+const minimumStandardOptions = [
+    'WCAG 2.1 AA + quarterly audits + diverse testing (min 3 groups)',
+    'WCAG 2.2 AA + release audit + localization for top 2 languages',
+    'Keyboard-only + contrast compliance + rural bandwidth mode + quarterly review',
+    'Assistive UX + multilingual output + monthly feedback loop + escalation',
+];
+
+const primaryPurposeOptions = [
+    'Improve access to insurance quotes',
+    'Improve customer self-service',
+    'Assist internal agents / CSRs',
+    'Support underwriting decision consistency',
+    'Reduce friction for underserved applicants',
+];
+
+const jurisdictionOptions = [
+    'US — multi-state',
+    'US — CA focus',
+    'US — NY focus',
+    'UK',
+    'EU',
+    'APAC',
+];
+
+const deploymentAudienceOptions = [
+    'Internal only (employees)',
+    'Partner-facing (brokers / agents)',
+    'Customer-facing (policyholders / applicants)',
+    'Mixed audience',
+];
+
 const statusOptions = ['Missing', 'Partial', 'Complete', 'Pass', 'Fail'];
 
 export default function ObjectiveTab() {
@@ -187,15 +218,15 @@ export default function ObjectiveTab() {
     const handleLoadSample = () => {
         // Populate Tab A with sample data
         setTabA({
-            primaryPurpose: 'quotes',
-            jurisdiction: 'us_multi',
+            primaryPurpose: 'Improve access to insurance quotes',
+            jurisdiction: 'US — multi-state',
             owner: roleOptions[0],
-            audience: 'customers',
+            audience: 'Customer-facing (policyholders / applicants)',
             criticalUserGroups: ['Older adults (low digital literacy)', 'Non-native language speakers'],
             localizationRequired: true,
             accessibilityRequired: true,
             failureDefinition: ['Quote or claim journey unusable on low bandwidth', 'UI not navigable via keyboard-only'],
-            minimumStandard: 'wcag_aa',
+            minimumStandard: 'WCAG 2.1 AA + quarterly audits + diverse testing (min 3 groups)',
         });
 
         // Generate sample action items
@@ -233,7 +264,7 @@ export default function ObjectiveTab() {
     };
 
     const loadSampleAll = () => {
-        setTabA({ ...tabA, primaryPurpose: 'quotes', jurisdiction: 'us_multi', owner: roleOptions[0], audience: 'customers', criticalUserGroups: ['older_adults', 'non_native'], localizationRequired: true, accessibilityRequired: true, minimumStandard: 'wcag_2_1_aa' });
+        setTabA({ ...tabA, primaryPurpose: 'Improve access to insurance quotes', jurisdiction: 'US — multi-state', owner: roleOptions[0], audience: 'Customer-facing (policyholders / applicants)', criticalUserGroups: ['Older adults (low digital literacy)', 'Non-native language speakers'], localizationRequired: true, accessibilityRequired: true, minimumStandard: 'WCAG 2.1 AA + quarterly audits + diverse testing (min 3 groups)' });
         const coverage = (tabB.coverageTable || []).map((r, i) => ({ ...r, status: i < 3 ? 'Complete' : 'Partial', owner: roleOptions[i % roleOptions.length] }));
         setTabB({ ...tabB, quoteJourney: true, claimsJourney: true, supportCoverage: true, wcagRequired: true, wcagLevel: 'wcag_2_1_aa', tools: ['axe', 'lighthouse'], coverageTable: coverage });
         const evidence = (tabG.evidenceSlots || []).map((s, i) => ({ ...s, status: i < 3 ? 'Approved' : 'Missing', owner: roleOptions[(i + 2) % roleOptions.length] }));
@@ -255,40 +286,72 @@ export default function ObjectiveTab() {
 
             <Grid container spacing={2} sx={{ mb: 2 }}>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                    <TextField fullWidth size="small" select label="Primary Purpose" value={tabA.primaryPurpose} onChange={(e) => setTabA({ ...tabA, primaryPurpose: e.target.value })}>
-                        <option value="">Select…</option>
-                        <option value="quotes">Improve access to insurance quotes</option>
-                        <option value="selfservice">Improve customer self-service</option>
-                        <option value="agents">Assist internal agents / CSRs</option>
-                        <option value="underwriting">Support underwriting decision consistency</option>
-                        <option value="underserved">Reduce friction for underserved applicants</option>
-                    </TextField>
+                    <Autocomplete
+                        options={primaryPurposeOptions}
+                        value={tabA.primaryPurpose}
+                        onChange={(event, newValue) => setTabA({ ...tabA, primaryPurpose: newValue })}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Primary Purpose"
+                                size="small"
+                                placeholder="Select…"
+                            />
+                        )}
+                        noOptionsText="No purposes available"
+                        isOptionEqualToValue={(option, value) => option === value}
+                    />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                    <TextField fullWidth size="small" select label="Jurisdiction / Market" value={tabA.jurisdiction} onChange={(e) => setTabA({ ...tabA, jurisdiction: e.target.value })}>
-                        <option value="">Select…</option>
-                        <option value="us_multi">US — multi-state</option>
-                        <option value="us_ca">US — CA focus</option>
-                        <option value="us_ny">US — NY focus</option>
-                        <option value="uk">UK</option>
-                        <option value="eu">EU</option>
-                        <option value="apac">APAC</option>
-                    </TextField>
+                    <Autocomplete
+                        options={jurisdictionOptions}
+                        value={tabA.jurisdiction}
+                        onChange={(event, newValue) => setTabA({ ...tabA, jurisdiction: newValue })}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Jurisdiction / Market"
+                                size="small"
+                                placeholder="Select…"
+                            />
+                        )}
+                        noOptionsText="No jurisdictions available"
+                        isOptionEqualToValue={(option, value) => option === value}
+                    />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                    <TextField fullWidth size="small" select label="Inclusiveness Owner (Accountable Role)" value={tabA.owner} onChange={(e) => setTabA({ ...tabA, owner: e.target.value })}>
-                        <option value="">Select…</option>
-                        {roleOptions.map((role) => (<option key={role} value={role}>{role}</option>))}
-                    </TextField>
+                    <Autocomplete
+                        options={roleOptions}
+                        value={tabA.owner}
+                        onChange={(event, newValue) => setTabA({ ...tabA, owner: newValue })}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Inclusiveness Owner (Accountable Role)"
+                                size="small"
+                                placeholder="Select…"
+                            />
+                        )}
+                        noOptionsText="No roles available"
+                        isOptionEqualToValue={(option, value) => option === value}
+                    />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                    <TextField fullWidth size="small" select label="Deployment Audience" value={tabA.audience} onChange={(e) => setTabA({ ...tabA, audience: e.target.value })}>
-                        <option value="">Select…</option>
-                        <option value="internal">Internal only (employees)</option>
-                        <option value="partners">Partner-facing (brokers / agents)</option>
-                        <option value="customers">Customer-facing (policyholders / applicants)</option>
-                        <option value="mixed">Mixed audience</option>
-                    </TextField>
+                    <Autocomplete
+                        options={deploymentAudienceOptions}
+                        value={tabA.audience}
+                        onChange={(event, newValue) => setTabA({ ...tabA, audience: newValue })}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Deployment Audience"
+                                size="small"
+                                placeholder="Select…"
+                            />
+                        )}
+                        noOptionsText="No audiences available"
+                        isOptionEqualToValue={(option, value) => option === value}
+                    />
                 </Grid>
             </Grid>
 
@@ -361,13 +424,21 @@ export default function ObjectiveTab() {
                     />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                    <TextField fullWidth size="small" select label="Minimum Inclusion Standard (Contract Summary)" value={tabA.minimumStandard} onChange={(e) => setTabA({ ...tabA, minimumStandard: e.target.value })}>
-                        <option value="">Select…</option>
-                        <option value="wcag_aa">WCAG 2.1 AA + quarterly audits + diverse testing (min 3 groups)</option>
-                        <option value="wcag_aa_v2">WCAG 2.2 AA + release audit + localization for top 2 languages</option>
-                        <option value="keyboard">Keyboard-only + contrast compliance + rural bandwidth mode + quarterly review</option>
-                        <option value="assistive">Assistive UX + multilingual output + monthly feedback loop + escalation</option>
-                    </TextField>
+                    <Autocomplete
+                        options={minimumStandardOptions}
+                        value={tabA.minimumStandard}
+                        onChange={(event, newValue) => setTabA({ ...tabA, minimumStandard: newValue })}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Minimum Inclusion Standard (Contract Summary)"
+                                size="small"
+                                placeholder="Select a standard"
+                            />
+                        )}
+                        noOptionsText="No standards available"
+                        isOptionEqualToValue={(option, value) => option === value}
+                    />
                     <Typography variant="caption" sx={{ color: 'text.secondary', mt: 1, display: 'block' }}>This becomes the "Inclusiveness Contract" for the model version and is referenced in gates and the Guardian policy pack.</Typography>
                 </Grid>
             </Grid>
