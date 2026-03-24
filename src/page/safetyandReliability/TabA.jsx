@@ -8,14 +8,14 @@ import {
     Stack,
     Chip,
     TextField,
-    MenuItem,
+    Autocomplete,
     Switch,
     Divider,
     Table,
     TableHead,
     TableRow,
     TableCell,
-    TableBody,
+    TableBody
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -333,22 +333,25 @@ const OWNER_ROLES = [
 
 function renderSelect(formik, name, label, options) {
     return (
-        <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-                size="small"
-                select
+        <Grid size={{ xs: 12, md: 6 }} key={name}>
+            <Autocomplete
                 fullWidth
-                label={label}
-                name={name}
-                value={formik.values[name]}
-                onChange={formik.handleChange}
-            >
-                {options.map((o) => (
-                    <MenuItem key={o.v} value={o.v}>
-                        {o.l}
-                    </MenuItem>
-                ))}
-            </TextField>
+                size="small"
+                options={options}
+                getOptionLabel={(option) => option.l}
+                isOptionEqualToValue={(option, value) => option.v === value.v}
+                value={options.find((o) => o.v === formik.values[name]) || null}
+                onChange={(_, value) => formik.setFieldValue(name, value?.v || "")}
+                onBlur={() => formik.setFieldTouched(name, true)}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label={label}
+                        error={Boolean(formik.touched[name] && formik.errors[name])}
+                        helperText={formik.touched[name] && formik.errors[name]}
+                    />
+                )}
+            />
         </Grid>
     );
 }

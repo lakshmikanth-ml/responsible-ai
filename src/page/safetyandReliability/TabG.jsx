@@ -147,7 +147,7 @@ export default function TabGEvidence() {
                         <Stack direction="row" justifyContent="space-between">
                             <Typography fontWeight={600}>
                                 Evidence Vault (Local Demo Uploads)
-                                <Typography variant="body2" color="text.secondary"
+                               <br /> <Typography variant="body2" color="text.secondary"
                                     component="span" gutterBottom>
                                     Upload artifacts and mark them approved to satisfy gates and audits.
                                 </Typography>
@@ -209,8 +209,8 @@ export default function TabGEvidence() {
 
                                             <TableCell sx={{ minWidth: 200 }}>
                                                 <Autocomplete
-                                                    size="small"
-                                                    options={OWNER_ROLES}
+                                             size="small"
+                                      options={OWNER_ROLES}
                                                     value={e.owner}
                                                     onChange={(_, v) => updateEvidence(e.id, "owner", v)}
                                                     renderInput={(params) => (

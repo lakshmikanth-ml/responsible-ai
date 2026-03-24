@@ -198,38 +198,32 @@ export default function TabCTrainingReadiness() {
                             <Typography variant="body2" fontWeight={600} sx={{ mb: 1 }}>
                                 Training Readiness Owner
                             </Typography>
-                            <TextField
-                                select
+                            <Autocomplete
                                 fullWidth
                                 size="small"
-                                value={ownerRole}
-                                onChange={(e) => setOwnerRole(e.target.value)}
-                            >
-                                {OWNER_ROLES.map((role) => (
-                                    <option key={role} value={role}>{role}</option>
-                                ))}
-                            </TextField>
+                                options={OWNER_ROLES}
+                                value={ownerRole || null}
+                                onChange={(_, value) => setOwnerRole(value || "")}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
                         </Grid>
 
                         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                             <Typography variant="body2" fontWeight={600} sx={{ mb: 1 }}>
                                 Training Readiness Interpretation
                             </Typography>
-                            <TextField
-                                select
+                            <Autocomplete
                                 fullWidth
                                 size="small"
                                 disabled={!dfaIngested}
-                                value={readiness}
-                                onChange={(e) => {
-                                    setReadiness(e.target.value);
+                                options={["Missing", "Partial", "Ready"]}
+                                value={readiness || null}
+                                onChange={(_, value) => {
+                                    setReadiness(value || "");
                                     setReadinessAuto(false);
                                 }}
-                            >
-                                {["Missing", "Partial", "Ready"].map((status) => (
-                                    <option key={status} value={status}>{status}</option>
-                                ))}
-                            </TextField>
+                                renderInput={(params) => <TextField {...params} />}
+                            />
                         </Grid>
 
                         <Grid size={{ xs: 12, sm: 6, md: 4 }}>

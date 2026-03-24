@@ -13,8 +13,6 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Select,
-    MenuItem,
     Stack,
     Switch, TableContainer, Paper,
     FormHelperText,
@@ -326,45 +324,36 @@ const PartH = ({ projectContext = {}, onStatusMessage }) => {
                         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 2, mb: 3 }}>
                             <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
                                 <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>Violation threshold (count)</Typography>
-                                <Select
+                                <Autocomplete
                                     fullWidth
                                     size="small"
-                                    value={violationThreshold}
-                                    onChange={(e) => setViolationThreshold(e.target.value)}
-                                >
-                                    <MenuItem value="3">3</MenuItem>
-                                    <MenuItem value="5">5</MenuItem>
-                                    <MenuItem value="10">10</MenuItem>
-                                    <MenuItem value="20">20</MenuItem>
-                                </Select>
+                                    options={['3', '5', '10', '20']}
+                                    value={violationThreshold || null}
+                                    onChange={(_, value) => setViolationThreshold(value || '')}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
                             </Card>
                             <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
                                 <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>Override threshold (%)</Typography>
-                                <Select
+                                <Autocomplete
                                     fullWidth
                                     size="small"
-                                    value={overrideThreshold}
-                                    onChange={(e) => setOverrideThreshold(e.target.value)}
-                                >
-                                    <MenuItem value="10">10</MenuItem>
-                                    <MenuItem value="15">15</MenuItem>
-                                    <MenuItem value="25">25</MenuItem>
-                                    <MenuItem value="40">40</MenuItem>
-                                </Select>
+                                    options={['10', '15', '25', '40']}
+                                    value={overrideThreshold || null}
+                                    onChange={(_, value) => setOverrideThreshold(value || '')}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
                             </Card>
                             <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
                                 <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>Review cadence</Typography>
-                                <Select
+                                <Autocomplete
                                     fullWidth
                                     size="small"
-                                    value={reviewCadence}
-                                    onChange={(e) => setReviewCadence(e.target.value)}
-                                >
-                                    <MenuItem value="Weekly">Weekly</MenuItem>
-                                    <MenuItem value="Bi-weekly">Bi-weekly</MenuItem>
-                                    <MenuItem value="Monthly">Monthly</MenuItem>
-                                    <MenuItem value="Quarterly">Quarterly</MenuItem>
-                                </Select>
+                                    options={['Weekly', 'Bi-weekly', 'Monthly', 'Quarterly']}
+                                    value={reviewCadence || null}
+                                    onChange={(_, value) => setReviewCadence(value || '')}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
                             </Card>
                         </Box>
 
@@ -372,30 +361,25 @@ const PartH = ({ projectContext = {}, onStatusMessage }) => {
                         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 2, mb: 3 }}>
                             <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
                                 <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>Critical SLA (hours)</Typography>
-                                <Select
+                                <Autocomplete
                                     fullWidth
                                     size="small"
-                                    value={criticalSLA}
-                                    onChange={(e) => setCriticalSLA(e.target.value)}
-                                >
-                                    <MenuItem value="24">24</MenuItem>
-                                    <MenuItem value="48">48</MenuItem>
-                                    <MenuItem value="72">72</MenuItem>
-                                </Select>
+                                    options={['24', '48', '72']}
+                                    value={criticalSLA || null}
+                                    onChange={(_, value) => setCriticalSLA(value || '')}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
                             </Card>
                             <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
                                 <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>Non-critical SLA (days)</Typography>
-                                <Select
+                                <Autocomplete
                                     fullWidth
                                     size="small"
-                                    value={nonCriticalSLA}
-                                    onChange={(e) => setNonCriticalSLA(e.target.value)}
-                                >
-                                    <MenuItem value="3">3</MenuItem>
-                                    <MenuItem value="5">5</MenuItem>
-                                    <MenuItem value="7">7</MenuItem>
-                                    <MenuItem value="10">10</MenuItem>
-                                </Select>
+                                    options={['3', '5', '7', '10']}
+                                    value={nonCriticalSLA || null}
+                                    onChange={(_, value) => setNonCriticalSLA(value || '')}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
                             </Card>
                             <Card variant="outlined" sx={{ p: 2, border: '1px solid #e0e0e0' }}>
                                 <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>Route critical incidents to *</Typography>

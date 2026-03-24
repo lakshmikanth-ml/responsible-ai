@@ -21,9 +21,6 @@ import {
     DialogActions,
     Autocomplete,
     FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
     Chip,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -411,16 +408,14 @@ const TabG = ({ projectContext = {}, onStatusMessage }) => {
                         )}
                     />
                     <FormControl fullWidth size="small">
-                        <InputLabel>Approval Status</InputLabel>
-                        <Select
-                            value={formData.approval}
-                            onChange={(e) => setFormData(prev => ({ ...prev, approval: e.target.value }))}
-                            label="Approval Status"
-                        >
-                            {approvalStatuses.map(status => (
-                                <MenuItem key={status} value={status}>{status}</MenuItem>
-                            ))}
-                        </Select>
+                        <Autocomplete
+                            fullWidth
+                            size="small"
+                            options={approvalStatuses}
+                            value={formData.approval || null}
+                            onChange={(_, value) => setFormData(prev => ({ ...prev, approval: value || '' }))}
+                            renderInput={(params) => <TextField {...params} label="Approval Status" />}
+                        />
                     </FormControl>
                     <TextField
                         label="Notes (optional)"

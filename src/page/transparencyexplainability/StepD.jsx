@@ -15,8 +15,7 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    Select,
-    MenuItem,
+    Autocomplete,
     Tooltip,
     IconButton,
 } from "@mui/material";
@@ -169,15 +168,14 @@ export default function TabDEvaluation() {
         setRows((prev) => prev.map((r) => (r.id === id ? { ...r, [key]: value } : r)));
 
     const renderSelect = (rowId, field, value) => (
-        <Select
+        <Autocomplete
             size="small"
             fullWidth
-            value={value}
-            onChange={(e) => updateRow(rowId, field, e.target.value)}
-        >
-            <MenuItem value="yes">yes</MenuItem>
-            <MenuItem value="no">no</MenuItem>
-        </Select>
+            options={["yes", "no"]}
+            value={value || null}
+            onChange={(_, nextValue) => updateRow(rowId, field, nextValue || "")}
+            renderInput={(params) => <TextField {...params} />}
+        />
     );
 
     return (

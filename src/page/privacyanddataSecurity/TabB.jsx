@@ -6,16 +6,13 @@ import {
     CardContent,
     Typography,
     Grid,
-    Select,
-    MenuItem,
     FormControl,
-    InputLabel,
     FormGroup,
     FormControlLabel,
     Checkbox,
     TextField,
     Divider,
-    Autocomplete,
+    Autocomplete,InputLabel ,Select ,MenuItem 
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 
@@ -274,17 +271,13 @@ const TabB = ({ projectContext = {}, onStatusMessage }) => {
                             sx={{ mb: 2 }}
                         />
                         <FormControl fullWidth sx={{ mb: 2 }}>
-                            <InputLabel>Decision Role</InputLabel>
-                            <Select
-                                value={projectCtx.decisionRole}
-                                onChange={(e) => handleContextChange('decisionRole', e.target.value)}
-                                label="Decision Role"
+                            <Autocomplete
+                                options={['Advisory only', 'Decision-support', 'Automated (restricted)']}
+                                value={projectCtx.decisionRole || null}
+                                onChange={(_, value) => handleContextChange('decisionRole', value || '')}
                                 size="small"
-                            >
-                                <MenuItem value="Advisory only">Advisory only</MenuItem>
-                                <MenuItem value="Decision-support">Decision-support</MenuItem>
-                                <MenuItem value="Automated (restricted)">Automated (restricted)</MenuItem>
-                            </Select>
+                                renderInput={(params) => <TextField {...params} label="Decision Role" />}
+                            />
                         </FormControl>
 
                         {/* Data Sensitivity & Hosting */}

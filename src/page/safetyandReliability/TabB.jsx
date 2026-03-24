@@ -337,22 +337,23 @@ const numField = (f, name, label) => (
 );
 
 const selectField = (f, name, label, options) => (
-    <Grid size={{ xs: 12, md: 4 }}>
-        <TextField
-            size="small"
-            select
+    <Grid size={{ xs: 12, md: 4 }} key={name}>
+        <Autocomplete
             fullWidth
-            label={label}
-            name={name}
-            value={f.values[name]}
-            onChange={f.handleChange}
-        >
-            {options.map((o) => (
-                <option key={o} value={o}>
-                    {o}
-                </option>
-            ))}
-        </TextField>
+            size="small"
+            options={options}
+            value={f.values[name] || null}
+            onChange={(_, value) => f.setFieldValue(name, value || "")}
+            onBlur={() => f.setFieldTouched(name, true)}
+            renderInput={(params) => (
+                <TextField
+                    {...params}
+                    label={label}
+                    error={Boolean(f.touched[name] && f.errors[name])}
+                    helperText={f.touched[name] && f.errors[name]}
+                />
+            )}
+        />
     </Grid>
 );
 

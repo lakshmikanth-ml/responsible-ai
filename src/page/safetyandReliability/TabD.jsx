@@ -233,51 +233,42 @@ export default function TabDEvaluation() {
                         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                             <Box>
                                 <Typography variant="body2" fontWeight={600} sx={{ mb: 1 }}>Testing Tools</Typography>
-                                <TextField
-                                    select
+                                <Autocomplete
                                     size="small"
                                     fullWidth
-                                    value={tools}
-                                    onChange={(e) => setTools(e.target.value)}
-                                >
-                                    {TEST_TOOLS.map((tool) => (
-                                        <option key={tool} value={tool}>{tool}</option>
-                                    ))}
-                                </TextField>
+                                    options={TEST_TOOLS}
+                                    value={tools || null}
+                                    onChange={(_, value) => setTools(value || "")}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
                             </Box>
                         </Grid>
 
                         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                             <Box>
                                 <Typography variant="body2" fontWeight={600} sx={{ mb: 1 }}>Testing Owner</Typography>
-                                <TextField
-                                    select
+                                <Autocomplete
                                     size="small"
                                     fullWidth
-                                    value={ownerRole}
-                                    onChange={(e) => setOwnerRole(e.target.value)}
-                                >
-                                    {OWNER_ROLES.map((role) => (
-                                        <option key={role} value={role}>{role}</option>
-                                    ))}
-                                </TextField>
+                                    options={OWNER_ROLES}
+                                    value={ownerRole || null}
+                                    onChange={(_, value) => setOwnerRole(value || "")}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
                             </Box>
                         </Grid>
 
                         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                             <Box>
                                 <Typography variant="body2" fontWeight={600} sx={{ mb: 1 }}>Documentation Location</Typography>
-                                <TextField
-                                    select
+                                <Autocomplete
                                     size="small"
                                     fullWidth
-                                    value={docLocation}
-                                    onChange={(e) => setDocLocation(e.target.value)}
-                                >
-                                    {DOC_LOCATIONS.map((loc) => (
-                                        <option key={loc} value={loc}>{loc}</option>
-                                    ))}
-                                </TextField>
+                                    options={DOC_LOCATIONS}
+                                    value={docLocation || null}
+                                    onChange={(_, value) => setDocLocation(value || "")}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
                             </Box>
                         </Grid>
                     </Grid>

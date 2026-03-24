@@ -12,15 +12,12 @@ import {
     TableRow,
     TableCell,
     TableBody,
-    Select,
-    MenuItem,
     Paper,
     TableContainer,
     Grid,
     Button,
     Stack,
     FormControl,
-    InputLabel,
     Alert, Autocomplete
 } from "@mui/material";
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -311,22 +308,26 @@ function ObjectiveTab() {
                         <TableRow>
                             <TableCell>Sustainability Maturity</TableCell>
                             <TableCell>
-                                <Select size="small" fullWidth defaultValue="Baseline">
-                                    <MenuItem value="Baseline">Baseline (Declared)</MenuItem>
-                                    <MenuItem value="Estimated">Estimated (Cloud-level)</MenuItem>
-                                    <MenuItem value="Measured">Measured (Advanced)</MenuItem>
-                                </Select>
+                                <Autocomplete
+                                    size="small"
+                                    fullWidth
+                                    options={['Baseline', 'Estimated', 'Measured']}
+                                    defaultValue="Baseline"
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
                             </TableCell>
                             <TableCell style={{ color: "#92400e" }}>Declared</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Primary Intent</TableCell>
                             <TableCell>
-                                <Select size="small" fullWidth defaultValue="Minimize">
-                                    <MenuItem value="Minimize">Minimize unnecessary compute</MenuItem>
-                                    <MenuItem value="Cost">Cost & efficiency alignment</MenuItem>
-                                    <MenuItem value="Carbon">Carbon reduction commitment</MenuItem>
-                                </Select>
+                                <Autocomplete
+                                    size="small"
+                                    fullWidth
+                                    options={['Minimize', 'Cost', 'Carbon']}
+                                    defaultValue="Minimize"
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
                             </TableCell>
                             <TableCell style={{ color: "#92400e" }}>Declared</TableCell>
                         </TableRow>
@@ -355,10 +356,13 @@ function CoverageTab() {
                             <TableRow key={area}>
                                 <TableCell>{area}</TableCell>
                                 <TableCell>
-                                    <Select size="small" defaultValue="Yes" fullWidth>
-                                        <MenuItem value="Yes">Yes</MenuItem>
-                                        <MenuItem value="No">No</MenuItem>
-                                    </Select>
+                                    <Autocomplete
+                                        size="small"
+                                        fullWidth
+                                        options={['Yes', 'No']}
+                                        defaultValue="Yes"
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -405,10 +409,13 @@ function EvaluationTab() {
             <Typography variant="body2" color="text.secondary" mb={2}>
                 No quantitative sustainability testing required at baseline maturity.
             </Typography>
-            <Select size="small" defaultValue="Accepted" fullWidth>
-                <MenuItem value="Accepted">Accepted as Baseline</MenuItem>
-                <MenuItem value="Planned">Improvement Planned</MenuItem>
-            </Select>
+            <Autocomplete
+                size="small"
+                fullWidth
+                options={['Accepted', 'Planned']}
+                defaultValue="Accepted"
+                renderInput={(params) => <TextField {...params} />}
+            />
         </Card>
     );
 }
@@ -454,10 +461,13 @@ function MitigationTab() {
                         <TableRow>
                             <TableCell>Annual sustainability posture review</TableCell>
                             <TableCell>
-                                <Select size="small" defaultValue="Platform" fullWidth>
-                                    <MenuItem value="Platform">Platform Lead</MenuItem>
-                                    <MenuItem value="Cloud">Cloud Operations</MenuItem>
-                                </Select>
+                                <Autocomplete
+                                    size="small"
+                                    fullWidth
+                                    options={['Platform', 'Cloud']}
+                                    defaultValue="Platform"
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
                             </TableCell>
                         </TableRow>
                     </TableBody>

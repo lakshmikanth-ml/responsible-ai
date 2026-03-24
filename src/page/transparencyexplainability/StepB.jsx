@@ -8,7 +8,6 @@ import {
     Button,
     Grid,
     TextField,
-    MenuItem,
     Divider,
     Chip,
     Table,
@@ -17,9 +16,7 @@ import {
     TableHead,
     TableRow,
     Checkbox,
-    Select,
     FormControl,
-    InputLabel,
     Alert,
     Tooltip,
     IconButton, Autocomplete
@@ -451,41 +448,38 @@ export default function TabBCoverage() {
                                     </TableCell>
                                     <TableCell>
                                         <FormControl fullWidth size="small">
-                                            <Select
-                                                value={row.audience}
-                                                onChange={(e) => handleUpdate(row.id, "audience", e.target.value)}
-                                            >
-                                                {AUDIENCE_OPTIONS.map((opt) => (
-                                                    <MenuItem key={opt} value={opt}>
-                                                        {opt}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
+                                            <Autocomplete
+                                                fullWidth
+                                                size="small"
+                                                options={AUDIENCE_OPTIONS}
+                                                value={row.audience || null}
+                                                onChange={(_, value) => handleUpdate(row.id, "audience", value || "")}
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />
                                         </FormControl>
                                     </TableCell>
                                     <TableCell>
                                         <FormControl fullWidth size="small">
-                                            <Select
-                                                value={row.depth}
-                                                onChange={(e) => handleUpdate(row.id, "depth", e.target.value)}
-                                            >
-                                                {DEPTH_OPTIONS.map((opt) => (
-                                                    <MenuItem key={opt} value={opt}>
-                                                        {opt}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
+                                            <Autocomplete
+                                                fullWidth
+                                                size="small"
+                                                options={DEPTH_OPTIONS}
+                                                value={row.depth || null}
+                                                onChange={(_, value) => handleUpdate(row.id, "depth", value || "")}
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />
                                         </FormControl>
                                     </TableCell>
                                     <TableCell>
                                         <FormControl fullWidth size="small">
-                                            <Select
-                                                value={row.mandatory}
-                                                onChange={(e) => handleUpdate(row.id, "mandatory", e.target.value)}
-                                            >
-                                                <MenuItem value="yes">yes</MenuItem>
-                                                <MenuItem value="no">no</MenuItem>
-                                            </Select>
+                                            <Autocomplete
+                                                fullWidth
+                                                size="small"
+                                                options={["yes", "no"]}
+                                                value={row.mandatory || null}
+                                                onChange={(_, value) => handleUpdate(row.id, "mandatory", value || "")}
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />
                                         </FormControl>
                                     </TableCell>
                                     <TableCell>
