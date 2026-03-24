@@ -8,8 +8,7 @@ import {
     TextField,
     FormControl,
     FormLabel,
-    Select,
-    MenuItem,
+   
     FormGroup,
     FormControlLabel,
     Checkbox,
@@ -405,10 +404,11 @@ const TabA = () => {
                             md: 6
                         }}>
                             <FormControl component="fieldset" fullWidth>
-                                <FormLabel>Regulatory / Policy Context</FormLabel>
+                                <Typography   variant="h6"
+            sx={{ fontWeight: 600, fontSize:"18px !important",marginTop:"6px" }} gutterBottom>Regulatory / Policy Context</Typography>
                                 <Box sx={{
                                     display: 'grid',
-                                    gridTemplateColumns: '1fr 1fr', gap: 1, mt: 0
+                                    gridTemplateColumns: '0.2fr 0.5fr', gap: 1, mt: 0
                                 }}>
                                     <FormControlLabel
                                         control={
@@ -573,15 +573,14 @@ const TabA = () => {
                                             />
                                         </TableCell>
                                         <TableCell>
-                                            <Select
+                                            <Autocomplete
                                                 size="small"
-                                                value={row.included}
-                                                onChange={(e) => updateGroupRow(idx, 'included', e.target.value)}
+                                                options={['Yes', 'No']}
+                                                value={row.included || null}
+                                                onChange={(_, value) => updateGroupRow(idx, 'included', value || '')}
                                                 sx={{ width: '100%' }}
-                                            >
-                                                <MenuItem value="Yes">Yes</MenuItem>
-                                                <MenuItem value="No">No</MenuItem>
-                                            </Select>
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />
                                         </TableCell>
                                         <TableCell>
                                             <TextField

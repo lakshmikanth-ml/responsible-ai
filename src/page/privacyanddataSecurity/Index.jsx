@@ -11,10 +11,8 @@ import {
     Divider,
     Grid,
     TextField,
-    Select,
-    MenuItem,
     FormControl,
-    InputLabel,
+    Autocomplete,
     Stack,
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -73,19 +71,16 @@ const ProjectContextCard = ({
                     onChange={(e) => onFieldChange('endpoint', e.target.value)}
                 />
                 <FormControl fullWidth size="small">
-                    <InputLabel id="decision-role-label">Decision Role</InputLabel>
-                    <Select
-                        labelId="decision-role-label"
-                        label="Decision Role"
-                        value={context.decisionRole}
-                        onChange={(e) => onFieldChange('decisionRole', e.target.value)}
-                    >
-                        {DECISION_ROLE_OPTIONS.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                    </Select>
+                    <Autocomplete
+                        fullWidth
+                        size="small"
+                        options={DECISION_ROLE_OPTIONS}
+                        getOptionLabel={(option) => option.label}
+                        isOptionEqualToValue={(option, value) => option.value === value.value}
+                        value={DECISION_ROLE_OPTIONS.find((option) => option.value === context.decisionRole) || null}
+                        onChange={(_, value) => onFieldChange('decisionRole', value?.value || '')}
+                        renderInput={(params) => <TextField {...params} label="Decision Role" />}
+                    />
                 </FormControl>
             </Stack>
 

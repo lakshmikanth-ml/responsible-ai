@@ -12,7 +12,7 @@ import {
     TableHead,
     TableBody,
     TableRow,
-    TableCell, Select, MenuItem, Stack, Switch, TableContainer, Paper
+    TableCell, Stack, Switch, TableContainer, Paper
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
@@ -550,16 +550,14 @@ const PartG = ({ projectContext = {}, onStatusMessage }) => {
 
                                                 {/* Status */}
                                                 <TableCell>
-                                                    <Select
+                                                    <Autocomplete
                                                         fullWidth
                                                         size="small"
-                                                        value={r.status}
-                                                        onChange={(e) => update(i, "status", e.target.value)}
-                                                    >
-                                                        <MenuItem value="Missing">Missing</MenuItem>
-                                                        <MenuItem value="Partial">Partial</MenuItem>
-                                                        <MenuItem value="Complete">Complete</MenuItem>
-                                                    </Select>
+                                                        options={["Missing", "Partial", "Complete"]}
+                                                        value={r.status || null}
+                                                        onChange={(_, value) => update(i, "status", value || "")}
+                                                        renderInput={(params) => <TextField {...params} />}
+                                                    />
                                                 </TableCell>
 
 

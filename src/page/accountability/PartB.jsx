@@ -7,10 +7,8 @@ import {
     Typography,
     Grid,
     TextField,
-    Select,
-    MenuItem,
+    Autocomplete,
     FormControl,
-    InputLabel,
     Switch,
     Table,
     TableHead,
@@ -499,17 +497,17 @@ const PartB = ({ projectContext = {}, onStatusMessage }) => {
 
                         {/* Approval Boundary Select */}
                         <FormControl fullWidth size="small" sx={{ mb: 3 }}>
-                            <InputLabel>Approval Boundary </InputLabel>
-                            <Select
-                                value={formData.boundary}
-                                label="Approval Boundary"
-                                onChange={(e) => handleFormChange('boundary', e.target.value)}
-                            >
-
-                                <MenuItem value="Advisory only (human decides)">Advisory only (human decides)</MenuItem>
-                                <MenuItem value="Decisioning with approval (human signs off)">Decisioning with approval (human signs off)</MenuItem>
-                                <MenuItem value="Automated decisioning (restricted)">Automated decisioning (restricted)</MenuItem>
-                            </Select>
+                            <Autocomplete
+                                options={[
+                                    'Advisory only (human decides)',
+                                    'Decisioning with approval (human signs off)',
+                                    'Automated decisioning (restricted)',
+                                ]}
+                                value={formData.boundary || null}
+                                onChange={(_, value) => handleFormChange('boundary', value || '')}
+                                size="small"
+                                renderInput={(params) => <TextField {...params} label="Approval Boundary" />}
+                            />
                             <FormHelperText>How far the AI can go</FormHelperText>
                         </FormControl>
 

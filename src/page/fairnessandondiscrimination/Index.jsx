@@ -326,7 +326,7 @@ const Index = () => {
                 {/* <Divider /> */}
 
                 {/* Tab Navigation */}
-                    <Grid size={{ xs: 12 }} sx={{ p: 2 }}>
+                    <Grid size={{ xs: 12 }} sx={{ px: 1 }}>
                 <Tabs
                     value={activeTab}
                     onChange={handleTabChange}

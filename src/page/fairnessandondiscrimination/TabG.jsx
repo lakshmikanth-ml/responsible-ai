@@ -14,8 +14,7 @@ import {
     TableRow,
     Paper,
     Chip,
-    Select,
-    MenuItem,
+    Autocomplete,
     FormControl,
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
@@ -350,14 +349,13 @@ const TabG = () => {
 
                                             <TableCell>
                                                 <FormControl fullWidth size="small">
-                                                    <Select
-                                                        value={module.status}
-                                                        onChange={(e) => setTrainingStatus(index, e.target.value)}
-                                                    >
-                                                        <MenuItem value="Incomplete">Incomplete</MenuItem>
-                                                        <MenuItem value="Partial">Partial</MenuItem>
-                                                        <MenuItem value="Complete">Complete</MenuItem>
-                                                    </Select>
+                                          <Autocomplete
+                                          size="small"
+                                                        options={['Incomplete', 'Partial', 'Complete']}
+                                                        value={module.status || null}
+                                                        onChange={(_, value) => setTrainingStatus(index, value || '')}
+                                                        renderInput={(params) => <TextField {...params} />}
+                                                    />
                                                 </FormControl>
                                             </TableCell>
                                         </TableRow>

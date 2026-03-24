@@ -14,10 +14,9 @@ import {
     TableRow,
     Paper,
     TextField,
-    Select,
-    MenuItem,
     FormControl,
     IconButton,
+    Autocomplete,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -33,6 +32,14 @@ const riskOptions = [
     { id: 'risk_manual_70b99623', label: 'Warning: Potential proxy discrimination risk' },
     { id: 'risk_a3_partial', label: 'Warning: Regulatory context incomplete' },
     { id: 'risk_release_evidence_missing', label: 'Warning: Release evidence missing' },
+];
+
+const ownerOptions = [
+    'ML Lead',
+    'Data Engineer',
+    'RAI Officer',
+    'Product Owner',
+    'Legal/Compliance',
 ];
 
 const defaultActionsData = {
@@ -251,16 +258,16 @@ const TabD = () => {
                             <TableRow key={action.id} sx={{ '&:hover': { bgcolor: '#f9f9f9' } }}>
                                 <TableCell>
                                     <FormControl fullWidth size="small">
-                                        <Select
-                                            value={action.riskId}
-                                            onChange={(e) => updateAction(index, 'riskId', e.target.value)}
-                                        >
-                                            {riskOptions.map(opt => (
-                                                <MenuItem key={opt.id} value={opt.id}>
-                                                    {opt.label.substring(0, 40)}...
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
+                                        <Autocomplete
+                                            fullWidth
+                                            size="small"
+                                            options={riskOptions}
+                                            getOptionLabel={(option) => option.label}
+                                            isOptionEqualToValue={(option, value) => option.id === value.id}
+                                            value={riskOptions.find((option) => option.id === action.riskId) || null}
+                                            onChange={(_, value) => updateAction(index, 'riskId', value?.id || '')}
+                                            renderInput={(params) => <TextField {...params} />}
+                                        />
                                     </FormControl>
                                     <Typography variant="caption" sx={{ display: 'block', mt: 0.5, color: '#666' }}>
                                         {getRiskDescription(action.riskId)}
@@ -281,18 +288,14 @@ const TabD = () => {
                                 </TableCell>
 
                                 <TableCell>
-                                    <FormControl fullWidth size="small">
-                                        <Select
-                                            value={action.owner}
-                                            onChange={(e) => updateAction(index, 'owner', e.target.value)}
-                                        >
-                                            <MenuItem value="ML Lead">ML Lead</MenuItem>
-                                            <MenuItem value="Data Engineer">Data Engineer</MenuItem>
-                                            <MenuItem value="RAI Officer">RAI Officer</MenuItem>
-                                            <MenuItem value="Product Owner">Product Owner</MenuItem>
-                                            <MenuItem value="Legal/Compliance">Legal/Compliance</MenuItem>
-                                        </Select>
-                                    </FormControl>
+                                    <Autocomplete
+                                        fullWidth
+                                        size="small"
+                                        options={ownerOptions}
+                                        value={action.owner || null}
+                                        onChange={(_, value) => updateAction(index, 'owner', value || '')}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
                                 </TableCell>
 
                                 <TableCell>
@@ -308,27 +311,27 @@ const TabD = () => {
 
                                 <TableCell>
                                     <FormControl fullWidth size="small">
-                                        <Select
-                                            value={action.severity}
-                                            onChange={(e) => updateAction(index, 'severity', e.target.value)}
-                                        >
-                                            <MenuItem value="Info">Info</MenuItem>
-                                            <MenuItem value="Warning">Warning</MenuItem>
-                                            <MenuItem value="Critical">Critical</MenuItem>
-                                        </Select>
+                                        <Autocomplete
+                                            fullWidth
+                                            size="small"
+                                            options={['Info', 'Warning', 'Critical']}
+                                            value={action.severity || null}
+                                            onChange={(_, value) => updateAction(index, 'severity', value || '')}
+                                            renderInput={(params) => <TextField {...params} />}
+                                        />
                                     </FormControl>
                                 </TableCell>
 
                                 <TableCell>
                                     <FormControl fullWidth size="small">
-                                        <Select
-                                            value={action.status}
-                                            onChange={(e) => updateAction(index, 'status', e.target.value)}
-                                        >
-                                            <MenuItem value="Open">Open</MenuItem>
-                                            <MenuItem value="In Progress">In Progress</MenuItem>
-                                            <MenuItem value="Completed">Completed</MenuItem>
-                                        </Select>
+                                        <Autocomplete
+                                            fullWidth
+                                            size="small"
+                                            options={['Open', 'In Progress', 'Completed']}
+                                            value={action.status || null}
+                                            onChange={(_, value) => updateAction(index, 'status', value || '')}
+                                            renderInput={(params) => <TextField {...params} />}
+                                        />
                                     </FormControl>
                                 </TableCell>
 

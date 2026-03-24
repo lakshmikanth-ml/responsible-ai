@@ -6,6 +6,7 @@ import {
     CardContent,
     Button,
     Alert,
+    TextField,
     Table,
     TableBody,
     TableCell,
@@ -13,8 +14,7 @@ import {
     TableHead,
     TableRow,
     Paper,
-    Select,
-    MenuItem,
+    Autocomplete,
     FormControl,
     Chip,
 } from '@mui/material';
@@ -433,13 +433,21 @@ th { background: #f5f5f5; text-align: left; }
 
                                             <TableCell>
                                                 <FormControl fullWidth size="small">
-                                                    <Select
-                                                        value={artifact.approved ? 'true' : 'false'}
-                                                        onChange={(e) => setArtifactApproval(index, e.target.value)}
-                                                    >
-                                                        <MenuItem value="false">Not Approved</MenuItem>
-                                                        <MenuItem value="true">Approved</MenuItem>
-                                                    </Select>
+                                                    <Autocomplete
+                                                    size="small"
+                                                        options={[
+                                                            { label: 'Not Approved', value: 'false' },
+                                                            { label: 'Approved', value: 'true' },
+                                                        ]}
+                                                        getOptionLabel={(option) => option.label}
+                                                        isOptionEqualToValue={(option, value) => option.value === value.value}
+                                                        value={[
+                                                            { label: 'Not Approved', value: 'false' },
+                                                            { label: 'Approved', value: 'true' },
+                                                        ].find((option) => option.value === (artifact.approved ? 'true' : 'false')) || null}
+                                                        onChange={(_, value) => setArtifactApproval(index, value?.value || 'false')}
+                                                        renderInput={(params) => <TextField {...params} />}
+                                                    />
                                                 </FormControl>
                                             </TableCell>
                                         </TableRow>
