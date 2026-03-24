@@ -6,21 +6,8 @@ import {
     Tab,
     Chip,
     Card,
-    CardContent,
-    Divider,
-    Button,
-    Alert,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
+    CardContent,Stack
+    
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import WarningIcon from '@mui/icons-material/Warning';
@@ -220,7 +207,7 @@ const Index = () => {
                 >
                     {/* Left Content */}
                     <Box>
-                        <Typography variant="h4" fontWeight={700} gutterBottom>
+                        <Typography variant="h4" fontWeight={700}  gutterBottom>
                             Fairness & Non-Discrimination
                         </Typography>
                         <Typography
@@ -233,55 +220,74 @@ const Index = () => {
                             evidence.
                         </Typography>
 
-                        {/* Badges */}
-                        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                            <Chip
-                                label="HIGH RISK"
-                                size="small"
-                                sx={{
-                                    fontWeight: 700,
-                                    bgcolor: '#ffebee',
-                                    color: '#c62828',
-                                }}
-                            />
+                       
+   {/* Status Chips */}
+                         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                        <Chip
+                            label="HIGH RISK"
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: 'rgba(25, 118, 210, 0.12)',
+                                borderColor: 'rgba(25, 118, 210, 0.35)',
+                                color: 'primary.dark',
+                            }}
+                        />
 
-                            <Chip
-                                label="Blocks Training"
-                                size="small"
-                                sx={{
-                                    bgcolor: '#e3f2fd',
-                                    color: '#1565c0',
-                                }}
-                            />
 
-                            <Chip
-                                label="Completeness: 22%"
-                                size="small"
-                                sx={{
-                                    bgcolor: '#ffebee',
-                                    color: '#c62828',
-                                }}
-                            />
+                        <Chip
+                            label="Blocks Training"
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: '#fffbeb',
+                                borderColor: '#fcd34d',
+                                color: '#b45309',
+                            }}
+                        />
 
-                            <Chip
-                                label="Last saved: —"
-                                size="small"
-                                sx={{
-                                    bgcolor: '#e3f2fd',
-                                    color: '#1565c0',
-                                }}
-                            />
 
-                            <Chip
-                                label="Version: v1"
-                                size="small"
-                                sx={{
-                                   bgcolor: '#e3f2fd',
-                                    color: '#1565c0',
-                                }}
-                            />
-                        </Box>
+                        <Chip
+                            label="Completeness: 22%"
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: '#fff7ed',
+                                borderColor: '#fdba74',
+                                color: '#c2410c',
+                            }}
+                        />
 
+
+                        <Chip
+                            label="Last saved: —"
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: '#fef2f2',
+                                borderColor: '#fca5a5',
+                                color: '#b91c1c',
+                            }}
+                        />
+                         <Chip
+                            label="Version: v1"
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                fontWeight: 600,
+                               
+                              
+                                backgroundColor: "#2a44da36",
+    borderColor:'#5e5484',
+    color: 'rgb(30, 72, 199)',
+
+                            }}
+                        />
+                   </Box>
                     </Box>
 
                     {/* Right Callout Box */}

@@ -415,7 +415,7 @@ const PartA = ({ projectContext = {}, onStatusMessage }) => {
                                     px: 1.5,
                                     py: 0.75,
                                     bgcolor: statusColor + '15',
-                                    borderRadius: '50px',
+                                    borderRadius: '4px',
                                     border: `1px solid ${statusColor}30`,
                                 }}
                             >

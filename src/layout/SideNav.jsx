@@ -62,7 +62,7 @@ const StyledDrawer = styled(Drawer, {
   "& .MuiDrawer-paper": {
     width: open ? drawerWidth : collapsedWidth,
     backgroundColor: theme.palette.background.paper,
-    // borderRight: `1px solid ${theme.palette.divider}`,
+     borderRight: `none`,
     boxShadow: "none",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -75,8 +75,8 @@ const StyledDrawer = styled(Drawer, {
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  padding: "8px",
-  // borderBottom: `1px solid ${theme.palette.divider}`,
+  // padding: "8px",
+  borderBottom: `1px solid ${theme.palette.divider}`,
   ...theme.mixins.toolbar,
 }));
 
@@ -157,6 +157,8 @@ export default function SideNav({
             alignItems: "center",
             width: "100%",
             justifyContent: finalCollapsed ? "center" : "space-between",
+            minHeight: "62px !important",
+            // borderBottom:"1px solid ${theme.palette.divider}",
             px: finalCollapsed ? 0 : 1,
           }}
         >
@@ -186,6 +188,7 @@ export default function SideNav({
                     ? alpha(theme.palette.common.white, 0.06)
                     : alpha(theme.palette.common.black, 0.04),
                   "&:hover": {
+                    
                     backgroundColor: isDark
                       ? alpha(theme.palette.common.white, 0.1)
                       : alpha(theme.palette.common.black, 0.08),
@@ -203,16 +206,18 @@ export default function SideNav({
         </Box>
       </DrawerHeader>
 
-      <Divider />
+      {/* <Divider /> */}
 
-      <List sx={{ px: 1, pt: 1 }}>
+      <List sx={{ px: 0, pt: 1 }}>
         {menuItems.map(({ to, label, Icon: MenuIcon }) => {
           const isActive = to.some((path) =>
             location.pathname.startsWith(path)
           );
 
           return (
-            <ListItem key={to[0]} disablePadding sx={{ mb: 0.5 }}>
+            <ListItem key={to[0]} disablePadding sx={{ mb: 0.5,display:"flex",alignContent:"center"
+              ,justifyContent:"center"
+             }} >
               <Tooltip title={finalCollapsed ? label : ""} placement="right">
                 <ListItemButton
                   component={Link}
@@ -220,29 +225,54 @@ export default function SideNav({
                   selected={isActive}
                   onClick={onClose}
                   sx={{
-                    borderRadius: "999px",
-                    py: "6px",
-                    px: finalCollapsed ? "16px" : "16px",
+                      // py: "8px",
+                    px: finalCollapsed ? "12px" : "14px",
                     color: theme.palette.text.secondary,
+                    maxWidth: finalCollapsed ? "44px" : "100%",
+                    // borderRadius: 1,
 
                     "&:hover": {
                       backgroundColor: itemHoverBg,
+                      borderRadius: finalCollapsed ? "4px" : "0px",
+                      
                     },
 
+                    "&.Mui-selected": {
+                      backgroundColor: "transparent",
+                    },
+                    "&.Mui-selected:hover": {
+                      backgroundColor: "transparent",
+                    },
                     ...(isActive && {
-                      background: itemActiveBg,
-                      color: itemActiveColor,
-                      fontWeight: 500,
+                      color: theme.palette.primary.main,
+                      fontWeight: 600,
 
-
-                      "&:hover": {
-                        background: itemActiveBg,
-                      },
+                      /* RIGHT BORDER INDICATOR */
+                      borderRight: !finalCollapsed ? `3px solid ${theme.palette.primary.main}` : "none",
 
                       "& .MuiListItemIcon-root": {
-                        color: itemActiveColor,
+                        color: theme.palette.primary.main,
+                      },
+
+
+                      "& .MuiListItemText-primary": {
+                        color: theme.palette.primary.main,
                       },
                     }),
+                    // ...(isActive && {
+                    //   background: itemActiveBg,
+                    //   color: itemActiveColor,
+                    //   fontWeight: 500,
+
+
+                    //   "&:hover": {
+                    //     background: itemActiveBg,
+                    //   },
+
+                    //   "& .MuiListItemIcon-root": {
+                    //     color: itemActiveColor,
+                    //   },
+                    // }),
                   }}
                 >
                   <ListItemIcon
@@ -298,6 +328,7 @@ export default function SideNav({
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
+            
           },
         }}
       >

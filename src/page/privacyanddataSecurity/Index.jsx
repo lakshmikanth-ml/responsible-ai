@@ -239,25 +239,45 @@ const Index = () => {
                             label="Lifecycle Controlled"
                             variant="outlined"
                             size="small"
-                            sx={{ fontWeight: 600 }}
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: 'rgba(25, 118, 210, 0.12)',
+                                borderColor: 'rgba(25, 118, 210, 0.35)',
+                                color: 'primary.dark',
+                            }}
                         />
                         <Chip
                             label="Coverage: 100%"
                             variant="outlined"
                             size="small"
-                            sx={{ fontWeight: 600 }}
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: '#f1f5f9',
+                                borderColor: '#cbd5e1',
+                                color: '#334155',
+                            }}
                         />
                         <Chip
                             label="Evidence: 0/6 approved"
                             variant="outlined"
                             size="small"
-                            sx={{ fontWeight: 600 }}
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: '#fff7ed',
+                                borderColor: '#fdba74',
+                                color: '#c2410c',
+                            }}
                         />
                         <Chip
                             label="Risks: 0 critical open"
                             variant="outlined"
                             size="small"
-                            sx={{ fontWeight: 600 }}
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: '#ecfdf5',
+                                borderColor: '#86efac',
+                                color: '#166534',
+                            }}
                         />
                     </Box>
                 </Box>
@@ -268,6 +288,7 @@ const Index = () => {
                 <Box sx={{
                     display: 'grid',
                     px: 2,
+                   
                     gridTemplateColumns: {
                         xs: '1fr', sm: '1fr 1fr',
                         md: '1fr 1fr 1fr 1fr'
@@ -290,7 +311,7 @@ const Index = () => {
                                 mb: 1.5,
                                 p: 1,
                                 bgcolor: gate.color + '15',
-                                borderRadius: '50px',
+                                borderRadius: '4px',
                                 width: 'fit-content',
                             }}>
                                 <Box sx={{

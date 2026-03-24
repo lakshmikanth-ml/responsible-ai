@@ -43,14 +43,14 @@ const Router = () => {
             path: "/app",
             element: <AuthGuard><Layout><Outlet /></Layout></AuthGuard>,
             children: [
-                {
-                    path: "roi",
-                    element: (
-                        <Suspense fallback={<LoadingScreen />}>
-                            <RoiPage />
-                        </Suspense>
-                    ),
-                },
+                // {
+                //     path: "roi",
+                //     element: (
+                //         <Suspense fallback={<LoadingScreen />}>
+                //             <RoiPage />
+                //         </Suspense>
+                //     ),
+                // },
                 {
                     path: "transparencyexplainability",
                     element: (

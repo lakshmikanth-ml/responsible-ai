@@ -13,6 +13,7 @@ import {
     Checkbox,
     Button,
     Alert,
+    Chip,
     Table,
     TableBody,
     TableCell,
@@ -190,19 +191,15 @@ const TabB = () => {
             'Ready': 'success',
         };
         return (
-            <Typography
-                variant="caption"
+            <Chip
+                label={status}
+                size="small"
                 sx={{
-                    px: 1.5,
-                    py: 0.5,
-                    borderRadius: 15,
-                    bgcolor: colorMap[status] ? `${colorMap[status]}.light` : 'default',
-                    color: colorMap[status] ? `${colorMap[status]}.dark` : 'default',
+                    bgcolor: colorMap[status] ? `${colorMap[status]}.light` : undefined,
+                    color: colorMap[status] ? `${colorMap[status]}.dark` : undefined,
                     fontWeight: 600,
                 }}
-            >
-                {status}
-            </Typography>
+            />
         );
     };
 
@@ -455,19 +452,15 @@ const TabB = () => {
                                                 <TableCell>{result.score}</TableCell>
                                                 <TableCell>{result.threshold}</TableCell>
                                                 <TableCell>
-                                                    <Typography
-                                                        variant="caption"
+                                                    <Chip
+                                                        label={result.status}
+                                                        size="small"
                                                         sx={{
-                                                            px: 1,
-                                                            py: 0.5,
-                                                            borderRadius: 1,
                                                             bgcolor: result.status === 'PASS' ? 'success.light' : 'error.light',
                                                             color: result.status === 'PASS' ? 'success.dark' : 'error.dark',
                                                             fontWeight: 600,
                                                         }}
-                                                    >
-                                                        {result.status}
-                                                    </Typography>
+                                                    />
                                                 </TableCell>
                                             </TableRow>
                                         ))}

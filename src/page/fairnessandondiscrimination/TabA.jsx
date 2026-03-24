@@ -15,6 +15,7 @@ import {
     Checkbox,
     Button,
     Alert,
+    Chip,
     Table,
     TableBody,
     TableCell,
@@ -269,16 +270,17 @@ const TabA = () => {
             'Partial': 'warning',
             'Complete': 'success',
         };
-        return <Typography variant="caption" sx={{
-            px: 1,
-            py: 0.5,
-            borderRadius: 15,
-            bgcolor: colorMap[status] ? `${colorMap[status]}.light` : 'default',
-            color: colorMap[status] ? `${colorMap[status]}.dark` : 'default',
-            fontWeight: 600
-        }}>
-            {status}
-        </Typography>;
+        return (
+            <Chip
+                label={status}
+                size="small"
+                sx={{
+                    bgcolor: colorMap[status] ? `${colorMap[status]}.light` : undefined,
+                    color: colorMap[status] ? `${colorMap[status]}.dark` : undefined,
+                    fontWeight: 600,
+                }}
+            />
+        );
     };
 
     return (
@@ -493,7 +495,9 @@ const TabA = () => {
                         <Button variant="contained" onClick={saveA1}>
                             Save Objectives
                         </Button>
-                        <Button variant="outlined" onClick={() => downloadTemplate('Fairness_Objectives_Template.docx')}>
+                        
+                        <Button variant="outlined" 
+                        onClick={() => downloadTemplate('Fairness_Objectives_Template.docx')}>
                             <DownloadIcon sx={{ mr: 1 }} /> Download  Objectives Template
                         </Button>
                     </Box>

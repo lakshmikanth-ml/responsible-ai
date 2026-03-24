@@ -245,27 +245,52 @@ const Index = () => {
                         <Chip
                             label="Lifecycle Controlled"
                             variant="outlined"
+                            size="small"
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: 'rgba(25, 118, 210, 0.12)',
+                                borderColor: 'rgba(25, 118, 210, 0.35)',
+                                color: 'primary.dark',
+                            }}
                         />
 
 
                         <Chip
                             label="Coverage: 44%"
-                            color="warning"
-                            variant="filled"
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: '#fffbeb',
+                                borderColor: '#fcd34d',
+                                color: '#b45309',
+                            }}
                         />
 
 
                         <Chip
                             label="Evidence: 0/6 approved"
-                            color="error"
-                            variant="filled"
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: '#fff7ed',
+                                borderColor: '#fdba74',
+                                color: '#c2410c',
+                            }}
                         />
 
 
                         <Chip
                             label="Risks: 3 open (3 critical)"
-                            color="error"
-                            variant="filled"
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: '#fef2f2',
+                                borderColor: '#fca5a5',
+                                color: '#b91c1c',
+                            }}
                         />
                     </Stack>
                 </Box>
@@ -312,7 +337,7 @@ const Index = () => {
                                 mb: 1.5,
                                 p: 1,
                                 bgcolor: gate.color + '15',
-                                borderRadius: '50px',
+                                borderRadius: '4px',
                                 width: 'fit-content',
                             }}>
                                 <Box sx={{

@@ -1,72 +1,107 @@
+// ----------------------------------------------------------------------
 
-export default function Typography(theme) {
+export function remToPx(value) {
+  return Math.round(parseFloat(value) * 16);
+}
+
+export function pxToRem(value) {
+  return `${value / 16}rem`;
+}
+
+export function responsiveFontSizes({ sm, md, lg }) {
   return {
-    MuiTypography: {
-      styleOverrides: {
-        paragraph: {
-          marginBottom: theme.spacing(2),
-          color:
-            theme.palette.mode === "dark"
-              ? theme.palette.text.primary
-              : theme.palette.text.primary,
-        },
-        gutterBottom: {
-          marginBottom: theme.spacing(1),
-        },
-        h1: {
-          color:
-            theme.palette.mode === "dark"
-              ? theme.palette.primary.light
-              : theme.palette.primary.main,
-        },
-        h2: {
-          color:
-            theme.palette.mode === "dark"
-              ? theme.palette.primary.light
-              : theme.palette.primary.main,
-        },
-        h3: {
-          color: theme.palette.text.primary,
-        },
-        h4: {
-          color: theme.palette.text.primary,
-        },
-        h5: {
-          color:
-            theme.palette.mode === "dark"
-              ? theme.palette.text.secondary
-              : theme.palette.text.secondary,
-        },
-        h6: {
-          color: theme.palette.text.primary,
-        },
-        body1: {
-          color: theme.palette.text.secondary,
-        },
-        body2: {
-          color: theme.palette.text.secondary,
-        },
-        subtitle1: {
-          color: theme.palette.text.primary,
-        },
-        subtitle2: {
-          color: theme.palette.text.secondary,
-        },
-        caption: {
-          color: theme.palette.text.secondary,
-        },
-        overline: {
-          color:
-            theme.palette.mode === "dark"
-              ? theme.palette.text.disabled
-              : theme.palette.text.disabled,
-          textTransform: "uppercase",
-        },
-        button: {
-          color: theme.palette.text.primary,
-          textTransform: "uppercase",
-        },
-      },
+    '@media (min-width:600px)': {
+      fontSize: pxToRem(sm),
+    },
+    '@media (min-width:900px)': {
+      fontSize: pxToRem(md),
+    },
+    '@media (min-width:1200px)': {
+      fontSize: pxToRem(lg),
+    },
+  };
+}
+// ----------------------------------------------------------------------
+export function typography(fontFamily) {
+  console.log("Typography fontFamily:", fontFamily);
+  return {
+    fontFamily: fontFamily,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+    fontWeightSemiBold: 600,
+    fontWeightBold: 700,
+    h1: {
+      fontWeight: 800,
+      lineHeight: 80 / 64,
+      fontSize: pxToRem(40),
+      ...responsiveFontSizes({ sm: 52, md: 58, lg: 64 }),
+    },
+    h2: {
+      fontWeight: 800,
+      lineHeight: 64 / 48,
+      fontSize: pxToRem(32),
+      ...responsiveFontSizes({ sm: 40, md: 44, lg: 48 }),
+    },
+    h3: {
+      fontWeight: 700,
+      lineHeight: 1.5,
+      fontSize: pxToRem(24),
+      ...responsiveFontSizes({ sm: 26, md: 30, lg: 32 }),
+    },
+    h4: {
+      fontWeight: 700,
+      lineHeight: 1.5,
+      fontSize: pxToRem(20),
+      background: "linear-gradient(to right, rgb(1, 144, 254), rgb(52, 166, 254))",
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+      ...responsiveFontSizes({ sm: 20, md: 24, lg: 24 }),
+    },
+    h5: {
+      fontWeight: 700,
+      lineHeight: 1.5,
+      fontSize: pxToRem(18),
+      ...responsiveFontSizes({ sm: 19, md: 20, lg: 20 }),
+    },
+    h6: {
+      fontWeight: 700,
+      lineHeight: 28 / 18,
+      fontSize: pxToRem(17),
+      ...responsiveFontSizes({ sm: 18, md: 18, lg: 18 }),
+    },
+    subtitle1: {
+      fontWeight: 600,
+      lineHeight: 1.5,
+      fontSize: pxToRem(16),
+    },
+    subtitle2: {
+      fontWeight: 600,
+      lineHeight: 22 / 14,
+      fontSize: pxToRem(14),
+    },
+    body1: {
+      lineHeight: 1.5,
+      fontSize: pxToRem(16),
+    },
+    body2: {
+      lineHeight: 22 / 14,
+      fontSize: pxToRem(14),
+    },
+    caption: {
+      lineHeight: 1.5,
+      fontSize: pxToRem(12),
+    },
+    overline: {
+      fontWeight: 700,
+      lineHeight: 1.5,
+      fontSize: pxToRem(12),
+      textTransform: 'uppercase',
+    },
+    button: {
+      fontWeight: 700,
+      lineHeight: 24 / 14,
+      fontSize: pxToRem(14),
+      textTransform: 'unset',
     },
   };
 }

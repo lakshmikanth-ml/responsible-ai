@@ -1,10 +1,13 @@
 export const MuiChip = {
     styleOverrides: {
+        root: {
+            borderRadius: "4px",
+        },
         sizeSmall: {
-            borderRadius: "18px",
+            borderRadius: "4px",
         },
         sizeMedium: {
-            borderRadius: "18px",
+            borderRadius: "4px",
         },
     },
 };

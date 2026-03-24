@@ -50,7 +50,7 @@ const PILL_ITEMS = [
         label: "Lifecycle Controlled",
         tone: "slate",
         backgroundColor: "rgba(25, 118, 210, 0.12)",
-        borderColor: "rgba(25, 118, 210, 0.35)",
+        // borderColor: "rgba(25, 118, 210, 0.35)",
         dotColor: "#1976d2",
     },
     { label: "Coverage: 31%", tone: "slate", backgroundColor: "#f1f5f9", },
@@ -88,7 +88,7 @@ const Pill = ({
                 gap: 1,
                 px: 1.5,
                 py: 0.75,
-                borderRadius: "999px",
+                borderRadius: "4px",
                 bgcolor: colors.bg,
                 border: "1px solid",
                 borderColor: colors.border,
@@ -460,17 +460,63 @@ const Index = () => {
                         </Box>
                     </Box>
 
+                 
+                       {/* Status Chips */}
                     <Stack
-                        mt={2}
-                        direction="row"
+                        direction={{ xs: "column", sm: "row" }}
                         spacing={1}
-                        flexWrap="wrap"
-                        alignItems="center"
-                        useFlexGap
+                        sx={{ mt: 2, flexWrap: "wrap" }}
                     >
-                        {PILL_ITEMS.map((pill) => (
-                            <Pill key={pill.label} {...pill} />
-                        ))}
+                        <Chip
+                            label="Lifecycle Controlled"
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: 'rgba(25, 118, 210, 0.12)',
+                                borderColor: 'rgba(25, 118, 210, 0.35)',
+                                color: 'primary.dark',
+                            }}
+                        />
+
+
+                        <Chip
+                            label="Coverage: 31%"
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: '#fffbeb',
+                                borderColor: '#fcd34d',
+                                color: '#b45309',
+                            }}
+                        />
+
+
+                        <Chip
+                            label="Evidence: 0/6 approved"
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: '#fff7ed',
+                                borderColor: '#fdba74',
+                                color: '#c2410c',
+                            }}
+                        />
+
+
+                        <Chip
+                            label="Risks: 2 open (3 critical)"
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                fontWeight: 600,
+                                bgcolor: '#fef2f2',
+                                borderColor: '#fca5a5',
+                                color: '#b91c1c',
+                            }}
+                        />
                     </Stack>
 
                 </Box>
@@ -521,7 +567,7 @@ const Index = () => {
                                 mb: 1.5,
                                 p: 1,
                                 bgcolor: gate.color + '15',
-                                borderRadius: '50px',
+                                borderRadius: '4px',
                                 width: 'fit-content',
                             }}>
                                 <Box sx={{

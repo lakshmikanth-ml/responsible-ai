@@ -142,7 +142,9 @@ export default function Header({ onMenuClick, open = true, user, mobileOpen }) {
       <Toolbar sx={{
         minHeight: 64,
         pr: { xs: 1, md: "8px" },
-        pl: { xs: 1, md: "8px" }
+        pl: { xs: 1, md: "8px" },
+        // minHeight: "62px !important",
+        //     borderBottom:"1px solid ${theme.palette.divider}",
       }}>
         {/* {showMenuButton && ( */}
 
@@ -173,7 +175,9 @@ export default function Header({ onMenuClick, open = true, user, mobileOpen }) {
           </IconButton>
         )} */}
 
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center",
+         
+         }}>
           {!isMobile && open && <img
             src={
               theme.palette.mode === "dark"
@@ -184,6 +188,7 @@ export default function Header({ onMenuClick, open = true, user, mobileOpen }) {
             style={{ width: "180px", height: "auto" }}
           />}
           <Box sx={{
+            
             marginLeft: showMenuButton ?
               "0px" : "20px"
           }}>

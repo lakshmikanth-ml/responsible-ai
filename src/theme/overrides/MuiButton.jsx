@@ -6,14 +6,14 @@ export const MuiButton = {
         },
         contained: {
             background:
-                "linear-gradient(to right, rgb(1, 144, 254), rgb(52, 166, 254))",
+                "linear-gradient(93.68deg, #174FA2 0.89%, #3A86FF 101.44%)",
             borderRadius: "8px",
             textTransform: "none",
             boxShadow: "none",
 
             "&:hover": {
                 background:
-                    "linear-gradient(to right, rgb(1, 144, 254), rgb(52, 166, 254))",
+                    "linear-gradient(93.68deg, #174FA2 0.89%, #3A86FF 101.44%)",
                 boxShadow: "none",
             },
 

@@ -813,11 +813,55 @@ export default function InclusivenessFormikPage() {
                     </Box>
                 </Box>
 
-                <Stack direction="row" spacing={1} mt={2} mb={2} flexWrap="wrap">
-                    <Chip color="primary" label="Lifecycle Controlled" />
-                    <Chip color="error" label="Coverage: 3%" />
-                    <Chip color="warning" label="Evidence: 0/6 approved" />
-                    <Chip color="error" label="Risks: 3 critical open" />
+                <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    spacing={1}
+                    sx={{ mt: 2, mb: 2, flexWrap: "wrap" }}
+                >
+                    <Chip
+                        label="Lifecycle Controlled"
+                        variant="outlined"
+                        size="small"
+                        sx={{
+                            fontWeight: 600,
+                            bgcolor: 'rgba(25, 118, 210, 0.12)',
+                            borderColor: 'rgba(25, 118, 210, 0.35)',
+                            color: 'primary.dark',
+                        }}
+                    />
+                    <Chip
+                        label="Coverage: 3%"
+                        variant="outlined"
+                        size="small"
+                        sx={{
+                            fontWeight: 600,
+                            bgcolor: '#fffbeb',
+                            borderColor: '#fcd34d',
+                            color: '#b45309',
+                        }}
+                    />
+                    <Chip
+                        label="Evidence: 0/6 approved"
+                        variant="outlined"
+                        size="small"
+                        sx={{
+                            fontWeight: 600,
+                            bgcolor: '#fff7ed',
+                            borderColor: '#fdba74',
+                            color: '#c2410c',
+                        }}
+                    />
+                    <Chip
+                        label="Risks: 3 critical open"
+                        variant="outlined"
+                        size="small"
+                        sx={{
+                            fontWeight: 600,
+                            bgcolor: '#fef2f2',
+                            borderColor: '#fca5a5',
+                            color: '#b91c1c',
+                        }}
+                    />
                 </Stack>
 
                 <Grid container spacing={2} mb={2}>
