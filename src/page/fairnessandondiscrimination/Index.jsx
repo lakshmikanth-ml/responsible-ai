@@ -6,7 +6,7 @@ import {
     Tab,
     Chip,
     Card,
-    CardContent,Stack
+    CardContent,Stack,Grid
     
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -326,6 +326,7 @@ const Index = () => {
                 {/* <Divider /> */}
 
                 {/* Tab Navigation */}
+                    <Grid size={{ xs: 12 }} sx={{ p: 2 }}>
                 <Tabs
                     value={activeTab}
                     onChange={handleTabChange}
@@ -335,7 +336,14 @@ const Index = () => {
                         borderBottom: 1,
                         borderColor: 'divider',
                         px: 2,
+                        // alignContent:"start",
+                        // display:"flex"
                     }}
+                      
+                     
+                      
+                        allowScrollButtonsMobile
+                       
                 >
                     {tabValues.map((value, index) => (
                         <Tab
@@ -350,7 +358,7 @@ const Index = () => {
                         />
                     ))}
                 </Tabs>
-
+</Grid>
                 {/* Tab Content */}
                 {renderTabContent()}
             </Card>
