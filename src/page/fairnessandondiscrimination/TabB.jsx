@@ -226,15 +226,16 @@ const TabB = () => {
     ];
 
     return (
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ px:0,pt:0 }}>
 
 
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 1 }}>
+            <Typography variant="h6" gutterBottom
+             sx={{ fontWeight: 700, mb: 1 }}>
                 B. Signals & Measurements
 
             </Typography>
             <Typography variant="body2"
-                color="text.secondary" sx={{ mb: 2 }}>
+                sx={{ mb: 2 }}>
                 Select fairness metrics, configure policy thresholds, and run baseline fairness evaluation.
             </Typography>
             {/* KPI Dashboard */}
@@ -486,7 +487,7 @@ const TabB = () => {
 
             {/* Demo Data Note & Reset Section */}
             <Card variant="outlined" sx={{ bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
-                <CardContent sx={{ pb: 2 }}>
+                <CardContent sx={{ pb: 0 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
                         <Box>
                             <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>

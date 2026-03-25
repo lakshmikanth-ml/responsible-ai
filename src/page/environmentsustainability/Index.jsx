@@ -170,7 +170,7 @@ export default function EnvironmentalSustainabilityTabs() {
 
     return (
         <>
-            <Paper sx={{ p: 2 }}>
+            <Box sx={{ width: "100%" }}>
 
                 <Box sx={{
                     display: 'flex',
@@ -185,7 +185,7 @@ export default function EnvironmentalSustainabilityTabs() {
                         <Typography variant="h4" fontWeight={700} gutterBottom>
                             Environmental Sustainability
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2">
                             Lightweight, declarative sustainability governance for AI systems
                         </Typography>
                     </Box>
@@ -214,7 +214,7 @@ export default function EnvironmentalSustainabilityTabs() {
                     </Alert>
                 )}
 
-                <Grid container spacing={2} mb={3}>
+                <Grid container spacing={2} mb={2}>
                     <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                         <Card variant="outlined">
                             <CardContent>
@@ -262,7 +262,7 @@ export default function EnvironmentalSustainabilityTabs() {
                     onChange={(_, v) => setActiveTab(v)}
                     variant="scrollable"
                     scrollButtons="auto"
-                    sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}
+                    sx={{ borderBottom: 1, borderColor: "divider", mb: 2 }}
                 >
                     {tabs.map(label => (
                         <Tab key={label} label={label} />
@@ -277,7 +277,7 @@ export default function EnvironmentalSustainabilityTabs() {
                 {activeTab === 5 && <MitigationTab />}
                 {activeTab === 6 && <EvidenceTab />}
                 {activeTab === 7 && <MonitoringTab />}
-            </Paper>
+            </Box>
             <Box mt={2}>
                 <ProjectContextCard
                     context={projectContext}

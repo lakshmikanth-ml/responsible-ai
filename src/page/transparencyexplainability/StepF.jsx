@@ -65,7 +65,7 @@ export default function TabFMitigation() {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     return (
-        <Card variant="outlined" sx={{ mt: 2 }}>
+        <Card variant="outlined" sx={{ mt: 0 }}>
             <CardContent>
 
                 <Formik

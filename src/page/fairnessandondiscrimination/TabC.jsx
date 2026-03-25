@@ -205,15 +205,15 @@ const TabC = () => {
     };
 
     return (
-        <Box sx={{ p: 2 }}>
+        <Box sx={{px:0,pt:0 }}>
 
 
             {/* Header */}
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 1 }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, mb: 1 }}>
                 C. Gaps & Risk Assessment
             </Typography>
             <Typography variant="body2"
-                color="text.secondary" sx={{ mb: 2 }}>
+                 sx={{ mb: 2 }}>
                 Auto-generated from A/B completeness, evaluation results, missing evidence, and open mitigation actions.
             </Typography>
             {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mb: 2, flexWrap: 'wrap' }}>
@@ -511,7 +511,7 @@ const TabC = () => {
 
             {/* Demo Data Note & Reset Section */}
             <Card variant="outlined" sx={{ mb: 0, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
-                <CardContent sx={{ pb: 2 }}>
+                <CardContent sx={{ pb: 0 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
                         <Box>
                             <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>

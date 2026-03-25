@@ -59,9 +59,11 @@ const GATES = [
 
 export default function KpiGateRow() {
     return (
-        <Grid container spacing={2} alignItems="stretch" mt={2}>
+        <Grid container spacing={2} 
+        alignItems="stretch" mt={2}>
             {GATES.map((gate) => (
-                <Grid key={gate.id} size={gate.grid} display="flex">
+                <Grid key={gate.id} 
+                size={gate.grid} display="flex">
                     <Card sx={{ flex: 1 }}>
                         <CardContent
                             sx={{

@@ -220,14 +220,14 @@ th { background: #f5f5f5; text-align: left; }
     };
 
     return (
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ px:0,pt:0}}>
 
 
             {/* Header */}
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, mb: 1 }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 1 }}>
                 E. Evidence & Artifacts
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+            <Typography variant="body2"  sx={{ mb: 3 }}>
                 Required artifacts are structured. Evidence is versioned and exportable.
             </Typography>
 
@@ -498,7 +498,7 @@ th { background: #f5f5f5; text-align: left; }
 
             {/* Demo Data Note & Reset Section */}
             <Card variant="outlined" sx={{ mt: 2, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
-                <CardContent sx={{ pb: 2 }}>
+                <CardContent sx={{ pb: 0 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
                         <Box>
                             <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>

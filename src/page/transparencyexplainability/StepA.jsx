@@ -163,8 +163,9 @@ export default function TabAObjective() {
     };
 
     return (
-        <Card className="tabPanel" variant="outlined">
-            <CardContent>
+        <Card className="tabPanel"
+         variant="outlined" >
+            <CardContent >
                 {/* HEADER */}
                 <Stack
                     direction={{ xs: "column", md: "row" }}
@@ -172,10 +173,12 @@ export default function TabAObjective() {
                     spacing={2}
                 >
                     <Box>
-                        <Typography variant="h6" fontWeight={700}>
+                        <Typography variant="h6"
+                         fontWeight={700}>
                             A. Objective & Risk Intent
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" mt={0.5}>
+                        <Typography variant="body2"
+                         color="text.secondary" mt={0.5}>
                             Define why explainability is required, what failure looks like,
                             and who is accountable. Missing objectives can block training for
                             decision-influencing use cases.

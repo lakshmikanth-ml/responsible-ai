@@ -151,7 +151,7 @@ export default function TransparencyExplainabilityContainer() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        gap: 3,
+        gap: 2,
       }}
     >
       {/* <Card variant="outlined" sx={{ p: 2 }}>

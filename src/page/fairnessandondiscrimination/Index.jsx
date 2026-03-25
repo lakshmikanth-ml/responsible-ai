@@ -30,7 +30,7 @@ const Index = () => {
         { type: 'Location', name: 'Zip Code', included: 'No', justification: 'Proxy risk; assess separately' },
     ]);
     const [formData, setFormData] = useState({
-        useCase: 'Underwriting Assistant – Eligibility & Risk Notes',
+        useCase: 'Underwriting Assistant â€“ Eligibility & Risk Notes',
         fairnessGoal: '',
         businessRationale: '',
         jurisdiction: '',
@@ -85,10 +85,10 @@ const Index = () => {
             }
         });
         if (errors.length > 0) {
-            setValidationMsg(`❌ Validation failed:\n${errors.join('\n')}`);
+            setValidationMsg(`âŒ Validation failed:\n${errors.join('\n')}`);
             return false;
         } else {
-            setValidationMsg('✓ Table validation passed!');
+            setValidationMsg('âœ“ Table validation passed!');
             return true;
         }
     };
@@ -193,28 +193,25 @@ const Index = () => {
     };
 
     return (
-        <Box >
-            <Card elevation={1}>
+        <Box sx={{ width: "100%" }}>
                 {/* Header Section */}
                 <Box
                     sx={{
                         display: 'grid',
                         gridTemplateColumns: { xs: '1fr', md: '1fr 360px' },
-                        gap: 3,
-                        p: 3,
+                        gap: 2,
+                        // p: 3,
                         alignItems: 'start',
                     }}
                 >
                     {/* Left Content */}
                     <Box>
-                        <Typography variant="h4" fontWeight={700}  gutterBottom>
+                        <Typography variant="h4" color="text.primary" sx={{fontWeight:600}}  gutterBottom>
                             Fairness & Non-Discrimination
                         </Typography>
                         <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            sx={{ mb: 2, maxWidth: 500 }}
-                        >
+                        variant='body2'
+                         gutterBottom>
                             Actionable control plane for defining fairness scope, running
                             measurements, managing mitigations, and producing audit-ready
                             evidence.
@@ -263,7 +260,7 @@ const Index = () => {
 
 
                         <Chip
-                            label="Last saved: —"
+                            label="Last saved: -"
                             variant="outlined"
                             size="small"
                             sx={{
@@ -326,7 +323,7 @@ const Index = () => {
                 {/* <Divider /> */}
 
                 {/* Tab Navigation */}
-                    <Grid size={{ xs: 12 }} sx={{ px: 1 }}>
+                    <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
                 <Tabs
                     value={activeTab}
                     onChange={handleTabChange}
@@ -335,7 +332,6 @@ const Index = () => {
                     sx={{
                         borderBottom: 1,
                         borderColor: 'divider',
-                        px: 2,
                         // alignContent:"start",
                         // display:"flex"
                     }}
@@ -360,8 +356,12 @@ const Index = () => {
                 </Tabs>
 </Grid>
                 {/* Tab Content */}
+                   <Card className="tabPanel"
+                         variant="outlined" sx={{mt:2}} >
+                     <CardContent  >      
                 {renderTabContent()}
-            </Card>
+                 </CardContent>
+                 </Card>
         </Box>
     );
 };

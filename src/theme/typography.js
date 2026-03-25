@@ -21,11 +21,14 @@ export function responsiveFontSizes({ sm, md, lg }) {
     },
   };
 }
+
+const primaryFont = '"IBM Plex Sans", sans-serif';
+
 // ----------------------------------------------------------------------
-export function typography(fontFamily) {
-  console.log("Typography fontFamily:", fontFamily);
+
+export function typography(fontFamily = primaryFont) {
   return {
-    fontFamily: fontFamily,
+    fontFamily: fontFamily || primaryFont,
     fontWeightRegular: 400,
     fontWeightMedium: 500,
     fontWeightSemiBold: 600,
@@ -40,7 +43,7 @@ export function typography(fontFamily) {
       fontWeight: 800,
       lineHeight: 64 / 48,
       fontSize: pxToRem(32),
-      ...responsiveFontSizes({ sm: 40, md: 44, lg: 48 }),
+      ...responsiveFontSizes({ sm: 40, md: 44, lg: 42 }),
     },
     h3: {
       fontWeight: 700,
@@ -52,9 +55,6 @@ export function typography(fontFamily) {
       fontWeight: 700,
       lineHeight: 1.5,
       fontSize: pxToRem(20),
-      background: "linear-gradient(to right, rgb(1, 144, 254), rgb(52, 166, 254))",
-      WebkitBackgroundClip: "text",
-      WebkitTextFillColor: "transparent",
       ...responsiveFontSizes({ sm: 20, md: 24, lg: 24 }),
     },
     h5: {
@@ -64,7 +64,7 @@ export function typography(fontFamily) {
       ...responsiveFontSizes({ sm: 19, md: 20, lg: 20 }),
     },
     h6: {
-      fontWeight: 700,
+      fontWeight: 600,
       lineHeight: 28 / 18,
       fontSize: pxToRem(17),
       ...responsiveFontSizes({ sm: 18, md: 18, lg: 18 }),
@@ -75,7 +75,7 @@ export function typography(fontFamily) {
       fontSize: pxToRem(16),
     },
     subtitle2: {
-      fontWeight: 600,
+      fontWeight: 500,
       lineHeight: 22 / 14,
       fontSize: pxToRem(14),
     },

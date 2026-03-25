@@ -181,7 +181,7 @@ export default function TabERisks() {
     };
 
     return (
-        <Card variant="outlined" sx={{ mt: 2 }}>
+        <Card variant="outlined" sx={{ mt: 0 }}>
             <CardContent>
                 <Stack
                     direction={{ xs: "column", md: "row" }}

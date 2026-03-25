@@ -405,14 +405,13 @@ export default function TransparencyExplainabilityHeader() {
     };
 
     return (
-        <>
-            <Card sx={{ mt: 0 }}>
-                <CardContent sx={{ p: { xs: 2, sm: 2 } }}>
+       <Box sx={{ width: "100%" }}>
+            <Box>
                     <Box sx={{
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'flex-start',
-                        mb: 2,
+                        mb: 0,
                         flexWrap: 'wrap',
                         gap: 2,
                     }}>
@@ -421,7 +420,9 @@ export default function TransparencyExplainabilityHeader() {
                             <Typography variant="h4" fontWeight={700} gutterBottom>
                                 Transparency & Explainability
                             </Typography>
-                            <Typography variant="body2" color="text.secondary">
+                            <Typography variant="body2"
+                             
+                             >
                                 Control whether AI outputs are explainable, defensible, and
                                 audit-ready across Pre-Training, Release, and Production.
                             </Typography>
@@ -447,7 +448,7 @@ export default function TransparencyExplainabilityHeader() {
                     <Stack
                         direction={{ xs: "column", sm: "row" }}
                         spacing={1}
-                        sx={{ mt: 2, flexWrap: "wrap" }}
+                        sx={{ mt: 2, flexWrap: "wrap",}}
                     >
                         <Chip
                             label="Lifecycle Controlled"
@@ -500,13 +501,14 @@ export default function TransparencyExplainabilityHeader() {
                             }}
                         />
                     </Stack>
+                    </Box>
 
 
                     {/* <Card variant="outlined" sx={{ p: 2 }}> */}
                     <KpiGateRow />
                     {/* </Card> */}
 
-
+<Box mt={2}>
                     <Tabs
                         value={tab}
                         onChange={(e, v) => setTab(v)}
@@ -516,7 +518,7 @@ export default function TransparencyExplainabilityHeader() {
                         sx={{
                             borderBottom: 1,
                             borderColor: "divider",
-                            mt: 3,
+                            mt: 0,
                         }}
                     >
                         {TABS.map((label) => (
@@ -555,8 +557,7 @@ export default function TransparencyExplainabilityHeader() {
                     <TabPanel value={tab} index={7}>
                         <TabHLifecycleMonitoring />
                     </TabPanel>
-                </CardContent>
-            </Card>
+              </Box>
 
             <Dialog
                 open={Boolean(drawerContent)}
@@ -605,6 +606,6 @@ export default function TransparencyExplainabilityHeader() {
                     </>
                 )}
             </Dialog>
-        </>
+        </Box>
     );
 }

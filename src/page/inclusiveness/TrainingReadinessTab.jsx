@@ -18,7 +18,7 @@ import {
     Typography,
     List,
     ListItem,
-    ListItemText,
+    ListItemText,Autocomplete,
     TextField,
     MenuItem,
     Button,
@@ -232,20 +232,24 @@ export default function TrainingReadinessTab() {
                                 </Box>
                             </Grid>
                             {/* DFA Owner */}
-                            <Grid item xs={12}>
-                                <TextField
-                                    size="small"
-                                    select
-                                    fullWidth
-                                    label="DFA Owner (Accountable Role)"
-                                    {...formik.getFieldProps('dfaOwner')}
-                                    error={formik.touched.dfaOwner && Boolean(formik.errors.dfaOwner)}
-                                    helperText={formik.touched.dfaOwner && formik.errors.dfaOwner}
-                                >
-                                    <MenuItem value="product">Product</MenuItem>
-                                    <MenuItem value="data">Data Science</MenuItem>
-                                    <MenuItem value="ml">ML Engineering</MenuItem>
-                                </TextField>
+                            <Grid size={{xs:12,md:6,lg:4}}>
+                              <Autocomplete
+  fullWidth
+  size="small"
+  options={["Product", "Data Science", "ML Engineering"]}
+  value={formik.values.dfaOwner || null}
+  onChange={(_, value) => formik.setFieldValue("dfaOwner", value || "")}
+  onBlur={() => formik.setFieldTouched("dfaOwner", true)}
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      label="DFA Owner (Accountable Role)"
+      error={formik.touched.dfaOwner && Boolean(formik.errors.dfaOwner)}
+      helperText={formik.touched.dfaOwner && formik.errors.dfaOwner}
+    />
+  )}
+/>
+
                             </Grid>
                         </Grid>
 

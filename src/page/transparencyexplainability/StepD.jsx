@@ -179,7 +179,7 @@ export default function TabDEvaluation() {
     );
 
     return (
-        <Card variant="outlined" sx={{ mt: 2 }}>
+        <Card variant="outlined" sx={{ mt: 0 }}>
             <CardContent>
                 <Stack
                     direction={{ xs: "column", md: "row" }}
@@ -347,24 +347,32 @@ export default function TabDEvaluation() {
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                                            {COMPONENTS.map((c) => (
-                                                <Chip
-                                                    key={c}
-                                                    label={c}
-                                                    size="small"
-                                                    variant={row.components.includes(c) ? "filled" : "outlined"}
-                                                    color={row.components.includes(c) ? "primary" : "default"}
-                                                    onClick={() => toggleComponent(row.id, c)}
-                                                    sx={{
-                                                        pl: 0.5,
-                                                        backgroundColor: row.components.includes(c) ? "primary.50" : "#f1f5f9",
-                                                        color: "#0f172a",
-                                                        border: "1px solid var(--border)",
-                                                    }}
-                                                />
-                                            ))}
-                                        </Stack>
+                                     <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+  {COMPONENTS.map((c) => {
+    const selected = row.components.includes(c);
+
+    return (
+      <Chip
+        key={c}
+        label={c}
+        size="small"
+        variant={selected ? "filled" : "outlined"}
+        onClick={() => toggleComponent(row.id, c)}
+        sx={{
+          pl: 0.5,
+          fontWeight: 600,
+          color: selected ? "#0b3b91" : "#334155",
+          backgroundColor: selected ? "#dbeafe" : "#f8fafc",
+          border: selected ? "1px solid #60a5fa" : "1px solid #cbd5e1",
+          "&:hover": {
+            backgroundColor: selected ? "#bfdbfe" : "#f1f5f9",
+          },
+        }}
+      />
+    );
+  })}
+</Stack>
+
                                     </TableCell>
                                     <TableCell>{renderSelect(row.id, "citationOk", row.citationOk)}</TableCell>
                                     <TableCell>{renderSelect(row.id, "clarityOk", row.clarityOk)}</TableCell>

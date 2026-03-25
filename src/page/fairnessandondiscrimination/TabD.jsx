@@ -172,14 +172,14 @@ const TabD = () => {
     };
 
     return (
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ px:0,pt:0}}>
 
 
             {/* Header */}
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, mb: 1 }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 1 }}>
                 D. Mitigation Actions & Ownership
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+            <Typography variant="body2"  sx={{ mb: 3 }}>
                 Turn each risk into tracked remediation work with owners, due dates, and evidence links.
             </Typography>
 
@@ -223,8 +223,8 @@ const TabD = () => {
             </Box>
 
             {/* Actions Table */}
-            <TableContainer component={Paper} variant="outlined" sx={{ mb: 2, overflowX: 'auto' }}>
-                <Table size="small">
+            <TableContainer component={Paper}  sx={{ mb: 2, overflowX: 'auto' }}>
+                <Table >
                     <TableHead>
                         <TableRow sx={{ bgcolor: '#f5f5f5' }}>
                             <TableCell sx={{ fontWeight: 700, minWidth: 180, color: '#1a1a1a' }}>
@@ -395,8 +395,8 @@ const TabD = () => {
             {/* Demo Data Note & Reset Section */}
             <Card variant="outlined" 
 
-                sx={{ mb: 3, mt: 2, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
-                <CardContent sx={{ pb: 2 }}>
+                sx={{ mb: 0, mt: 2, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
+                <CardContent sx={{ pb: 0 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
                         <Box>
                             <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>

@@ -68,5 +68,13 @@ button:focus-visible {
 } */
 
 body {
+  margin: 0;
+  min-width: 320px;
   background-color: rgb(236, 239, 241);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }

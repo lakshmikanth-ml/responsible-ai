@@ -408,12 +408,9 @@ const Index = () => {
 
     return (
         <Box >
-
-
-            {/* Main Card with Header + Content */}
-            <Card elevation={1} sx={{ m: 0 }}>
+            <Box sx={{ width: '100%', m: 0 }}>
                 {/* Header Section */}
-                <Box sx={{ p: 2 }}>
+                <Box>
                     {/* Header Top: Title + Action Buttons */}
                     <Box
                         sx={{
@@ -430,7 +427,7 @@ const Index = () => {
                             <Typography variant="h4" fontWeight={700} gutterBottom>
                                 Accountability
                             </Typography>
-                            <Typography variant="body2" color="text.secondary">
+                            <Typography variant="body2" >
                                 Ensure clear ownership, approval paths, audit logs, and incident response so AI deployments remain defensible and controllable across Pre-Training, Release, and Production.
                             </Typography>
                         </Box>
@@ -460,7 +457,7 @@ const Index = () => {
                     <Stack
                         direction={{ xs: "column", sm: "row" }}
                         spacing={1}
-                        sx={{ mt: 2, flexWrap: "wrap" }}
+                        sx={{ mt: 2, flexWrap: "wrap",mb:2 }}
                     >
                         <Chip
                             label="Lifecycle Controlled"
@@ -522,7 +519,6 @@ const Index = () => {
                         display: 'grid',
                         gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' },
                         gap: 2,
-                        mx: 2,
                     }}
                 >
                     {[
@@ -583,11 +579,11 @@ const Index = () => {
                 </Box>
 
                 {/* Main Content Grid: Left Sidebar + Right Tab Content */}
-                <Grid container>
+                <Grid container mt={2}>
 
 
                     {/* Right Panel: Tabs + Content */}
-                    <Grid size={{ xs: 12 }} sx={{ p: 2 }}>
+                    <Grid size={{ xs: 12 }}>
                         {/* Tab Navigation */}
                         <Tabs
                             value={activeTab}
@@ -619,7 +615,7 @@ const Index = () => {
                         {renderTabContent()}
                     </Grid>
                 </Grid>
-            </Card>
+            </Box>
             <Box mt={2}>
                 <ProjectContextCard
                     context={projectContext}

@@ -3,8 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 // ============ Initial State ============
 const initialState = {
     mode: 'light',
-    // fontFamily: 'Outfit, sans-serif',
-    fontFamily: "Inter",
+    fontFamily: '"IBM Plex Sans", sans-serif',
     layoutType: 'vertical',
     direction: 'ltr',
     borderRadius: 4,

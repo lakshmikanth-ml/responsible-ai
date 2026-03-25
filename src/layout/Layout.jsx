@@ -27,7 +27,8 @@ export default function Layout() {
   return (
     <Box sx={{
       display: 'flex', minHeight: '100vh',
-      background: darkMode ? 'unset' : 'linear-gradient(to bottom, #F4FAFF80, #F8FBFD, #FCFCFC)'
+     background: darkMode ? 'unset' : "rgb(244, 250, 255)"
+      // background: darkMode ? 'unset' : 'linear-gradient(to bottom, #F4FAFF80, #F8FBFD, #FCFCFC)'
     }}>
       <Header
         onMenuClick={handleDrawerToggle}
@@ -44,7 +45,8 @@ export default function Layout() {
         component="main"
         sx={{
           flexGrow: 1,
-          p: { xs: 2, sm: 3 },
+          px: { xs: 2, md: 3 },
+          py: { xs: 2, md: 3 },
           width: {
             xs: '100%',
             md: `calc(100% - ${collapsed ?
@@ -54,9 +56,9 @@ export default function Layout() {
             xs: 0,
             // md: collapsed ? `${collapsedWidth}px` : `${drawerWidth}px`
           },
-          maxWidth: { xs: 'unset', lg: '1440px' },
-          mx: { xs: 'unset', lg: 'auto' },
-          mt: { xs: 8, lg: '84px' }, // Space for the fixed header
+          maxWidth: { xs: '100%', lg: '1440px' },
+          mx: { xs: 0, lg: 'auto' },
+          mt: { xs: 8, lg: '66px' }, // Space for the fixed header
           transition: (theme) =>
             theme.transitions.create(['margin', 'width'], {
               easing: theme.transitions.easing.sharp,

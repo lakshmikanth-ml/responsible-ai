@@ -324,14 +324,14 @@ const TabH = () => {
     };
 
     return (
-        <Box sx={{ p: 2 }}>
+        <Box sx={{px:0,pt:0 }}>
 
 
             {/* Header */}
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, mb: 1 }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 1 }}>
                 H. Compliance, Reporting & Traceability
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+            <Typography variant="body2" sx={{ mb: 3 }}>
                 Always-on exports: snapshot JSON, evidence index CSV, and a readable pillar report.
             </Typography>
 
@@ -468,7 +468,7 @@ const TabH = () => {
 
             {/* Demo Data Note */}
             <Card variant="outlined" sx={{ mt: 3, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
-                <CardContent sx={{ pb: 2 }}>
+                <CardContent sx={{ pb: 0 }}>
                     <Box>
                         <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>
                             v1 note:

@@ -190,11 +190,9 @@ const Index = () => {
 
     return (
         <Box>
-
-
-            <Card elevation={1}>
+            <Box sx={{ width: '100%' }}>
                 {/* Header Section */}
-                <Box sx={{ p: 2 }}>
+                <Box>
                     {/* Header Top */}
                     <Box sx={{
                         display: 'flex',
@@ -209,7 +207,9 @@ const Index = () => {
                             <Typography variant="h4" fontWeight={700} gutterBottom>
                                 Privacy & Data Security
                             </Typography>
-                            <Typography variant="body2" color="text.secondary">
+                            <Typography 
+                            variant="body2"
+                             >
                                 Control whether the AI system prevents PII leakage, resists data exfiltration, enforces access boundaries, and remains audit-ready across Pre-Training, Release, and Production.
                             </Typography>
                         </Box>
@@ -229,7 +229,7 @@ const Index = () => {
                     </Box>
 
                     {/* Status Chips */}
-                    <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mb: 0 }}>
+                    <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mb: 2 }}>
                         <Chip
                             label="Lifecycle Controlled"
                             variant="outlined"
@@ -282,8 +282,6 @@ const Index = () => {
                 {/* Main Content Grid: Project Context (Left) + Tab Content (Right) */}
                 <Box sx={{
                     display: 'grid',
-                    px: 2,
-                   
                     gridTemplateColumns: {
                         xs: '1fr', sm: '1fr 1fr',
                         md: '1fr 1fr 1fr 1fr'
@@ -325,12 +323,12 @@ const Index = () => {
                         </Card>
                     ))}
                 </Box>
-                <Grid container>
+                <Grid container mt={2}>
                     {/* Gate Status Cards */}
 
 
                     {/* Right Panel: Tabs */}
-                    <Grid item xs={12} md={9} sx={{ p: 2 }}>
+                    <Grid item xs={12} md={9}>
                         {/* Tab Navigation */}
                         <Tabs
                             value={activeTab}
@@ -364,7 +362,7 @@ const Index = () => {
                         {renderTabContent()}
                     </Grid>
                 </Grid>
-            </Card>
+            </Box>
             {/* <Box mt={2}>
                 <ProjectContextCard
                     context={projectContext}

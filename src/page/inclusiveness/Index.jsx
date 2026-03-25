@@ -771,7 +771,7 @@ export default function InclusivenessFormikPage() {
 
     return (
         <>
-            <Paper variant="outlined" sx={{ p: 2 }}>
+            <Box sx={{ width: "100%" }}>
                 {/* Header */}
 
 
@@ -789,7 +789,7 @@ export default function InclusivenessFormikPage() {
                         <Typography variant="h4" fontWeight={700} gutterBottom>
                             Inclusiveness
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" >
                             Ensure the AI system is accessible, usable, and beneficial across diverse user groups (including underserved communities), and that accessibility standards and inclusive testing are enforced across pre-training, release, and production.
                         </Typography>
                     </Box>
@@ -1035,7 +1035,7 @@ export default function InclusivenessFormikPage() {
                     />
 
                 )}
-            </Paper>
+            </Box>
             <Box mt={2}>
                 <ProjectContextCard
                     context={projectContext}

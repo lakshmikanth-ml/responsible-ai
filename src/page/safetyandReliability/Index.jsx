@@ -193,11 +193,9 @@ const Index = () => {
 
     return (
         <Box>
-
-
-            <Card elevation={1}>
+            <Box sx={{ width: '100%' }}>
                 {/* Header Section */}
-                <Box sx={{ p: 2 }}>
+                <Box>
                     {/* Header Top */}
                     <Box sx={{
                         display: 'flex',
@@ -212,7 +210,8 @@ const Index = () => {
                             <Typography variant="h4" fontWeight={700} gutterBottom>
                                 Safety & Reliability
                             </Typography>
-                            <Typography variant="body2" color="text.secondary">
+                            <Typography variant="body2"
+                             >
                                 Control whether the AI system is stable, resilient to edge cases, safe under failures, and operationally reliable across Pre-Training, Release, and Production. This includes uptime, latency, error budgets, stress testing, fallback protocols, incident response readiness, and runtime monitoring.
                             </Typography>
                         </Box>
@@ -235,7 +234,7 @@ const Index = () => {
                     <Stack
                         direction={{ xs: "column", sm: "row" }}
                         spacing={1}
-                        sx={{ mt: 2, flexWrap: "wrap" }}
+                        sx={{ mt: 2, flexWrap: "wrap",mb:2 }}
                     >
                         <Chip
                             label="Lifecycle Controlled"
@@ -293,10 +292,9 @@ const Index = () => {
 
                 {/* Gate Status Cards */}
                 <Box sx={{
-
-                    display: 'grid', mx: 2,
+                    display: 'grid',
                     gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' },
-                    gap: 2, mb: 0
+                    gap: 2, mb: 2
                 }}>
                     {[
                         {
@@ -356,7 +354,7 @@ const Index = () => {
 
 
                     {/* Right Panel: Tabs */}
-                    <Grid item xs={12} md={9} sx={{ p: 2 }}>
+                    <Grid item xs={12} md={9}>
                         {/* Tab Navigation */}
                         <Tabs
                             value={activeTab}
@@ -387,7 +385,7 @@ const Index = () => {
                         {renderTabContent()}
                     </Grid>
                 </Grid>
-            </Card>
+            </Box>
             <Box mt={2}>
                 <ProjectContextCard
                     context={projectContext}

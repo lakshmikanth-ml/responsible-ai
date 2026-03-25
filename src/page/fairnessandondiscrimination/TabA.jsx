@@ -283,14 +283,15 @@ const TabA = () => {
     };
 
     return (
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ px:0,pt:0 }}>
 
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 1 }}>
+            <Typography variant="h6"
+             gutterBottom sx={{ fontWeight: 700, mb: 1 }}>
                 A. Objectives & Scope
 
             </Typography>
             <Typography variant="body2"
-                color="text.secondary" sx={{ mb: 2 }}>
+                sx={{ mb: 2 }}>
                 Define what “fairness” means for this use case and document impacted groups.
             </Typography>
             {/* KPI Dashboard - Reusable */}
@@ -405,14 +406,16 @@ const TabA = () => {
                         }}>
                             <FormControl component="fieldset" fullWidth>
                                 <Typography   variant="h6"
-            sx={{ fontWeight: 600, fontSize:"18px !important",marginTop:"6px" }} gutterBottom>Regulatory / Policy Context</Typography>
+            sx={{ fontWeight: 600, fontSize:"18px !important",
+            marginTop:"6px" }} gutterBottom>Regulatory / Policy Context</Typography>
                                 <Box sx={{
                                     display: 'grid',
-                                    gridTemplateColumns: '0.2fr 0.5fr', gap: 1, mt: 0
+                                    gridTemplateColumns: '0.4fr 0.4fr', gap: 1, mt: 0
                                 }}>
                                     <FormControlLabel
                                         control={
                                             <Checkbox
+                                            size='small'
                                                 checked={formData.regulations.includes('NAIC')}
                                                 onChange={handleRegulationChange}
                                                 value="NAIC"
@@ -423,6 +426,7 @@ const TabA = () => {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
+                                             size='small'
                                                 checked={formData.regulations.includes('State DOI')}
                                                 onChange={handleRegulationChange}
                                                 value="State DOI"
@@ -433,6 +437,7 @@ const TabA = () => {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
+                                             size='small'
                                                 checked={formData.regulations.includes('EU AI Act')}
                                                 onChange={handleRegulationChange}
                                                 value="EU AI Act"
@@ -443,6 +448,7 @@ const TabA = () => {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
+                                             size='small'
                                                 checked={formData.regulations.includes('Internal Policy')}
                                                 onChange={handleRegulationChange}
                                                 value="Internal Policy"
@@ -704,11 +710,14 @@ const TabA = () => {
             </Card>
 
             {/* Demo Data Note & Reset Section */}
-            <Card variant="outlined" sx={{ mt: 3, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
-                <CardContent sx={{ pb: 2 }}>
+            <Card variant="outlined" sx={{ mt: 3,
+                 bgcolor: '#fafafa',
+                  borderColor: '#e0e0e0' }}>
+                <CardContent sx={{ pb: 0 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
                         <Box>
-                            <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>
+                            <Typography variant="caption" sx={{ fontWeight: 600,
+                                 display: 'block', mb: 0.5 }}>
                                 v1 note:
                             </Typography>
                             <Typography variant="caption" color="text.secondary">

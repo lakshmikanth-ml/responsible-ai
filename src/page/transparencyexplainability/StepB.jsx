@@ -199,7 +199,7 @@ export default function TabBCoverage() {
             : Math.round((coveredMandatory.length / mandatoryRows.length) * 100);
 
     return (
-        <Card variant="outlined" sx={{ mt: 2 }}>
+        <Card variant="outlined" sx={{ mt: 0 }}>
             <CardContent>
                 <Stack
                     direction={{ xs: "column", md: "row" }}
