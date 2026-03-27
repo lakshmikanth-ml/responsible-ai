@@ -99,7 +99,7 @@ const ProjectContextCard = ({
                 </Typography>
             )}
 
-            <Typography variant="caption" color="text.secondary" mt={1} display="block">
+            <Typography variant="caption"  mt={1} display="block">
                 Data persists locally (browser localStorage) for demo realism.
             </Typography>
         </CardContent>

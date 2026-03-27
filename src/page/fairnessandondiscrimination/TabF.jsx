@@ -108,13 +108,29 @@ const TabF = () => {
     const getStatusColor = (status) => {
         switch (status) {
             case 'BLOCKED':
-                return { bg: '#ffcdd2', border: '#f44336', accent: '#d32f2f', icon: BlockIcon };
+                return { 
+                    light: { bg: '#ffebee', border: '#ef9a9a', accent: '#c62828' },
+                    dark: { bg: 'rgba(244, 67, 54, 0.16)', border: 'rgba(244, 67, 54, 0.32)', accent: '#ef5350' },
+                    icon: BlockIcon 
+                };
             case 'READY':
-                return { bg: '#c8e6c9', border: '#4caf50', accent: '#2e7d32', icon: CheckCircleIcon };
+                return { 
+                    light: { bg: '#e8f5e8', border: '#81c784', accent: '#2e7d32' },
+                    dark: { bg: 'rgba(76, 175, 80, 0.16)', border: 'rgba(76, 175, 80, 0.32)', accent: '#81c784' },
+                    icon: CheckCircleIcon 
+                };
             case 'APPROVED':
-                return { bg: '#a5d6a7', border: '#2e7d32', accent: '#1b5e20', icon: CheckCircleIcon };
+                return { 
+                    light: { bg: '#c8e6c9', border: '#66bb6a', accent: '#1b5e20' },
+                    dark: { bg: 'rgba(76, 175, 80, 0.24)', border: 'rgba(76, 175, 80, 0.48)', accent: '#4caf50' },
+                    icon: CheckCircleIcon 
+                };
             default:
-                return { bg: '#fff3e0', border: '#ffb74d', accent: '#f57c00', icon: BlockIcon };
+                return { 
+                    light: { bg: '#fff3e0', border: '#ffcc02', accent: '#f57c00' },
+                    dark: { bg: 'rgba(255, 152, 0, 0.16)', border: 'rgba(255, 152, 0, 0.32)', accent: '#ffb74d' },
+                    icon: BlockIcon 
+                };
         }
     };
 
@@ -176,7 +192,7 @@ const TabF = () => {
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 1 }}>
                 F. Lifecycle Gating
             </Typography>
-            <Typography variant="body2"  sx={{ mb: 3 }}>
+            <Typography variant="body2"  sx={{ mb: 2 }}>
                 Baseline → Release Readiness → Production governance gates computed from pillar state.
             </Typography>
 
@@ -188,7 +204,7 @@ const TabF = () => {
             )}
 
             {/* Gates Table */}
-            <TableContainer component={Paper} variant="outlined" sx={{ mb: 3, overflowX: 'auto' }}>
+            <TableContainer component={Paper} variant="outlined" sx={{ mb: 2, overflowX: 'auto' }}>
                 <Table size="small">
                     <TableHead>
                         <TableRow sx={{ bgcolor: '#f5f5f5' }}>
@@ -214,7 +230,9 @@ const TabF = () => {
                             return (
                                 <TableRow key={index} sx={{ '&:hover': { bgcolor: '#f9f9f9' } }}>
                                     <TableCell>
-                                        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                                        <Typography 
+                                        
+                                        variant="subtitle2" sx={{ fontWeight: 600 }}>
                                             {gate.stage}
                                         </Typography>
                                     </TableCell>
@@ -226,10 +244,26 @@ const TabF = () => {
                                                 label={gate.status}
                                                 size="small"
                                                 sx={{
-                                                    bgcolor: statusColor.bg,
-                                                    borderColor: statusColor.border,
-                                                    color: statusColor.accent,
+                                                    bgcolor: (theme) =>
+                                                        theme.palette.mode === 'dark'
+                                                            ? statusColor.dark.bg
+                                                            : statusColor.light.bg,
+                                                    borderColor: (theme) =>
+                                                        theme.palette.mode === 'dark'
+                                                            ? statusColor.dark.border
+                                                            : statusColor.light.border,
+                                                    color: (theme) =>
+                                                        theme.palette.mode === 'dark'
+                                                            ? statusColor.dark.accent
+                                                            : statusColor.light.accent,
                                                     fontWeight: 700,
+                                                    '&:hover': {
+                                                        bgcolor: (theme) =>
+                                                            theme.palette.mode === 'dark'
+                                                                ? statusColor.dark.bg
+                                                                : statusColor.light.bg,
+                                                        opacity: 0.8,
+                                                    },
                                                 }}
                                                 variant="outlined"
                                             />
@@ -271,7 +305,7 @@ const TabF = () => {
             </TableContainer>
 
             {/* Action Buttons */}
-            <Box sx={{ display: 'flex', gap: 1, mb: 3, flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
                 <Button
                     variant="contained"
                     startIcon={<SendIcon />}
@@ -372,28 +406,31 @@ const TabF = () => {
             </Dialog>
 
             {/* Demo Data Note & Reset Section */}
-            <Card variant="outlined" sx={{ mt: 3, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
-                <CardContent sx={{ pb: 0 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-                        <Box>
-                            <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>
-                                v1 note:
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                                This file stores state in localStorage for demo purposes. Replace with GenAI Foundry backend APIs for enterprise deployments.
-                            </Typography>
-                        </Box>
-                        <Button
-                            variant="outlined"
-                            size="small"
-                            onClick={resetAll}
-                            sx={{ whiteSpace: 'nowrap' }}
-                        >
-                            Reset Demo Data
-                        </Button>
-                    </Box>
-                </CardContent>
-            </Card>
+            <Card variant="outlined" sx={{ mt: 2,
+                            bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : '#fafafa',
+                            borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(171, 171, 171, 0.15)' : '#e0e0e0'  }}>
+                           <CardContent sx={{ pb: 0 }}>
+                               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+                                   <Box>
+                                       <Typography variant="caption" sx={{ fontWeight: 600,
+                                            display: 'block', mb: 0.5 }}>
+                                           v1 note:
+                                       </Typography>
+                                       <Typography variant="caption" color="text.secondary">
+                                           This file stores state in localStorage for demo purposes. Replace with GenAI Foundry backend APIs for enterprise deployments.
+                                       </Typography>
+                                   </Box>
+                                   <Button
+                                       variant="outlined"
+                                       size="small"
+                                       onClick={resetAll}
+                                       sx={{ whiteSpace: 'nowrap' }}
+                                   >
+                                       Reset Demo Data
+                                   </Button>
+                               </Box>
+                           </CardContent>
+                       </Card>
         </Box>
     );
 };

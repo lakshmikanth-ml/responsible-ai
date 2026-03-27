@@ -332,7 +332,7 @@ const TabB = ({ projectContext = {}, onStatusMessage }) => {
                             </Button>
                         </Box>
 
-                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.6 }}>
+                        <Typography variant="caption"  sx={{ display: 'block', lineHeight: 1.6 }}>
                             Data persists locally (browser localStorage) for demo realism.
                         </Typography>
                     </CardContent>
@@ -341,12 +341,9 @@ const TabB = ({ projectContext = {}, onStatusMessage }) => {
 
             {/* RIGHT PANEL: TAB B CONTENT */}
             <Grid size={{ xs: 12, md: 8 }}>
-                <Box sx={{
-                    p: 0,
-                    border: "1px solid rgba(117, 117, 117, 0.2)",
-                    borderRadius: "8px",
-                    padding: "16px",
-                }}>
+                 <Card elevation={0}
+                    sx={{ position: 'sticky', top: 20 }}>
+                    <CardContent>
                     {/* Header Section */}
                     <Box sx={{
                         mb: 2, pb: 0,
@@ -356,7 +353,7 @@ const TabB = ({ projectContext = {}, onStatusMessage }) => {
                                 🛡️ B. Coverage (Controls You Promise to Enforce)
                             </Typography>
                         </Box>
-                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2, lineHeight: 1.7 }}>
+                        <Typography variant="body2"  sx={{ mb: 2, lineHeight: 1.7 }}>
                             Select which privacy/security controls are mandatory. We avoid free-text: each control is a concrete switch that maps to Guardian + platform configuration.
                         </Typography>
                         <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
@@ -390,39 +387,102 @@ const TabB = ({ projectContext = {}, onStatusMessage }) => {
                                     </Typography>
                                     <FormGroup>
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData.outputControls.piiMask} onChange={() => handleCheckboxChange('outputControls', 'piiMask')} />}
-                                            label="PII masking"
-
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData.outputControls.piiMask} 
+                                                    onChange={() => handleCheckboxChange('outputControls', 'piiMask')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    PII masking
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData.outputControls.piiBlock} onChange={() => handleCheckboxChange('outputControls', 'piiBlock')} />}
-                                            label="PII hard-block (deny response)"
-
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData.outputControls.piiBlock} 
+                                                    onChange={() => handleCheckboxChange('outputControls', 'piiBlock')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    PII hard-block (deny response)
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData.outputControls.secretsBlock} onChange={() => handleCheckboxChange('outputControls', 'secretsBlock')} />}
-                                            label="Secrets detection + block"
-
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData.outputControls.secretsBlock} 
+                                                    onChange={() => handleCheckboxChange('outputControls', 'secretsBlock')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    Secrets detection + block
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData.outputControls.tenantBlock} onChange={() => handleCheckboxChange('outputControls', 'tenantBlock')} />}
-                                            label="Cross-tenant leakage block"
-
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData.outputControls.tenantBlock} 
+                                                    onChange={() => handleCheckboxChange('outputControls', 'tenantBlock')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    Cross-tenant leakage block
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData.outputControls.docEntitle} onChange={() => handleCheckboxChange('outputControls', 'docEntitle')} />}
-                                            label="Document entitlement checks (RBAC)"
-
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData.outputControls.docEntitle} 
+                                                    onChange={() => handleCheckboxChange('outputControls', 'docEntitle')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    Document entitlement checks (RBAC)
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData.outputControls.citationsReq} onChange={() => handleCheckboxChange('outputControls', 'citationsReq')} />}
-                                            label="Require citations for doc answers"
-
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData.outputControls.citationsReq} 
+                                                    onChange={() => handleCheckboxChange('outputControls', 'citationsReq')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    Require citations for doc answers
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData.outputControls.redactionLogs} onChange={() => handleCheckboxChange('outputControls', 'redactionLogs')} />}
-                                            label="Redaction logging (what was masked)"
-
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData.outputControls.redactionLogs} 
+                                                    onChange={() => handleCheckboxChange('outputControls', 'redactionLogs')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    Redaction logging (what was masked)
+                                                </Typography>
+                                            }
                                         />
                                     </FormGroup>
                                 </CardContent>
@@ -437,34 +497,88 @@ const TabB = ({ projectContext = {}, onStatusMessage }) => {
                                     </Typography>
                                     <FormGroup>
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData.inputControls.promptInject} onChange={() => handleCheckboxChange('inputControls', 'promptInject')} />}
-                                            label="Prompt injection detection"
-
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData.inputControls.promptInject} 
+                                                    onChange={() => handleCheckboxChange('inputControls', 'promptInject')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    Prompt injection detection
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData.inputControls.exfilDetect} onChange={() => handleCheckboxChange('inputControls', 'exfilDetect')} />}
-                                            label="Data exfiltration intent detection"
-
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData.inputControls.exfilDetect} 
+                                                    onChange={() => handleCheckboxChange('inputControls', 'exfilDetect')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    Data exfiltration intent detection
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData.inputControls.allowlistTools} onChange={() => handleCheckboxChange('inputControls', 'allowlistTools')} />}
-                                            label="Tool/function allowlisting"
-
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData.inputControls.allowlistTools} 
+                                                    onChange={() => handleCheckboxChange('inputControls', 'allowlistTools')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    Tool/function allowlisting
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData.inputControls.rateLimit} onChange={() => handleCheckboxChange('inputControls', 'rateLimit')} />}
-                                            label="Rate limiting (abuse)"
-
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData.inputControls.rateLimit} 
+                                                    onChange={() => handleCheckboxChange('inputControls', 'rateLimit')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    Rate limiting (abuse)
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData.inputControls.piiInbound} onChange={() => handleCheckboxChange('inputControls', 'piiInbound')} />}
-                                            label="Inbound PII detection (user input)"
-
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData.inputControls.piiInbound} 
+                                                    onChange={() => handleCheckboxChange('inputControls', 'piiInbound')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    Inbound PII detection (user input)
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData.inputControls.dlp} onChange={() => handleCheckboxChange('inputControls', 'dlp')} />}
-                                            label="DLP integration (optional)"
-
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData.inputControls.dlp} 
+                                                    onChange={() => handleCheckboxChange('inputControls', 'dlp')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    DLP integration (optional)
+                                                </Typography>
+                                            }
                                         />
                                     </FormGroup>
                                 </CardContent>
@@ -668,7 +782,7 @@ const TabB = ({ projectContext = {}, onStatusMessage }) => {
                             </Box>
                         </CardContent>
                     </Card>
-                </Box>
+                </CardContent></Card>
             </Grid>
         </Grid>
     );

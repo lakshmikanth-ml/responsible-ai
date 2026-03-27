@@ -179,7 +179,7 @@ const TabD = () => {
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 1 }}>
                 D. Mitigation Actions & Ownership
             </Typography>
-            <Typography variant="body2"  sx={{ mb: 3 }}>
+            <Typography variant="body2"  sx={{ mb: 2 }}>
                 Turn each risk into tracked remediation work with owners, due dates, and evidence links.
             </Typography>
 
@@ -393,30 +393,31 @@ const TabD = () => {
             </Alert>
 
             {/* Demo Data Note & Reset Section */}
-            <Card variant="outlined" 
-
-                sx={{ mb: 0, mt: 2, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
-                <CardContent sx={{ pb: 0 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-                        <Box>
-                            <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>
-                                v1 note:
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                                This file stores state in localStorage for demo purposes. Replace with GenAI Foundry backend APIs for enterprise deployments.
-                            </Typography>
-                        </Box>
-                        <Button
-                            variant="outlined"
-                            size="small"
-                            onClick={resetAll}
-                            sx={{ whiteSpace: 'nowrap' }}
-                        >
-                            Reset Demo Data
-                        </Button>
-                    </Box>
-                </CardContent>
-            </Card>
+            <Card variant="outlined" sx={{ mt: 2,
+                            bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : '#fafafa',
+                            borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(171, 171, 171, 0.15)' : '#e0e0e0'  }}>
+                           <CardContent sx={{ pb: 0 }}>
+                               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+                                   <Box>
+                                       <Typography variant="caption" sx={{ fontWeight: 600,
+                                            display: 'block', mb: 0.5 }}>
+                                           v1 note:
+                                       </Typography>
+                                       <Typography variant="caption" color="text.secondary">
+                                           This file stores state in localStorage for demo purposes. Replace with GenAI Foundry backend APIs for enterprise deployments.
+                                       </Typography>
+                                   </Box>
+                                   <Button
+                                       variant="outlined"
+                                       size="small"
+                                       onClick={resetAll}
+                                       sx={{ whiteSpace: 'nowrap' }}
+                                   >
+                                       Reset Demo Data
+                                   </Button>
+                               </Box>
+                           </CardContent>
+                       </Card>
         </Box>
     );
 };

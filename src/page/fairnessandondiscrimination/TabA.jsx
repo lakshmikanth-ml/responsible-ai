@@ -264,19 +264,52 @@ const TabA = () => {
     };
 
     const renderKPIBadge = (status) => {
-        const colorMap = {
-            'Missing': 'error',
-            'Partial': 'warning',
-            'Complete': 'success',
+        const colorConfig = {
+            'Missing': { 
+                light: { bg: '#ffebee', color: '#c62828', border: '#ef9a9a' },
+                dark: { bg: 'rgba(244, 67, 54, 0.16)', color: '#ef5350', border: 'rgba(244, 67, 54, 0.32)' }
+            },
+            'Partial': { 
+                light: { bg: '#fff8e1', color: '#f57c00', border: '#ffcc02' },
+                dark: { bg: 'rgba(255, 152, 0, 0.16)', color: '#ffb74d', border: 'rgba(255, 152, 0, 0.32)' }
+            },
+            'Complete': { 
+                light: { bg: '#e8f5e8', color: '#2e7d32', border: '#81c784' },
+                dark: { bg: 'rgba(76, 175, 80, 0.16)', color: '#81c784', border: 'rgba(76, 175, 80, 0.32)' }
+            },
         };
+
+        const config = colorConfig[status];
+        if (!config) {
+            return (
+                <Chip
+                    label={status}
+                    size="small"
+                    sx={{
+                        bgcolor: 'grey.100',
+                        color: 'grey.700',
+                        fontWeight: 600,
+                        border: '1px solid',
+                        borderColor: 'grey.300',
+                    }}
+                />
+            );
+        }
+
         return (
             <Chip
                 label={status}
                 size="small"
                 sx={{
-                    bgcolor: colorMap[status] ? `${colorMap[status]}.light` : undefined,
-                    color: colorMap[status] ? `${colorMap[status]}.dark` : undefined,
+                    bgcolor: (theme) => theme.palette.mode === 'dark' ? config.dark.bg : config.light.bg,
+                    color: (theme) => theme.palette.mode === 'dark' ? config.dark.color : config.light.color,
                     fontWeight: 600,
+                    border: '1px solid',
+                    borderColor: (theme) => theme.palette.mode === 'dark' ? config.dark.border : config.light.border,
+                    '&:hover': {
+                        bgcolor: (theme) => theme.palette.mode === 'dark' ? config.dark.bg : config.light.bg,
+                        opacity: 0.8,
+                    },
                 }}
             />
         );
@@ -302,25 +335,69 @@ const TabA = () => {
                     xs: '1fr', sm: '1fr 1fr 1fr',
                     lg: '1fr 1fr 1fr'
                 },
-                gap: 2, mb: 3, mt: 1
+                gap: 2, mb: 2, mt: 1
             }}>
                 {kpiConfig.map((kpi) => (
-                    <Card key={kpi.id}
-                        variant="outlined">
-                        <CardContent p={2} pb={2}>
-                            <Typography variant="caption" color="text.secondary">
+                    <Card 
+                        key={kpi.id}
+                        variant="outlined"
+                        sx={{
+                            transition: 'all 0.2s ease-in-out',
+                            // '&:hover': {
+                            //     transform: 'translateY(-2px)',
+                            //     boxShadow: (theme) => theme.palette.mode === 'dark' 
+                            //         ? '0 4px 20px rgba(0, 0, 0, 0.3)' 
+                            //         : '0 4px 20px rgba(0, 0, 0, 0.12)',
+                            //     borderColor: (theme) => theme.palette.mode === 'dark' 
+                            //         ? 'rgba(255, 255, 255, 0.12)' 
+                            //         : 'rgba(0, 0, 0, 0.12)',
+                            // },
+                            bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                ? 'background.paper' 
+                                : '#ffffff',
+                            borderColor: (theme) => theme.palette.mode === 'dark' 
+                                ? 'rgba(255, 255, 255, 0.08)' 
+                                : 'rgba(0, 0, 0, 0.08)',
+                        }}
+                    >
+                        <CardContent sx={{ p: 2, pb: '16px !important' }}>
+                            <Typography 
+                                variant="caption" 
+                               
+                                sx={{ 
+                                    fontWeight: 500,
+                                    fontSize: '0.75rem',
+                                   
+                                    letterSpacing: '0.5px',
+                                }}
+                            >
                                 {kpi.label}
                             </Typography>
-                            <Box sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <Box sx={{ mt: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
                                 {renderKPIBadge(kpi.status)}
                                 {kpi.count > 0 && (
-                                    <Typography variant="caption" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                                    <Typography 
+                                        variant="caption" 
+                                        sx={{ 
+                                            fontWeight: 600, 
+                                            color: 'primary.main',
+                                            fontSize: '0.75rem',
+                                        }}
+                                    >
                                         ({kpi.count})
                                     </Typography>
                                 )}
                             </Box>
-                            <Typography variant="caption"
-                                sx={{ mt: 1, display: 'block', color: 'text.secondary' }}>
+                            <Typography 
+                                variant="caption"
+                                sx={{ 
+                                    mt: 1.5, 
+                                    display: 'block', 
+                                    
+                                    fontSize: '0.7rem',
+                                    lineHeight: 1.4,
+                                }}
+                            >
                                 {kpi.description}
                             </Typography>
                         </CardContent>
@@ -329,7 +406,7 @@ const TabA = () => {
             </Box>
 
             {/* A.1 Section */}
-            <Card variant="outlined" sx={{ mb: 3 }}>
+            <Card variant="outlined" sx={{ mb: 2 }}>
                 <CardContent>
                     <Typography variant="h6" gutterBottom>
                         A.1 Fairness Objective Definition
@@ -367,11 +444,11 @@ const TabA = () => {
                                 )}
                                 noOptionsText="No options"
                                 clearIcon={null}
-                                slotProps={{
-                                    paper: {
-                                        sx: { mt: 1 }
-                                    }
-                                }}
+                                // slotProps={{
+                                //     paper: {
+                                //         sx: { mt: 0 }
+                                //     }
+                                // }}
                             />
                         </Grid>
                         <Grid size={{
@@ -395,7 +472,7 @@ const TabA = () => {
                                 clearIcon={null}
                                 slotProps={{
                                     paper: {
-                                        sx: { mt: 1 }
+                                        sx: { mt: 0 }
                                     }
                                 }}
                             />
@@ -421,7 +498,10 @@ const TabA = () => {
                                                 value="NAIC"
                                             />
                                         }
-                                        label="NAIC"
+                                        label= {
+                                        <Typography variant="body2">
+                                            NAIC</Typography>
+                                            }
                                     />
                                     <FormControlLabel
                                         control={
@@ -432,7 +512,9 @@ const TabA = () => {
                                                 value="State DOI"
                                             />
                                         }
-                                        label="State DOI"
+                                        label={ <Typography variant="body2">
+
+                                        State DOI</Typography> }
                                     />
                                     <FormControlLabel
                                         control={
@@ -443,7 +525,9 @@ const TabA = () => {
                                                 value="EU AI Act"
                                             />
                                         }
-                                        label="EU AI Act"
+                                        label=  {<Typography variant="body2">
+
+                                         EU AI Act</Typography> }
                                     />
                                     <FormControlLabel
                                         control={
@@ -454,7 +538,12 @@ const TabA = () => {
                                                 value="Internal Policy"
                                             />
                                         }
-                                        label="Internal Policy"
+                                        label=
+                                         {<Typography variant="body2">
+
+                                         
+                                        Internal Policy</Typography>
+                                    }
                                     />
                                 </Box>
                             </FormControl>
@@ -515,12 +604,12 @@ const TabA = () => {
             </Card>
 
             {/* A.2 Section */}
-            <Card variant="outlined" sx={{ mb: 3 }}>
+            <Card variant="outlined" sx={{ mb: 2 }}>
                 <CardContent>
                     <Typography variant="h6" gutterBottom>
                         A.2 Impacted Demographic Groups (Editable Table)
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    <Typography variant="body2"  sx={{ mb: 2 }}>
                         Define protected/sensitive attributes. Exclusions require a justification to manage proxy risk.
                     </Typography>
 
@@ -546,10 +635,10 @@ const TabA = () => {
                         </Button>
                     </Box>
 
-                    <TableContainer component={Paper} variant="outlined">
-                        <Table size="small">
+                    <TableContainer  >
+                        <Table>
                             <TableHead>
-                                <TableRow sx={{ bgcolor: 'grey.100' }}>
+                                <TableRow >
                                     <TableCell sx={{ fontWeight: 600 }}>Attribute Type</TableCell>
                                     <TableCell sx={{ fontWeight: 600 }}>Attribute Name</TableCell>
                                     <TableCell sx={{ fontWeight: 600 }}>Included?</TableCell>
@@ -642,7 +731,7 @@ const TabA = () => {
                     </Typography>
                     <Grid container spacing={2} sx={{ mt: 1 }}>
                         <Grid item xs={12} md={6}>
-                            <Card variant="outlined" sx={{ p: 2, bgcolor: 'grey.50' }}>
+                            <Card variant="outlined" sx={{ p: 2, bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : 'grey.50' }}>
                                 <Typography variant="subtitle2" fontWeight={600}>
                                     Upload Workshop Notes / Minutes
                                 </Typography>
@@ -674,7 +763,7 @@ const TabA = () => {
                             </Card>
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <Card variant="outlined" sx={{ p: 2, height: "100%", bgcolor: 'grey.50' }}>
+                            <Card variant="outlined" sx={{ p: 2, height: "100%", bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : 'grey.50' }}>
                                 <Typography variant="subtitle2" fontWeight={600}>
                                     Upload Legal / Compliance Notes
                                 </Typography>
@@ -710,9 +799,9 @@ const TabA = () => {
             </Card>
 
             {/* Demo Data Note & Reset Section */}
-            <Card variant="outlined" sx={{ mt: 3,
-                 bgcolor: '#fafafa',
-                  borderColor: '#e0e0e0' }}>
+            <Card variant="outlined" sx={{ mt: 2,
+                 bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : '#fafafa',
+                 borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(171, 171, 171, 0.15)' : '#e0e0e0'  }}>
                 <CardContent sx={{ pb: 0 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
                         <Box>

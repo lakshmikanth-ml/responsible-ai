@@ -24,7 +24,7 @@ import {
     MenuItem,
     TableContainer,
     Paper
-    , Grid, Stack, Chip, Divider
+    , Grid, Stack, Chip, Divider, Autocomplete
 } from "@mui/material";
 
 /* ================= INITIAL VALUES ================= */
@@ -124,11 +124,13 @@ export default function MitigationTab({
     };
 
     return (
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 2 }}>
             <Grid container spacing={3}>
                 <Grid size={{ xs: 12, md: 8 }}>
-                    <Typography fontWeight={700} mb={1}>F. Mitigation</Typography>
-                    <Typography variant="body2" color="text.secondary" mb={2}>
+                    <Typography variant='h6'
+                     fontWeight={700} >F. Mitigation</Typography>
+                    <Typography variant="body2"
+                      mb={2}>
                         Convert risks into mitigation tasks. Gate logic expects critical mitigations to be marked as "Complete".
                     </Typography>
 
@@ -138,7 +140,7 @@ export default function MitigationTab({
                     </Box>
 
                     {/* Mitigation Table */}
-                    <TableContainer sx={{ mb: 2 }} component={Paper}>
+                    <TableContainer sx={{ mb: 2 }} >
                         <Table >
                             <TableHead>
                                 <TableRow>
@@ -170,33 +172,62 @@ export default function MitigationTab({
                                             ></TextField>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField
-                                                fullWidth
-                                                select size="small"
-                                                value={row.priority}
-                                                onChange={(e) =>
-                                                    formik.setFieldValue(`mitigations.${i}.priority`, e.target.value)
+                                            <Autocomplete
+                                                size="small"
+                                                options={[
+                                                    { value: 'low', label: 'Low' },
+                                                    { value: 'medium', label: 'Medium' },
+                                                    { value: 'high', label: 'High' },
+                                                ]}
+                                                getOptionLabel={(option) => option.label}
+                                                value={row.priority ? 
+                                                    [
+                                                        { value: 'low', label: 'Low' },
+                                                        { value: 'medium', label: 'Medium' },
+                                                        { value: 'high', label: 'High' },
+                                                    ].find(option => option.value === row.priority) || null
+                                                    : null
                                                 }
-                                            >
-                                                <MenuItem value="low">Low</MenuItem>
-                                                <MenuItem value="medium">Medium</MenuItem>
-                                                <MenuItem value="high">High</MenuItem>
-                                            </TextField>
+                                                onChange={(event, newValue) => {
+                                                    formik.setFieldValue(`mitigations.${i}.priority`, newValue ? newValue.value : '');
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        fullWidth
+                                                    />
+                                                )}
+                                            />
                                         </TableCell>
                                         <TableCell>
-                                            <TextField
-                                                fullWidth
-                                                select size="small"
-                                                value={row.owner}
-                                                onChange={(e) =>
-                                                    formik.setFieldValue(`mitigations.${i}.owner`, e.target.value)
+                                            <Autocomplete
+                                                size="small"
+                                                options={[
+                                                    { value: 'product', label: 'Product' },
+                                                    { value: 'design', label: 'Design' },
+                                                    { value: 'qa', label: 'QA' },
+                                                    { value: 'engineering', label: 'Engineering' },
+                                                ]}
+                                                getOptionLabel={(option) => option.label}
+                                                value={row.owner ? 
+                                                    [
+                                                        { value: 'product', label: 'Product' },
+                                                        { value: 'design', label: 'Design' },
+                                                        { value: 'qa', label: 'QA' },
+                                                        { value: 'engineering', label: 'Engineering' },
+                                                    ].find(option => option.value === row.owner) || null
+                                                    : null
                                                 }
-                                            >
-                                                <MenuItem value="product">Product</MenuItem>
-                                                <MenuItem value="design">Design</MenuItem>
-                                                <MenuItem value="qa">QA</MenuItem>
-                                                <MenuItem value="engineering">Engineering</MenuItem>
-                                            </TextField>
+                                                onChange={(event, newValue) => {
+                                                    formik.setFieldValue(`mitigations.${i}.owner`, newValue ? newValue.value : '');
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        fullWidth
+                                                    />
+                                                )}
+                                            />
                                         </TableCell>
                                         <TableCell>
                                             <TextField
@@ -209,18 +240,32 @@ export default function MitigationTab({
                                             />
                                         </TableCell>
                                         <TableCell>
-                                            <TextField
-                                                fullWidth
-                                                select size="small"
-                                                value={row.status}
-                                                onChange={(e) =>
-                                                    formik.setFieldValue(`mitigations.${i}.status`, e.target.value)
+                                            <Autocomplete
+                                                size="small"
+                                                options={[
+                                                    { value: 'open', label: 'Open' },
+                                                    { value: 'in_progress', label: 'In Progress' },
+                                                    { value: 'complete', label: 'Complete' },
+                                                ]}
+                                                getOptionLabel={(option) => option.label}
+                                                value={row.status ? 
+                                                    [
+                                                        { value: 'open', label: 'Open' },
+                                                        { value: 'in_progress', label: 'In Progress' },
+                                                        { value: 'complete', label: 'Complete' },
+                                                    ].find(option => option.value === row.status) || null
+                                                    : null
                                                 }
-                                            >
-                                                <MenuItem value="open">Open</MenuItem>
-                                                <MenuItem value="in_progress">In Progress</MenuItem>
-                                                <MenuItem value="complete">Complete</MenuItem>
-                                            </TextField>
+                                                onChange={(event, newValue) => {
+                                                    formik.setFieldValue(`mitigations.${i}.status`, newValue ? newValue.value : '');
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        fullWidth
+                                                    />
+                                                )}
+                                            />
                                         </TableCell>
                                         <TableCell>
                                             <Box sx={{ display: 'flex', gap: 0.5 }}>
@@ -240,7 +285,7 @@ export default function MitigationTab({
                     </TableContainer>
 
                     {/* Audit Trail */}
-                    <Typography fontWeight={600} mb={1}>Audit Trail Notes</Typography>
+                    <Typography variant='h6' mb={1}>Audit Trail Notes</Typography>
                     <Typography variant="caption" color="text.secondary" mb={1}>
                         Short, PM-friendly record of key decisions (what we changed and why). This is used in audits and internal reviews.
                     </Typography>
@@ -264,7 +309,7 @@ export default function MitigationTab({
                     <Stack spacing={2}>
                         {/* Quick Actions */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Quick Actions</Typography>
+                            <Typography variant='h6' mb={2}>Quick Actions</Typography>
                             <Stack spacing={1}>
                                 <Button
                                     variant="outlined"
@@ -281,8 +326,8 @@ export default function MitigationTab({
 
                      {/* Action Items */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Action Items</Typography>
-                            <TableContainer sx={{ mb: 2 }} component={Paper}>
+                            <Typography variant='h6' mb={2}>Action Items</Typography>
+                            <TableContainer  >
 
                                 <Table size="small">
                                     <TableHead>
@@ -322,7 +367,7 @@ export default function MitigationTab({
 
                         {/* Policy Pack Preview */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Policy Pack Preview</Typography>
+                            <Typography variant='h6' mb={2}>Policy Pack Preview</Typography>
                             <Box
                                 sx={{
                                     bgcolor: '#0f172a',
@@ -342,7 +387,7 @@ export default function MitigationTab({
 
                         {/* Status Summary */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Status Summary</Typography>
+                            <Typography variant='h6' mb={2}>Status Summary</Typography>
                             <Typography variant="body2">
                                 <b>Coverage:</b> {coveragePercent}%
                                 <br />

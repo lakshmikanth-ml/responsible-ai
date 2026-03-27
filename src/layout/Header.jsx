@@ -46,6 +46,7 @@ const StyledAppBar = styled(AppBar, {
 })(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
   width: "100%",
+  position: "fixed",
 
   backgroundColor: theme.palette.background.navbar,
   borderWidth: 0,
@@ -175,7 +176,8 @@ export default function Header({ onMenuClick, open = true, user, mobileOpen }) {
           </IconButton>
         )} */}
 
-        <Box sx={{ display: "flex", alignItems: "center",
+        <Box sx={{ display: "flex",
+         alignItems: "center",
          
          }}>
           {!isMobile && open && <img

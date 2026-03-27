@@ -124,7 +124,7 @@ export default function TabGEvidence() {
                         <Typography variant="h6" fontWeight={700}>
                             G. Evidence
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" >
                             Upload and approve evidence artifacts for audits and release defensibility.
                         </Typography>
                     </Box>
@@ -145,18 +145,30 @@ export default function TabGEvidence() {
                 <Card variant="outlined">
                     <CardContent>
                         <Stack direction="row" justifyContent="space-between">
-                            <Typography fontWeight={600}>
+                            <Typography variant="h6">
                                 Evidence Vault (Local Demo Uploads)
-                               <br /> <Typography variant="body2" color="text.secondary"
+                               <br /> <Typography variant="body2"
+                                
                                     component="span" gutterBottom>
                                     Upload artifacts and mark them approved to satisfy gates and audits.
                                 </Typography>
                             </Typography>
-                            <Chip
-                                label={allRequiredApproved ? "COMPLETE" : "MISSING"}
-                                color={allRequiredApproved ? "success" : "warning"}
-                                size="small"
-                            />
+                            
+                             <Chip
+                                                        label={allRequiredApproved ? "INGESTED" : "MISSING"}
+                                                        size="small"
+                                                        sx={(theme) => ({
+                                                            bgcolor: allRequiredApproved 
+                                                                ? (theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(34, 197, 94, 0.08)')
+                                                                : (theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.15)' : 'rgba(251, 146, 60, 0.08)'),
+                                                            border: '1px solid',
+                                                            borderColor: allRequiredApproved 
+                                                                ? (theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.4)' : 'rgba(34, 197, 94, 0.3)')
+                                                                : (theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.4)' : 'rgba(251, 146, 60, 0.3)'),
+                                                            color: allRequiredApproved ? '#4caf50' : '#f97316',
+                                                            fontWeight: 600,
+                                                        })}
+                                                    />
                         </Stack>
 
                         <Stack direction="row" spacing={1} mt={1}>
@@ -171,15 +183,10 @@ export default function TabGEvidence() {
                         <TableContainer
                             sx={{
                                 mt: 2,
-                                border: "1px solid #ccc",
-                                borderRadius: 2,
-                                overflowX: "auto",
+                              
                             }}
                         >
-                            <Table size="small" sx={{
-                                borderColor: "#ccc", borderRadius: "8px",
-                                // borderCollapse: "separate", borderSpacing: "0 8px"
-                            }}>
+                            <Table >
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Evidence</TableCell>
@@ -199,11 +206,27 @@ export default function TabGEvidence() {
                                                         <Chip
                                                             label="Required"
                                                             size="small"
-                                                            color="error"
-                                                            sx={{ mr: 0.5 }}
+                                                            sx={{
+                                                                mr: 0.5,
+                                                                bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(239, 68, 68, 0.08)',
+                                                                border: '1px solid',
+                                                                borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(239, 68, 68, 0.3)',
+                                                                color: '#f44336',
+                                                                fontWeight: 600,
+                                                            }}
                                                         />
                                                     )}
-                                                    <Chip label={e.type} size="small" />
+                                                    <Chip 
+                                                        label={e.type} 
+                                                        size="small"
+                                                        sx={(theme) => ({
+                                                            bgcolor: theme.palette.mode === 'dark' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(59, 130, 246, 0.08)',
+                                                            border: '1px solid',
+                                                            borderColor: theme.palette.mode === 'dark' ? 'rgba(59, 130, 246, 0.4)' : 'rgba(59, 130, 246, 0.3)',
+                                                            color: '#3b82f6',
+                                                            fontWeight: 600,
+                                                        })}
+                                                    />
                                                 </Box>
                                             </TableCell>
 
@@ -221,17 +244,47 @@ export default function TabGEvidence() {
 
                                             <TableCell sx={{ minWidth: 140 }}>
                                                 {e.file ? (
-                                                    <Chip label="Uploaded" color="success" size="small" />
+                                                    <Chip 
+                                                        label="Uploaded" 
+                                                        size="small"
+                                                        sx={(theme) => ({
+                                                            bgcolor: theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(34, 197, 94, 0.08)',
+                                                            border: '1px solid',
+                                                            borderColor: theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.4)' : 'rgba(34, 197, 94, 0.3)',
+                                                            color: '#4caf50',
+                                                            fontWeight: 600,
+                                                        })}
+                                                    />
                                                 ) : (
-                                                    <Chip label="MISSING" color="warning" size="small" />
+                                                    <Chip 
+                                                        label="MISSING" 
+                                                        size="small"
+                                                        sx={(theme) => ({
+                                                            bgcolor: theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.15)' : 'rgba(251, 146, 60, 0.08)',
+                                                            border: '1px solid',
+                                                            borderColor: theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.4)' : 'rgba(251, 146, 60, 0.3)',
+                                                            color: '#f97316',
+                                                            fontWeight: 600,
+                                                        })}
+                                                    />
                                                 )}
                                             </TableCell>
 
                                             <TableCell sx={{ minWidth: 140 }}>
                                                 <Chip
                                                     label={e.approved ? "APPROVED" : "PENDING"}
-                                                    color={e.approved ? "success" : "warning"}
                                                     size="small"
+                                                    sx={(theme) => ({
+                                                        bgcolor: e.approved 
+                                                            ? (theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(34, 197, 94, 0.08)')
+                                                            : (theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.15)' : 'rgba(251, 146, 60, 0.08)'),
+                                                        border: '1px solid',
+                                                        borderColor: e.approved 
+                                                            ? (theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.4)' : 'rgba(34, 197, 94, 0.3)')
+                                                            : (theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.4)' : 'rgba(251, 146, 60, 0.3)'),
+                                                        color: e.approved ? '#4caf50' : '#f97316',
+                                                        fontWeight: 600,
+                                                    })}
                                                 />
                                             </TableCell>
 
@@ -262,12 +315,19 @@ export default function TabGEvidence() {
                         </TableContainer>
 
                         <Box mt={2} color="text.secondary"
-                            sx={{
-                                border: "1px solid #dbe6ff",
-                                background: "linear-gradient(180deg, #f5f8ff 0%, #f2f6ff 100%)",
-                                borderRadius: "14px",
-                                padding: "12px",
-                                color: "#0b2a70"
+                           sx={{
+                                border: '1px solid',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(171, 171, 171, 0.15)' 
+                                    : '#888f9e',
+                                background: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%)' 
+                                    : 'linear-gradient(180deg, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0.02) 100%)',
+                                borderRadius: '14px',
+                                padding: '12px',
+                                color: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(255, 255, 255, 0.9)' 
+                                    : '#0b2a70'
                             }}>
                             Release Gate requires approved failover/fallback protocols and
                             incident response playbook (minimum).

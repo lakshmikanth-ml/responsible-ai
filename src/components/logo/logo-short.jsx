@@ -106,7 +106,7 @@ const LogoShort = forwardRef(
         }
 
         return (
-            <Link component={RouterLink} to="/app/roi" sx={{ display: "contents" }}>
+            <Link component={RouterLink} to="/app/fairnessandondiscrimination" sx={{ display: "contents" }}>
                 {logo}
             </Link>
         );

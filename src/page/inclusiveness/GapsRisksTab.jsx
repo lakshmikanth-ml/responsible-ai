@@ -28,6 +28,7 @@ import {
     Stack,
     Chip,
     Divider,
+    Autocomplete,
 } from "@mui/material";
 
 /* ================= INITIAL VALUES ================= */
@@ -93,12 +94,15 @@ export default function GapsRisksTab({ initialValues, onSave, onGenerateRisks, o
     };
 
     return (
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 2 }}>
             <Grid container spacing={3}>
                 {/* LEFT: main content */}
                 <Grid size={{ xs: 12, md: 8 }}>
-                    <Typography fontWeight={700} mb={1}>E. Gaps & Risks</Typography>
-                    <Typography variant="body2" color="text.secondary" mb={2}>
+                    <Typography
+                    variant="h6"
+                     fontWeight={700} >E. Gaps & Risks</Typography>
+                    <Typography variant="body2" 
+                     mb={2}>
                         Risks are generated from missing items across A–D, missing evidence approvals, and missing monitoring. Assign owners and track.
                     </Typography>
 
@@ -109,7 +113,7 @@ export default function GapsRisksTab({ initialValues, onSave, onGenerateRisks, o
 
                     {/* Risks Table */}
                     <TableContainer sx={{ mb: 2 }}
-                        component={Paper}>
+                       >
                         <Table >
                             <TableHead>
                                 <TableRow>
@@ -132,41 +136,89 @@ export default function GapsRisksTab({ initialValues, onSave, onGenerateRisks, o
                                 {formik.values.risks.map((row, i) => (
                                     <TableRow key={row.key}>
                                         <TableCell>
-                                            <TextField
-                                                fullWidth
-                                                select size="small"
-                                                value={row.severity}
-                                                onChange={(e) => formik.setFieldValue(`risks.${i}.severity`, e.target.value)}
-                                            >
-                                                <MenuItem value="low">Low</MenuItem>
-                                                <MenuItem value="medium">Medium</MenuItem>
-                                                <MenuItem value="high">High</MenuItem>
-                                            </TextField>
+                                            <Autocomplete
+                                                size="small"
+                                                options={[
+                                                    { value: 'low', label: 'Low' },
+                                                    { value: 'medium', label: 'Medium' },
+                                                    { value: 'high', label: 'High' },
+                                                ]}
+                                                getOptionLabel={(option) => option.label}
+                                                value={row.severity ? 
+                                                    [
+                                                        { value: 'low', label: 'Low' },
+                                                        { value: 'medium', label: 'Medium' },
+                                                        { value: 'high', label: 'High' },
+                                                    ].find(option => option.value === row.severity) || null
+                                                    : null
+                                                }
+                                                onChange={(event, newValue) => {
+                                                    formik.setFieldValue(`risks.${i}.severity`, newValue ? newValue.value : '');
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        fullWidth
+                                                    />
+                                                )}
+                                            />
                                         </TableCell>
                                         <TableCell>{row.risk}</TableCell>
                                         <TableCell>
-                                            <TextField
-                                                fullWidth
-                                                select size="small"
-                                                value={row.status}
-                                                onChange={(e) => formik.setFieldValue(`risks.${i}.status`, e.target.value)}
-                                            >
-                                                <MenuItem value="open">Open</MenuItem>
-                                                <MenuItem value="mitigated">Mitigated</MenuItem>
-                                            </TextField>
+                                            <Autocomplete
+                                                size="small"
+                                                options={[
+                                                    { value: 'open', label: 'Open' },
+                                                    { value: 'mitigated', label: 'Mitigated' },
+                                                ]}
+                                                getOptionLabel={(option) => option.label}
+                                                value={row.status ? 
+                                                    [
+                                                        { value: 'open', label: 'Open' },
+                                                        { value: 'mitigated', label: 'Mitigated' },
+                                                    ].find(option => option.value === row.status) || null
+                                                    : null
+                                                }
+                                                onChange={(event, newValue) => {
+                                                    formik.setFieldValue(`risks.${i}.status`, newValue ? newValue.value : '');
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        fullWidth
+                                                    />
+                                                )}
+                                            />
                                         </TableCell>
                                         <TableCell>
-                                            <TextField
-                                                fullWidth
-                                                select size="small"
-                                                value={row.owner}
-                                                onChange={(e) => formik.setFieldValue(`risks.${i}.owner`, e.target.value)}
-                                            >
-                                                <MenuItem value="product">Product</MenuItem>
-                                                <MenuItem value="design">Design</MenuItem>
-                                                <MenuItem value="ml">ML Engineering</MenuItem>
-                                                <MenuItem value="qa">QA</MenuItem>
-                                            </TextField>
+                                            <Autocomplete
+                                                size="small"
+                                                options={[
+                                                    { value: 'product', label: 'Product' },
+                                                    { value: 'design', label: 'Design' },
+                                                    { value: 'ml', label: 'ML Engineering' },
+                                                    { value: 'qa', label: 'QA' },
+                                                ]}
+                                                getOptionLabel={(option) => option.label}
+                                                value={row.owner ? 
+                                                    [
+                                                        { value: 'product', label: 'Product' },
+                                                        { value: 'design', label: 'Design' },
+                                                        { value: 'ml', label: 'ML Engineering' },
+                                                        { value: 'qa', label: 'QA' },
+                                                    ].find(option => option.value === row.owner) || null
+                                                    : null
+                                                }
+                                                onChange={(event, newValue) => {
+                                                    formik.setFieldValue(`risks.${i}.owner`, newValue ? newValue.value : '');
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        fullWidth
+                                                    />
+                                                )}
+                                            />
                                         </TableCell>
                                         <TableCell>{row.recommendedAction}</TableCell>
                                     </TableRow>
@@ -183,7 +235,7 @@ export default function GapsRisksTab({ initialValues, onSave, onGenerateRisks, o
                     <Stack spacing={2}>
                         {/* Quick Actions */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Quick Actions</Typography>
+                            <Typography variant="h6" mb={2}>Quick Actions</Typography>
                             <Stack spacing={1}>
                                 <Button
                                     variant="outlined"
@@ -199,10 +251,10 @@ export default function GapsRisksTab({ initialValues, onSave, onGenerateRisks, o
                         </Card>
                         {/* Action Items */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Action Items</Typography>
-                            <TableContainer sx={{ mb: 2 }} component={Paper}>
+                            <Typography variant="h6" mb={2}>Action Items</Typography>
+                            <TableContainer>
 
-                                <Table size="small">
+                                <Table >
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>Priority</TableCell>
@@ -240,7 +292,7 @@ export default function GapsRisksTab({ initialValues, onSave, onGenerateRisks, o
 
                         {/* Policy Pack Preview */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Policy Pack Preview</Typography>
+                            <Typography variant={"h6"} mb={2}>Policy Pack Preview</Typography>
                             <Box
                                 sx={{
                                     bgcolor: '#0f172a',
@@ -260,7 +312,7 @@ export default function GapsRisksTab({ initialValues, onSave, onGenerateRisks, o
 
                         {/* Status Summary */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Status Summary</Typography>
+                            <Typography variant="h6" mb={2}>Status Summary</Typography>
                             <Typography variant="body2">
                                 <b>Coverage:</b> {coveragePercent}%
                                 <br />

@@ -178,7 +178,7 @@ export default function TabAObjective() {
                             A. Objective & Risk Intent
                         </Typography>
                         <Typography variant="body2"
-                         color="text.secondary" mt={0.5}>
+                         mt={0.5}>
                             Define why explainability is required, what failure looks like,
                             and who is accountable. Missing objectives can block training for
                             decision-influencing use cases.
@@ -278,7 +278,7 @@ export default function TabAObjective() {
                     {/* LEFT — RISK DRIVERS */}
                     <Grid size={{ xs: 12, md: 6 }}>
                         <Box>
-                            <Typography variant="subtitle2" mb={1} sx={{ color: "black" }} >
+                            <Typography variant="h6" mb={1}  >
                                 Risk Drivers (Check all that apply)
                             </Typography>
 
@@ -297,7 +297,10 @@ export default function TabAObjective() {
                                                 },
                                             }}
                                         >
-                                            <Typography fontWeight={600} mb={0.5}>
+                                            <Typography
+                                            variant="subtitle1"
+                                            
+                                            fontWeight={600} mb={0.5}>
                                                 {g.title}
                                             </Typography>
 
@@ -313,7 +316,9 @@ export default function TabAObjective() {
                                                                 onChange={() => toggleRisk(key)}
                                                             />
                                                         }
-                                                        label={i}
+                                               label={<Typography 
+                                                variant="body2">
+                                                {i} </Typography>  }
                                                     />
                                                 );
                                             })}
@@ -332,7 +337,7 @@ export default function TabAObjective() {
                                 top: 16,
                             }}
                         >
-                            <Typography variant="subtitle2" mb={1} sx={{ color: "black" }}>
+                            <Typography variant="subtitle2" mb={1} >
                                 Explainability Contract
                             </Typography>
 
@@ -352,7 +357,7 @@ export default function TabAObjective() {
                                     borderRadius: "14px",
                                     border: "1px solid #d0d7e2",
                                     borderLeft: "4px solid #184ea4",
-                                    background: "#f8fafc",
+                                    background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.neutral : "#f8fafc",
                                 }}
                             >
                                 <Typography variant="body2">
@@ -364,77 +369,7 @@ export default function TabAObjective() {
                     </Grid>
                 </Grid>
 
-                {/* RISK DRIVERS */}
-                {/* <Box mt={2}>
-                    <Typography variant="subtitle2" mb={1}>
-                        Risk Drivers (Check all that apply)
-                    </Typography>
-
-                    <Grid container spacing={2}>
-                        {RISK_GROUPS.map((g) => (
-                            <Grid key={g.title} size={{ xs: 12, md: 4 }}>
-                                <Card
-                                    variant="outlined"
-                                    sx={{
-                                        p: 1.5,
-                                        borderRadius: "14px",
-                                        height: "100%",
-                                    }}
-                                >
-                                    <Typography fontWeight={600} mb={0.5}>
-                                        {g.title}
-                                    </Typography>
-
-                                    {g.items.map((i) => {
-                                        const key = `${g.title}-${i}`;
-                                        return (
-                                            <FormControlLabel
-                                                key={key}
-                                                control={
-                                                    <Checkbox
-                                                        size="small"
-                                                        checked={!!risks[key]}
-                                                        onChange={() => toggleRisk(key)}
-                                                    />
-                                                }
-                                                label={i}
-                                            />
-                                        );
-                                    })}
-                                </Card>
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Box> */}
-
-                {/* CONTRACT */}
-                {/* <Box mt={2}>
-                    <TextField
-                        fullWidth
-                        multiline
-                        minRows={4}
-                        label="Minimum Explanation Standard (Contract Summary)"
-                        placeholder="Example: Mandatory outputs must include citations + business-readable reasoning. If confidence is low, system must route to SME review."
-                        value={contract}
-                        onChange={(e) => setContract(e.target.value)}
-                    />
-
-                    <Box
-                        sx={{
-                            mt: 1.5,
-                            p: 1.5,
-                            borderRadius: "14px",
-                            border: "1px solid #d0d7e2",
-                            borderLeft: "4px solid #184ea4",
-                            background: "#f8fafc",
-                        }}
-                    >
-                        <Typography variant="body2">
-                            This becomes the “Explainability Contract” for the model version.
-                            It is used in the gates and in the Guardian policy pack.
-                        </Typography>
-                    </Box>
-                </Box> */}
+              
             </CardContent>
         </Card>
     );

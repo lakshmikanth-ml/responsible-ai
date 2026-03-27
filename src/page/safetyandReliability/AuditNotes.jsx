@@ -59,7 +59,7 @@ export default function AuditTrail() {
             <CardContent>
                 {/* Header */}
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography fontWeight={600}>Audit Trail Notes</Typography>
+                    <Typography variant="h6" >Audit Trail Notes</Typography>
                     <Button
                         variant="outlined"
                         size="small"
@@ -101,9 +101,9 @@ export default function AuditTrail() {
                 {/* Table (same as original) */}
                 <TableContainer sx={{
                     mt: 2,
-                    border: "1px solid #ccc", borderRadius: 2
+                    
                 }}>
-                    <Table size="small"
+                    <Table 
                     >
                         <TableHead>
                             <TableRow>

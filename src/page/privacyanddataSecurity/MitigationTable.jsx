@@ -79,7 +79,7 @@ export default function TabFMitigation() {
                         F. Mitigation (What We Will Implement)
                     </Typography>
 
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" >
                         Structured mitigation tasks mapped to risks.
                     </Typography>
                 </Box>
@@ -134,8 +134,7 @@ export default function TabFMitigation() {
                                         <TableCell colSpan={7}>
                                             <Typography
                                                 color="text.secondary"
-                                                fontWeight={600}
-                                            >
+                                                                                >
                                                 No mitigations yet. Add mitigations for
                                                 critical/high risks.
                                             </Typography>
@@ -254,7 +253,7 @@ export default function TabFMitigation() {
                     mt: 2,
                     p: 2,
                     borderRadius: 2,
-                    background: "#f8fafc",
+                    background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.neutral : "#f8fafc",
                     borderLeft: "4px solid #184ea4",
                 }}
             >

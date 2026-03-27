@@ -176,7 +176,7 @@ const ProjectContextCard = ({
                 </Typography>
             )}
 
-            <Typography variant="caption" color="text.secondary" mt={1} display="block">
+            <Typography variant="caption"  mt={1} display="block">
                 Data persists locally (browser localStorage) for demo realism.
             </Typography>
         </CardContent>
@@ -547,8 +547,40 @@ const Index = () => {
                             color: gateStatuses.guardianHealth === 'UNKNOWN' ? '#f57c00' : '#2e7d32',
                         },
                     ].map((gate, idx) => (
-                        <Card key={idx} variant="outlined" sx={{ p: 2 }}>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                        <Card 
+                            key={idx} 
+                            variant="outlined" 
+                            sx={{ 
+                                p: 2,
+                                border: '1px solid',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(171, 171, 171, 0.15)' 
+                                    : 'rgba(117, 117, 117, 0.2)',
+                                background: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.01) 100%)' 
+                                    : 'linear-gradient(180deg, #ffffff 0%, #fafafa 100%)',
+                                transition: 'all 0.2s ease-in-out',
+                                '&:hover': {
+                                    borderColor: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(171, 171, 171, 0.25)' 
+                                        : 'rgba(117, 117, 117, 0.3)',
+                                    transform: 'translateY(-2px)',
+                                    boxShadow: (theme) => theme.palette.mode === 'dark' 
+                                        ? '0 4px 12px rgba(0, 0, 0, 0.3)' 
+                                        : '0 4px 12px rgba(0, 0, 0, 0.1)',
+                                },
+                            }}
+                        >
+                            <Typography 
+                                variant="subtitle2"
+                                sx={{ 
+                                    fontWeight: 600, 
+                                    mb: 1,
+                                    color: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(255, 255, 255, 0.95)' 
+                                        : 'rgba(0, 0, 0, 0.87)',
+                                }}
+                            >
                                 {gate.title}
                             </Typography>
                             <Box sx={{
@@ -556,22 +588,48 @@ const Index = () => {
                                 alignItems: 'center',
                                 gap: 1,
                                 mb: 1.5,
-                                p: 1,
-                                bgcolor: gate.color + '15',
+                                p: "6px",
+                                bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                    ? gate.color + '25' 
+                                    : gate.color + '15',
                                 borderRadius: '4px',
                                 width: 'fit-content',
+                                border: '1px solid',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? gate.color + '40' 
+                                    : gate.color + '30',
                             }}>
                                 <Box sx={{
                                     width: 10,
                                     height: 10,
                                     borderRadius: '50%',
                                     bgcolor: gate.color,
+                                    boxShadow: (theme) => theme.palette.mode === 'dark' 
+                                        ? `0 0 8px ${gate.color}40` 
+                                        : `0 0 8px ${gate.color}20`,
                                 }} />
-                                <Typography variant="caption" sx={{ fontWeight: 700, color: gate.color }}>
+                                <Typography 
+                                    variant="caption" 
+                                    sx={{ 
+                                        fontWeight: 700, 
+                                        color: gate.color,
+                                        textShadow: (theme) => theme.palette.mode === 'dark' 
+                                            ? `0 0 4px ${gate.color}20` 
+                                            : 'none',
+                                    }}
+                                >
                                     {gate.status}
                                 </Typography>
                             </Box>
-                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.5 }}>
+                            <Typography 
+                                variant="caption" 
+                              
+                                sx={{ 
+                                    display: 'block', 
+                                    lineHeight: 1.5,
+                                   
+                                }}
+                            >
                                 {gate.hint}
                             </Typography>
                         </Card>

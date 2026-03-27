@@ -175,21 +175,21 @@ export default function TrainingReadinessTab() {
 
 
     return (
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 2 }}>
             <Grid container spacing={3}>
                 {/* LEFT: form + table */}
                 <Grid size={{ xs: 12, md: 8 }}>
-                    <Typography fontWeight={700} mb={1}>
+                    <Typography fontWeight={700}variant='h6'>
                         C. Training Readiness (DFA Ingestion)
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" mb={2}>
+                    <Typography variant="body2"  mb={2}>
                         This pillar page ingests DFA JSON (from the separate DFA app) to populate training readiness signals that affect inclusiveness risk (language coverage, readability, data provenance, and representation notes).
                     </Typography>
 
                     <Box component="form" onSubmit={formik.handleSubmit}>
                         <Grid container spacing={2} mb={2}>
                             {/* DFA JSON */}
-                            <Grid item xs={12}>
+                            <Grid  size={{xs:12}}>
                                 <TextField
                                     fullWidth
                                     multiline
@@ -200,6 +200,7 @@ export default function TrainingReadinessTab() {
                                     error={formik.touched.dfaJson && Boolean(formik.errors.dfaJson)}
                                     helperText={formik.touched.dfaJson && formik.errors.dfaJson}
                                 />
+
                                 <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
                                     <Button variant="outlined" onClick={handleLoadSampleLocal}>
                                         Load DFA Sample
@@ -208,13 +209,30 @@ export default function TrainingReadinessTab() {
                                         Ingest DFA JSON
                                     </Button>
                                 </Box>
-                                <Typography variant="body2" color="text.secondary" mt={1} gutterBottom>
+
+                                <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                    mt={1}
+                                    gutterBottom
+                                >
                                     Ingestion populates the table to the right and influences Pre-Training Gate.
                                 </Typography>
                             </Grid>
-                            <Grid item xs={12}>
-                                <Box sx={{ mt: 0, p: 1, bgcolor: '#f5f5f5', background: 'linear-gradient(180deg, #f5f8ff 0%, #f2f6ff 100%)', color: '#0b2a70', borderRadius: 2 }}>
-                                    <Typography fontWeight={600} mb={1}>What PMs should look for in DFA:</Typography>
+                            <Grid size={{xs:12,md:6}}>
+                                <Box sx={{ 
+    mt: 0, 
+    p: 1, 
+    
+    color: (theme) => theme.palette.mode === 'dark' ? '#60a5fa' : '#0b2a70', 
+    borderRadius: 2,
+    border: '1px solid',
+    borderColor: (theme) =>
+         theme.palette.mode === 'dark' ? 
+    'rgba(171, 171, 171, 0.15)' :
+    'rgba(117, 117, 117, 0.2)'
+}}>
+                                    <Typography variant='h6' mb={1}>What PMs should look for in DFA:</Typography>
                                     <List dense>
                                         <ListItem disablePadding>
                                             <ListItemText primary="Language coverage flags (English only vs multilingual needs)" />
@@ -232,7 +250,8 @@ export default function TrainingReadinessTab() {
                                 </Box>
                             </Grid>
                             {/* DFA Owner */}
-                            <Grid size={{xs:12,md:6,lg:4}}>
+                            <Grid size={{xs:12,md:6,
+                            lg:6}}>
                               <Autocomplete
   fullWidth
   size="small"
@@ -254,7 +273,7 @@ export default function TrainingReadinessTab() {
                         </Grid>
 
                         {/* DFA Signals Table */}
-                        <Typography fontWeight={600} mb={1}>DFA Signals</Typography>
+                        <Typography variant="h6" mb={1}>DFA Signals</Typography>
                         <TableContainer sx={{ mb: 2 }} component={Paper}>
                             <Table>
                                 <TableHead>
@@ -271,11 +290,39 @@ export default function TrainingReadinessTab() {
                                             <TableCell>{row.label}</TableCell>
                                             <TableCell>{row.value}</TableCell>
                                             <TableCell>
-                                                <Chip
-                                                    size="small"
-                                                    color={row.status === 'missing' ? 'error' : 'success'}
-                                                    label={row.status === 'missing' ? 'Missing' : 'Available'}
-                                                />
+     <Chip
+  size="small"
+  label={row.status === "missing" ? "Missing" : "Available"}
+  sx={(theme) =>
+    row.status === "missing"
+      ? {
+          bgcolor:
+            theme.palette.mode === "dark"
+              ? "rgba(244, 67, 54, 0.15)"
+              : "rgba(244, 67, 54, 0.08)",
+          border: "1px solid",
+          borderColor:
+            theme.palette.mode === "dark"
+              ? "rgba(244, 67, 54, 0.4)"
+              : "rgba(244, 67, 54, 0.3)",
+          color: "#f44336",
+          fontWeight: 600,
+        }
+      : {
+          bgcolor:
+            theme.palette.mode === "dark"
+              ? "rgba(76, 175, 80, 0.15)"
+              : "rgba(76, 175, 80, 0.08)",
+          border: "1px solid",
+          borderColor:
+            theme.palette.mode === "dark"
+              ? "rgba(76, 175, 80, 0.4)"
+              : "rgba(76, 175, 80, 0.3)",
+          color: "#4caf50",
+          fontWeight: 600,
+        }
+  }
+/>
                                             </TableCell>
                                             <TableCell>{row.interpretation}</TableCell>
                                         </TableRow>
@@ -296,7 +343,7 @@ export default function TrainingReadinessTab() {
                     <Stack spacing={2}>
                         {/* Quick Actions */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Quick Actions</Typography>
+                            <Typography variant="h6" mb={2}>Quick Actions</Typography>
                             <Stack spacing={1}>
                                 <Button
                                     variant="outlined"
@@ -313,8 +360,8 @@ export default function TrainingReadinessTab() {
 
                    {/* Action Items */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Action Items</Typography>
-                            <TableContainer sx={{ mb: 2 }} component={Paper}>
+                            <Typography variant="h6" mb={2}>Action Items</Typography>
+                            <TableContainer >
 
                                 <Table size="small">
                                     <TableHead>
@@ -354,7 +401,7 @@ export default function TrainingReadinessTab() {
 
                         {/* Policy Pack Preview */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Policy Pack Preview</Typography>
+                            <Typography variant="h6" mb={2}>Policy Pack Preview</Typography>
                             <Box
                                 sx={{
                                     bgcolor: '#0f172a',
@@ -373,8 +420,9 @@ export default function TrainingReadinessTab() {
                         </Card>
 
                         {/* Status Summary */}
-                        <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Status Summary</Typography>
+                        <Card variant="outlined"
+                         sx={{ p: 2 }}>
+                            <Typography variant="h6" mb={2}>Status Summary</Typography>
                             <Typography variant="body2">
                                 <b>Coverage:</b> {coveragePercent}%
                                 <br />

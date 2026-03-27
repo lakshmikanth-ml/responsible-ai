@@ -17,6 +17,7 @@ import {
     Checkbox,
     IconButton,
     TablePagination,
+    TableContainer,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
@@ -124,7 +125,7 @@ export default function TabGEvidenceAudit() {
                                                     <Typography variant="h6">
                                                         G. Evidence & Audit Trail
                                                     </Typography>
-                                                    <Typography variant="body2" color="text.secondary">
+                                                    <Typography variant="body2" >
                                                         Evidence must be structured, approved, and runtime-backed.
                                                     </Typography>
                                                 </Box>
@@ -182,8 +183,8 @@ export default function TabGEvidenceAudit() {
                                             </Grid>
 
                                             {/* TABLE */}
-                                            <Box sx={{ overflowX: "auto", border: "1px solid", borderColor: "divider" }}>
-                                                <Table stickyHeader size="small" sx={{ minWidth: 1000 }}>
+                           <TableContainer>
+            <Table  size="small" >
                                                     <TableHead>
                                                         <TableRow>
                                                             <TableCell />
@@ -304,7 +305,7 @@ export default function TabGEvidenceAudit() {
                                                         })}
                                                     </TableBody>
                                                 </Table>
-                                            </Box>
+                                           </TableContainer>
 
                                             {/* PAGINATION */}
                                             <TablePagination
@@ -326,7 +327,7 @@ export default function TabGEvidenceAudit() {
                                                     mt: 2,
                                                     p: 2,
                                                     borderRadius: 2,
-                                                    background: "#f8fafc",
+                                                    background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.neutral : "#f8fafc",
                                                     borderLeft: "4px solid #184ea4",
                                                 }}
                                             >

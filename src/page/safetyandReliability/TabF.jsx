@@ -130,7 +130,7 @@ export default function TabFGapsRisks() {
                             F. Mitigation
 
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" >
                             Action plan to close safety and reliability risks (owners + due dates).
                         </Typography>
                     </Box>
@@ -151,17 +151,28 @@ export default function TabFGapsRisks() {
                 <Card variant="outlined">
                     <CardContent>
                         <Stack direction="row" justifyContent="space-between">
-                            <Typography fontWeight={600}>
+                            <Typography variant="h6" >
                                 Risk Register (Auto-Generated)
-                                <Typography variant="body2" display="block" color="text.secondary" gutterBottom>
+                                <Typography variant="body2"
+                                 display="block"  gutterBottom>
 
                                     Generated from missing controls across tabs + runtime signals. Update owner/status/due date.
                                 </Typography>
                             </Typography>
                             <Chip
                                 label={allClosed ? "COMPLETE" : "PARTIAL"}
-                                color={allClosed ? "success" : "warning"}
                                 size="small"
+                                sx={(theme) => ({
+                                    bgcolor: allClosed 
+                                        ? (theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(34, 197, 94, 0.08)')
+                                        : (theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.15)' : 'rgba(251, 146, 60, 0.08)'),
+                                    border: '1px solid',
+                                    borderColor: allClosed 
+                                        ? (theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.4)' : 'rgba(34, 197, 94, 0.3)')
+                                        : (theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.4)' : 'rgba(251, 146, 60, 0.3)'),
+                                    color: allClosed ? '#4caf50' : '#f97316',
+                                    fontWeight: 600,
+                                })}
                             />
                         </Stack>
 
@@ -177,19 +188,10 @@ export default function TabFGapsRisks() {
                         <TableContainer
                             sx={{
                                 mt: 2,
-                                border: "1px solid #ccc",
-                                borderRadius: 2,
-                                overflowX: "auto",
+                               
                             }}
                         >
-                            <Table
-                                size="small"
-                                sx={{
-                                    mt: 2, borderColor: "#ccc", borderRadius: "8px",
-                                    borderCollapse: "separate", borderSpacing: "0 8px"
-                                }}
-
-                            >
+                            <Table>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>ID</TableCell>
@@ -217,8 +219,17 @@ export default function TabFGapsRisks() {
                                             </TableCell>
 
                                             <TableCell>
-                                                <Chip label={r.severity} color="error" size="small" />
-                                            </TableCell>
+ <Chip 
+                                                    label={r.severity} 
+                                                    size="small"
+                                                    sx={(theme) => ({
+                                                        bgcolor: theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(239, 68, 68, 0.08)',
+                                                        border: '1px solid',
+                                                        borderColor: theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(239, 68, 68, 0.3)',
+                                                        color: '#f44336',
+                                                        fontWeight: 600,
+                                                    })}
+                                                />                                            </TableCell>
 
                                             <TableCell sx={{ minWidth: 200 }}>
                                                 <Autocomplete
@@ -275,11 +286,18 @@ export default function TabFGapsRisks() {
 
                         <Box mt={2} color="text.secondary"
                             sx={{
-                                border: "1px solid #dbe6ff",
-                                background: "linear-gradient(180deg, #f5f8ff 0%, #f2f6ff 100%)",
-                                borderRadius: "14px",
-                                padding: "12px",
-                                color: "#0b2a70"
+                                border: '1px solid',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(171, 171, 171, 0.15)' 
+                                    : '#888f9e',
+                                background: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%)' 
+                                    : 'linear-gradient(180deg, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0.02) 100%)',
+                                borderRadius: '14px',
+                                padding: '12px',
+                                color: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(255, 255, 255, 0.9)' 
+                                    : '#0b2a70'
                             }}
                         >
                             Mitigation drives release readiness. Gates improve only when risks/actions are actually closed and evidence is approved.
@@ -291,7 +309,7 @@ export default function TabFGapsRisks() {
                 <Card variant="outlined" sx={{ mt: 2 }}>
                     <CardContent>
                         <Stack direction="row" justifyContent="space-between">
-                            <Typography fontWeight={600}>Audit Trail Notes</Typography>
+                            <Typography variant="h6">Audit Trail Notes</Typography>
                             <Button size="small" onClick={addNote} disabled={!canAdd}>
                                 Add Note
                             </Button>
@@ -320,11 +338,9 @@ export default function TabFGapsRisks() {
                             </Grid>
                         </Grid>
 
-                        <Table size="small" mt={2}
-                            sx={{
-                                mt: 2, borderColor: "#ccc", borderRadius: "8px",
-                                border: "1px solid #ccc", borderSpacing: "0 8px"
-                            }}>
+<TableContainer sx={{mt:2}}>
+                        <Table 
+                           >
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Timestamp</TableCell>
@@ -351,6 +367,7 @@ export default function TabFGapsRisks() {
                                 )}
                             </TableBody>
                         </Table>
+                        </TableContainer>
                     </CardContent>
                 </Card>
             </CardContent >

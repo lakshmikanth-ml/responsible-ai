@@ -26,7 +26,11 @@ export const MuiTypography = {
             color: theme.palette.text.primary,
         }),
         h5: ({ theme }) => ({
-            color: theme.palette.text.secondary,
+            // color: theme.palette.text.secondary,
+             color:
+                theme.palette.mode === "dark"
+                    ? "#F7F7F7" 
+                    : "rgb(26, 26, 26)",
         }),
         h6: ({ theme }) => ({
             // color: theme.palette.text.primary,
@@ -39,8 +43,11 @@ export const MuiTypography = {
             color: theme.palette.text.secondary,
         }),
         body2: ({ theme }) => ({
-           
-              color:
+            // color:
+            //     theme.palette.mode === "dark"
+            //         ? theme.palette.text.secondary
+            //         : "rgb(26, 26, 26)",
+            color:
                 theme.palette.mode === "dark"
                     ? "#F7F7F7" 
                     : "rgb(26, 26, 26)",
@@ -49,10 +56,18 @@ export const MuiTypography = {
             color: theme.palette.text.primary,
         }),
         subtitle2: ({ theme }) => ({
-            color: theme.palette.text.secondary,
+            // color: theme.palette.text.secondary,
+            color:
+                theme.palette.mode === "dark"
+                    ? "#F7F7F7" 
+                    : "rgb(26, 26, 26)",
         }),
         caption: ({ theme }) => ({
-            color: theme.palette.text.secondary,
+            // color: theme.palette.text.secondary,
+              color:
+                theme.palette.mode === "dark"
+                    ? "#F7F7F7" 
+                    : "rgb(26, 26, 26)",
         }),
         overline: ({ theme }) => ({
             color: theme.palette.text.disabled,

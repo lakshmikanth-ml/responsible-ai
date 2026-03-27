@@ -121,7 +121,7 @@ const ProjectContextCard = ({
                 </Typography>
             )}
 
-            <Typography variant="caption" color="text.secondary" mt={1} display="block">
+            <Typography variant="caption"  mt={1} display="block">
                 Data persists locally (browser localStorage) for demo realism.
             </Typography>
         </CardContent>
@@ -819,9 +819,13 @@ export default function InclusivenessFormikPage() {
                         size="small"
                         sx={{
                             fontWeight: 600,
-                            bgcolor: 'rgba(25, 118, 210, 0.12)',
-                            borderColor: 'rgba(25, 118, 210, 0.35)',
-                            color: 'primary.dark',
+                            bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(59, 130, 246, 0.16)' : 'rgba(59, 130, 246, 0.08)',
+                            borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(59, 130, 246, 0.4)' : 'rgba(59, 130, 246, 0.3)',
+                            color: (theme) => theme.palette.mode === 'dark' ? '#60a5fa' : '#2563eb',
+                            '&:hover': {
+                                bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(59, 130, 246, 0.24)' : 'rgba(59, 130, 246, 0.12)',
+                                opacity: 0.8,
+                            },
                         }}
                     />
                     <Chip
@@ -830,9 +834,13 @@ export default function InclusivenessFormikPage() {
                         size="small"
                         sx={{
                             fontWeight: 600,
-                            bgcolor: '#fffbeb',
-                            borderColor: '#fcd34d',
-                            color: '#b45309',
+                            bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.16)' : 'rgba(251, 146, 60, 0.08)',
+                            borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.4)' : 'rgba(251, 146, 60, 0.3)',
+                            color: (theme) => theme.palette.mode === 'dark' ? '#fdba74' : '#f97316',
+                            '&:hover': {
+                                bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.24)' : 'rgba(251, 146, 60, 0.12)',
+                                opacity: 0.8,
+                            },
                         }}
                     />
                     <Chip
@@ -841,9 +849,13 @@ export default function InclusivenessFormikPage() {
                         size="small"
                         sx={{
                             fontWeight: 600,
-                            bgcolor: '#fff7ed',
-                            borderColor: '#fdba74',
-                            color: '#c2410c',
+                            bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(168, 85, 247, 0.16)' : 'rgba(168, 85, 247, 0.08)',
+                            borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(168, 85, 247, 0.4)' : 'rgba(168, 85, 247, 0.3)',
+                            color: (theme) => theme.palette.mode === 'dark' ? '#c084fc' : '#9333ea',
+                            '&:hover': {
+                                bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(168, 85, 247, 0.24)' : 'rgba(168, 85, 247, 0.12)',
+                                opacity: 0.8,
+                            },
                         }}
                     />
                     <Chip
@@ -852,9 +864,13 @@ export default function InclusivenessFormikPage() {
                         size="small"
                         sx={{
                             fontWeight: 600,
-                            bgcolor: '#fef2f2',
-                            borderColor: '#fca5a5',
-                            color: '#b91c1c',
+                            bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.16)' : 'rgba(239, 68, 68, 0.08)',
+                            borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(239, 68, 68, 0.3)',
+                            color: (theme) => theme.palette.mode === 'dark' ? '#f87171' : '#dc2626',
+                            '&:hover': {
+                                bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.24)' : 'rgba(239, 68, 68, 0.12)',
+                                opacity: 0.8,
+                            },
                         }}
                     />
                 </Stack>
@@ -1053,18 +1069,18 @@ export default function InclusivenessFormikPage() {
 const STATUS_CONFIG = {
     PASS: {
         label: "PASS",
-        color: "success",
-        bg: "success.light",
+        light: { bg: 'rgba(34, 197, 94, 0.08)', border: 'rgba(34, 197, 94, 0.3)', color: '#16a34a' },
+        dark: { bg: 'rgba(34, 197, 94, 0.16)', border: 'rgba(34, 197, 94, 0.4)', color: '#4ade80' },
     },
     BLOCKED: {
         label: "BLOCKED",
-        color: "error",
-        bg: "error.light",
+        light: { bg: 'rgba(239, 68, 68, 0.08)', border: 'rgba(239, 68, 68, 0.3)', color: '#dc2626' },
+        dark: { bg: 'rgba(239, 68, 68, 0.16)', border: 'rgba(239, 68, 68, 0.4)', color: '#f87171' },
     },
     DEGRADED: {
         label: "DEGRADED",
-        color: "warning",
-        bg: "warning.light",
+        light: { bg: 'rgba(251, 146, 60, 0.08)', border: 'rgba(251, 146, 60, 0.3)', color: '#f97316' },
+        dark: { bg: 'rgba(251, 146, 60, 0.16)', border: 'rgba(251, 146, 60, 0.4)', color: '#fdba74' },
     },
 };
 
@@ -1074,28 +1090,83 @@ function GateCard({ title, status, description }) {
 
     return (
         <Card
+            variant="outlined"
             sx={{
-                borderRadius: 3,
+                borderRadius: 2,
                 height: "100%",
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: (theme) => theme.palette.mode === 'dark' 
+                        ? `0 4px 20px ${config.dark.border.replace('0.4', '0.3')}` 
+                        : `0 4px 20px ${config.light.border.replace('0.3', '0.15')}`,
+                    borderColor: (theme) => theme.palette.mode === 'dark' 
+                        ? config.dark.border 
+                        : config.light.border,
+                },
+                bgcolor: (theme) => theme.palette.mode === 'dark' 
+                    ? config.dark.bg 
+                    : config.light.bg,
+                borderColor: (theme) => theme.palette.mode === 'dark' 
+                    ? config.dark.border 
+                    : config.light.border,
+                borderLeft: '4px solid',
+                borderLeftColor: (theme) => theme.palette.mode === 'dark' 
+                    ? config.dark.color 
+                    : config.light.color,
             }}
         >
-            <CardContent>
+            <CardContent sx={{ p: 2.5 }}>
                 <Box
                     display="flex"
                     justifyContent="space-between"
                     alignItems="center"
-                    mb={1}
+                    mb={1.5}
                 >
-                    <Typography fontWeight={600}>{title}</Typography>
+                    <Typography 
+                        fontWeight={700}
+                        sx={{ 
+                            fontSize: '1rem',
+                            color: (theme) => theme.palette.mode === 'dark' 
+                                ? theme.palette.text.primary 
+                                : 'inherit',
+                        }}
+                    >
+                        {title}
+                    </Typography>
                     <Chip
                         label={config.label}
-                        color={config.color}
+                        variant="outlined"
                         size="small"
-                        sx={{ fontWeight: 600 }}
+                        sx={{
+                            fontWeight: 700,
+                            bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                ? config.dark.bg 
+                                : config.light.bg,
+                            borderColor: (theme) => theme.palette.mode === 'dark' 
+                                ? config.dark.border 
+                                : config.light.border,
+                            color: (theme) => theme.palette.mode === 'dark' 
+                                ? config.dark.color 
+                                : config.light.color,
+                            '&:hover': {
+                                bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                    ? config.dark.bg 
+                                    : config.light.bg,
+                                opacity: 0.8,
+                            },
+                        }}
                     />
                 </Box>
 
-                <Typography variant="body2" color="text.secondary">
+                <Typography 
+                    variant="body2" 
+                    color="text.secondary"
+                    sx={{ 
+                        lineHeight: 1.5,
+                        fontSize: '0.875rem',
+                    }}
+                >
                     {description}
                 </Typography>
             </CardContent>

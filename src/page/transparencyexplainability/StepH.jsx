@@ -105,7 +105,7 @@ export default function TabHLifecycleMonitoring() {
                         <Typography variant="h6" fontWeight={700}>
                             H. Lifecycle Enforcement &amp; Monitoring
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" mt={0.5}>
+                        <Typography variant="body2"  mt={0.5}>
                             Compute gates and monitor runtime explainability using Guardian telemetry. This is where Transparency stays alive in production.
                         </Typography>
                     </Box>
@@ -167,7 +167,7 @@ export default function TabHLifecycleMonitoring() {
                                     whiteSpace: "pre-wrap",
                                     mt: 1,
                                     p: 1,
-                                    bgcolor: "#f8fafc",
+                                    bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : "#f8fafc",
                                     borderRadius: 1.5,
                                     border: "1px solid",
                                     borderColor: "divider",
@@ -192,7 +192,7 @@ export default function TabHLifecycleMonitoring() {
                                     whiteSpace: "pre-wrap",
                                     mt: 1,
                                     p: 1,
-                                    bgcolor: "#f8fafc",
+                                    bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : "#f8fafc",
                                     borderRadius: 1.5,
                                     border: "1px solid",
                                     borderColor: "divider",
@@ -216,7 +216,7 @@ export default function TabHLifecycleMonitoring() {
                         border: "1px solid",
                         borderColor: "divider",
                         borderLeft: "4px solid #184ea4",
-                        background: "#f8fafc",
+                        background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.neutral : "#f8fafc",
                         display: "flex",
                         gap: 1,
                         alignItems: "flex-start",

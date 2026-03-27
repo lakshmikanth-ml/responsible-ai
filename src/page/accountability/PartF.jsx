@@ -257,7 +257,7 @@ const PartF = ({ projectContext = {}, onStatusMessage }) => {
                                 Ingest DFA JSON
                             </Button>
                         </Box>
-                        <Typography variant="caption" sx={{ display: 'block', mb: 1, color: 'text.secondary' }}>
+                        <Typography variant="caption" sx={{ display: 'block', mb: 1,  }}>
                             Paste DFA JSON from the separate Data Foundation Analyzer app. This populates Tab C and influences gates.                        </Typography>
                         <TextField
                             multiline

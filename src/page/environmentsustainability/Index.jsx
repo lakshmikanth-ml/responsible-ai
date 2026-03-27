@@ -115,7 +115,7 @@ const ProjectContextCard = ({
                 </Typography>
             )}
 
-            <Typography variant="caption" color="text.secondary" mt={1} display="block">
+            <Typography variant="caption"  mt={1} display="block">
                 Data persists locally (browser localStorage) for demo realism.
             </Typography>
         </CardContent>
@@ -216,34 +216,218 @@ export default function EnvironmentalSustainabilityTabs() {
 
                 <Grid container spacing={2} mb={2}>
                     <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="caption" color="text.secondary">Lifecycle</Typography>
-                                <Typography fontWeight={600}>Baseline</Typography>
+                        <Card 
+                            variant="outlined"
+                            sx={{
+                                transition: 'all 0.2s ease-in-out',
+                                '&:hover': {
+                                    transform: 'translateY(-2px)',
+                                    boxShadow: (theme) => theme.palette.mode === 'dark' 
+                                        ? '0 4px 20px rgba(59, 130, 246, 0.3)' 
+                                        : '0 4px 20px rgba(59, 130, 246, 0.15)',
+                                    borderColor: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(59, 130, 246, 0.5)' 
+                                        : 'rgba(59, 130, 246, 0.3)',
+                                },
+                                bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(59, 130, 246, 0.08)' 
+                                    : 'rgba(59, 130, 246, 0.04)',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(59, 130, 246, 0.2)' 
+                                    : 'rgba(59, 130, 246, 0.15)',
+                                borderLeft: '4px solid',
+                                borderLeftColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? '#3b82f6' 
+                                    : '#2563eb',
+                            }}
+                        >
+                            <CardContent sx={{ p: 2, pb: '16px !important' }}>
+                                <Typography 
+                                    variant="caption" 
+                                    color="text.secondary"
+                                    sx={{ 
+                                        fontWeight: 600,
+                                        fontSize: '0.75rem',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.5px',
+                                    }}
+                                >
+                                    Lifecycle
+                                </Typography>
+                                <Typography 
+                                    fontWeight={700}
+                                    sx={{ 
+                                        mt: 1.5, 
+                                        fontSize: '1.2rem',
+                                        color: (theme) => theme.palette.mode === 'dark' 
+                                            ? '#60a5fa' 
+                                            : '#2563eb',
+                                    }}
+                                >
+                                    Baseline
+                                </Typography>
                             </CardContent>
                         </Card>
                     </Grid>
                     <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="caption" color="text.secondary">Coverage</Typography>
-                                <Typography fontWeight={600}>Limited</Typography>
+                        <Card 
+                            variant="outlined"
+                            sx={{
+                                transition: 'all 0.2s ease-in-out',
+                                '&:hover': {
+                                    transform: 'translateY(-2px)',
+                                    boxShadow: (theme) => theme.palette.mode === 'dark' 
+                                        ? '0 4px 20px rgba(168, 85, 247, 0.3)' 
+                                        : '0 4px 20px rgba(168, 85, 247, 0.15)',
+                                    borderColor: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(168, 85, 247, 0.5)' 
+                                        : 'rgba(168, 85, 247, 0.3)',
+                                },
+                                bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(168, 85, 247, 0.08)' 
+                                    : 'rgba(168, 85, 247, 0.04)',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(168, 85, 247, 0.2)' 
+                                    : 'rgba(168, 85, 247, 0.15)',
+                                borderLeft: '4px solid',
+                                borderLeftColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? '#a855f7' 
+                                    : '#9333ea',
+                            }}
+                        >
+                            <CardContent sx={{ p: 2, pb: '16px !important' }}>
+                                <Typography 
+                                    variant="caption" 
+                                    color="text.secondary"
+                                    sx={{ 
+                                        fontWeight: 600,
+                                        fontSize: '0.75rem',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.5px',
+                                    }}
+                                >
+                                    Coverage
+                                </Typography>
+                                <Typography 
+                                    fontWeight={700}
+                                    sx={{ 
+                                        mt: 1.5, 
+                                        fontSize: '1.2rem',
+                                        color: (theme) => theme.palette.mode === 'dark' 
+                                            ? '#c084fc' 
+                                            : '#9333ea',
+                                    }}
+                                >
+                                    Limited
+                                </Typography>
                             </CardContent>
                         </Card>
                     </Grid>
                     <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="caption" color="text.secondary">Evidence</Typography>
-                                <Typography fontWeight={600}>1</Typography>
+                        <Card 
+                            variant="outlined"
+                            sx={{
+                                transition: 'all 0.2s ease-in-out',
+                                '&:hover': {
+                                    transform: 'translateY(-2px)',
+                                    boxShadow: (theme) => theme.palette.mode === 'dark' 
+                                        ? '0 4px 20px rgba(251, 146, 60, 0.3)' 
+                                        : '0 4px 20px rgba(251, 146, 60, 0.15)',
+                                    borderColor: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(251, 146, 60, 0.5)' 
+                                        : 'rgba(251, 146, 60, 0.3)',
+                                },
+                                bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(251, 146, 60, 0.08)' 
+                                    : 'rgba(251, 146, 60, 0.04)',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(251, 146, 60, 0.2)' 
+                                    : 'rgba(251, 146, 60, 0.15)',
+                                borderLeft: '4px solid',
+                                borderLeftColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? '#fb923c' 
+                                    : '#f97316',
+                            }}
+                        >
+                            <CardContent sx={{ p: 2, pb: '16px !important' }}>
+                                <Typography 
+                                    variant="caption" 
+                                    color="text.secondary"
+                                    sx={{ 
+                                        fontWeight: 600,
+                                        fontSize: '0.75rem',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.5px',
+                                    }}
+                                >
+                                    Evidence
+                                </Typography>
+                                <Typography 
+                                    fontWeight={700}
+                                    sx={{ 
+                                        mt: 1.5, 
+                                        fontSize: '1.2rem',
+                                        color: (theme) => theme.palette.mode === 'dark' 
+                                            ? '#fdba74' 
+                                            : '#f97316',
+                                    }}
+                                >
+                                    1
+                                </Typography>
                             </CardContent>
                         </Card>
                     </Grid>
                     <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="caption" color="text.secondary">Risk</Typography>
-                                <Typography fontWeight={600} color="success.main">Low</Typography>
+                        <Card 
+                            variant="outlined"
+                            sx={{
+                                transition: 'all 0.2s ease-in-out',
+                                '&:hover': {
+                                    transform: 'translateY(-2px)',
+                                    boxShadow: (theme) => theme.palette.mode === 'dark' 
+                                        ? '0 4px 20px rgba(34, 197, 94, 0.3)' 
+                                        : '0 4px 20px rgba(34, 197, 94, 0.15)',
+                                    borderColor: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(34, 197, 94, 0.5)' 
+                                        : 'rgba(34, 197, 94, 0.3)',
+                                },
+                                bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(34, 197, 94, 0.08)' 
+                                    : 'rgba(34, 197, 94, 0.04)',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(34, 197, 94, 0.2)' 
+                                    : 'rgba(34, 197, 94, 0.15)',
+                                borderLeft: '4px solid',
+                                borderLeftColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? '#22c55e' 
+                                    : '#16a34a',
+                            }}
+                        >
+                            <CardContent sx={{ p: 2, pb: '16px !important' }}>
+                                <Typography 
+                                    variant="caption" 
+                                    color="text.secondary"
+                                    sx={{ 
+                                        fontWeight: 600,
+                                        fontSize: '0.75rem',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.5px',
+                                    }}
+                                >
+                                    Risk
+                                </Typography>
+                                <Typography 
+                                    fontWeight={700} 
+                                    sx={{ 
+                                        mt: 1.5, 
+                                        fontSize: '1.2rem',
+                                        color: (theme) => theme.palette.mode === 'dark' 
+                                            ? '#4ade80' 
+                                            : '#16a34a',
+                                    }}
+                                >
+                                    Low
+                                </Typography>
                             </CardContent>
                         </Card>
                     </Grid>
@@ -294,9 +478,9 @@ export default function EnvironmentalSustainabilityTabs() {
 function ObjectiveTab() {
     return (
         <Card sx={{ p: 2 }}>
-            <Typography fontWeight={600} mb={2}>Objective</Typography>
-            <TableContainer component={Paper} >
-                <Table size="small">
+            <Typography variant="h6" fontWeight={600} mb={2}>Objective</Typography>
+            <TableContainer >
+                <Table >
                     <TableHead>
                         <TableRow>
                             <TableCell>Item</TableCell>
@@ -342,7 +526,7 @@ function ObjectiveTab() {
 function CoverageTab() {
     return (
         <Card sx={{ p: 2 }}>
-            <Typography fontWeight={600} mb={2}>Coverage</Typography>
+            <Typography variant="h6" fontWeight={600} mb={2}>Coverage</Typography>
             <TableContainer component={Paper} >
                 <Table >
                     <TableHead>
@@ -377,7 +561,7 @@ function CoverageTab() {
 function ReadinessTab() {
     return (
         <Card sx={{ p: 2 }}>
-            <Typography fontWeight={600} mb={2}>Readiness</Typography>
+            <Typography variant="h6" fontWeight={600} mb={2}>Readiness</Typography>
             <TableContainer component={Paper} >
                 <Table >
                     <TableHead>
@@ -405,7 +589,7 @@ function ReadinessTab() {
 function EvaluationTab() {
     return (
         <Card sx={{ p: 2 }}>
-            <Typography fontWeight={600} mb={2}>Evaluation</Typography>
+            <Typography variant="h6" fontWeight={600} mb={2}>Evaluation</Typography>
             <Typography variant="body2" color="text.secondary" mb={2}>
                 No quantitative sustainability testing required at baseline maturity.
             </Typography>
@@ -423,7 +607,7 @@ function EvaluationTab() {
 function RisksTab() {
     return (
         <Card sx={{ p: 2 }}>
-            <Typography fontWeight={600} mb={2}>Risks</Typography>
+            <Typography variant="h6" fontWeight={600} mb={2}>Risks</Typography>
             <TableContainer component={Paper} >
                 <Table>
                     <TableHead>
@@ -448,7 +632,7 @@ function RisksTab() {
 function MitigationTab() {
     return (
         <Card sx={{ p: 2 }}>
-            <Typography fontWeight={600} mb={2}>Mitigation</Typography>
+            <Typography variant="h6" fontWeight={600} mb={2}>Mitigation</Typography>
             <TableContainer component={Paper} >
                 <Table>
                     <TableHead>
@@ -481,7 +665,7 @@ function MitigationTab() {
 function EvidenceTab() {
     return (
         <Card sx={{ p: 2 }}>
-            <Typography fontWeight={600} mb={2}>Evidence</Typography>
+            <Typography variant="h6" fontWeight={600} mb={2}>Evidence</Typography>
             <TableContainer component={Paper} >
                 <Table >
                     <TableHead>
@@ -506,7 +690,7 @@ function EvidenceTab() {
 function MonitoringTab() {
     return (
         <Card sx={{ p: 2 }}>
-            <Typography fontWeight={600} mb={2}>Monitoring</Typography>
+            <Typography variant="h6"  fontWeight={600} mb={2}>Monitoring</Typography>
             <TableContainer component={Paper} >
                 <Table >
                     <TableHead>

@@ -16,6 +16,7 @@ import {
     TableRow,
     TableCell,
     TableBody,
+    TableContainer,
 } from "@mui/material";
 import { useState } from "react";
 
@@ -95,7 +96,7 @@ export default function TabDEvaluation() {
                 <Stack direction="row" justifyContent="space-between">
                     <Box>
                         <Typography variant="h6" fontWeight={700}>D. Evaluation</Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" >
                             Pre-deployment testing: stress, chaos, edge cases, and UAT.
                         </Typography>
                     </Box>
@@ -132,15 +133,26 @@ export default function TabDEvaluation() {
                             <Typography variant="h6" fontWeight={700}>
                                 Pre-Deployment Testing
                             </Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                            <Typography variant="body2"  sx={{ mt: 0.5 }}>
                                 Validate stability under load, failures, edge inputs, and realistic workflows.
                             </Typography>
                         </Box>
-                        <Chip
-                            label={completed ? "COMPLETE" : "MISSING"}
-                            color={completed ? "success" : "warning"}
-                            size="small"
-                        />
+                        
+                         <Chip
+                                                    label={completed ? "INGESTED" : "MISSING"}
+                                                    size="small"
+                                                    sx={(theme) => ({
+                                                        bgcolor: completed 
+                                                            ? (theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(34, 197, 94, 0.08)')
+                                                            : (theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.15)' : 'rgba(251, 146, 60, 0.08)'),
+                                                        border: '1px solid',
+                                                        borderColor: completed 
+                                                            ? (theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.4)' : 'rgba(34, 197, 94, 0.3)')
+                                                            : (theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.4)' : 'rgba(251, 146, 60, 0.3)'),
+                                                        color: completed ? '#4caf50' : '#f97316',
+                                                        fontWeight: 600,
+                                                    })}
+                                                />
                     </Box>
 
                     {/* Toggle Row 1: Testing Completions */}
@@ -152,7 +164,7 @@ export default function TabDEvaluation() {
                              sx={{ p: 1, border: '1px solid #e0e0e0', borderRadius: 1, height: '100%' }}>
                                 <Box>
                                     <Typography fontWeight={600} variant="body2">Stress / Load Testing Completed</Typography>
-                                    <Typography variant="caption" color="text.secondary">Simulate peak volume (claims storms, broker rush).</Typography>
+                                    <Typography variant="caption" >Simulate peak volume (claims storms, broker rush).</Typography>
                                 </Box>
                                 <Switch checked={stressTested} onChange={(e) => setStressTested(e.target.checked)} />
                             </Stack>
@@ -164,7 +176,7 @@ export default function TabDEvaluation() {
           sx={{ p: 1, border: '1px solid #e0e0e0', borderRadius: 1, height: '100%' }}>
                                 <Box>
                                     <Typography fontWeight={600} variant="body2">Chaos / Failure Testing Completed</Typography>
-                                    <Typography variant="caption" color="text.secondary">Inject failures (timeouts, downstream outage) to validate resilience.</Typography>
+                                    <Typography variant="caption" >Inject failures (timeouts, downstream outage) to validate resilience.</Typography>
                                 </Box>
                                 <Switch checked={chaosTested} onChange={(e) => setChaosTested(e.target.checked)} />
                             </Stack>
@@ -176,7 +188,7 @@ export default function TabDEvaluation() {
                alignItems="center" sx={{ p: 1, border: '1px solid #e0e0e0', borderRadius: 1, height: '100%' }}>
                                 <Box>
                                     <Typography fontWeight={600} variant="body2">Edge Case Suite Executed</Typography>
-                                    <Typography variant="caption" color="text.secondary">Unusual inputs, missing fields, outliers, adversarial prompts.</Typography>
+                                    <Typography variant="caption" >Unusual inputs, missing fields, outliers, adversarial prompts.</Typography>
                                 </Box>
                                 <Switch checked={edgeCaseSuite} onChange={(e) => setEdgeCaseSuite(e.target.checked)} />
                             </Stack>
@@ -193,7 +205,7 @@ export default function TabDEvaluation() {
           sx={{ p: 1, border: '1px solid #e0e0e0', borderRadius: 1, height: '100%' }}>
                                 <Box>
                                     <Typography fontWeight={600} variant="body2">UAT Sign-off Completed</Typography>
-                                    <Typography variant="caption" color="text.secondary">Business acceptance confirms behavior under realistic usage.</Typography>
+                                    <Typography variant="caption" >Business acceptance confirms behavior under realistic usage.</Typography>
                                 </Box>
                                 <Switch checked={uatDone} onChange={(e) => setUatDone(e.target.checked)} />
                             </Stack>
@@ -282,16 +294,26 @@ export default function TabDEvaluation() {
                                 <Button variant="outlined" onClick={generateChecklist}>
                                     Generate Recommended Test Checklist
                                 </Button>
-                                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+                                <Typography variant="caption"  sx={{ display: 'block', mt: 1 }}>
                                     Generates a practical checklist based on the chosen use case and risk impact.
                                 </Typography>
                             </Box>
                         </Grid>
 
                         <Grid size={{ xs: 12, md: 6 }}>
-                            <Box sx={{ p: 2, border: '1px solid #e0e0e0', borderRadius: 1, backgroundColor: '#f5f5f5' }}>
+                            <Box sx={{ 
+                                p: 2, 
+                                border: '1px solid',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(171, 171, 171, 0.15)' 
+                                    : 'rgba(117, 117, 117, 0.2)',
+                                borderRadius: 1, 
+                                backgroundColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(245, 245, 245, 0.05)' 
+                                    : '#f5f5f5' 
+                            }}>
                                 {checklist.length === 0 ? (
-                                    <Typography variant="body2" color="text.secondary">
+                                    <Typography variant="body2" >
                                         Click "Generate Recommended Test Checklist" to view suggested tests for this deployment.
                                     </Typography>
                                 ) : (
@@ -308,7 +330,7 @@ export default function TabDEvaluation() {
                 <Card variant="outlined" sx={{ mt: 2 }}>
                     <CardContent>
                         <Stack direction="row" justifyContent="space-between">
-                            <Typography fontWeight={600}>Audit Trail Notes</Typography>
+                            <Typography variant="h6" >Audit Trail Notes</Typography>
                             <Button size="small" onClick={addNote} disabled={!canAdd}>Add Note</Button>
                         </Stack>
 
@@ -332,8 +354,8 @@ export default function TabDEvaluation() {
                                 />
                             </Grid>
                         </Grid>
-
-                        <Table size="small" sx={{ mt: 2, borderColor: "#ccc", borderRadius: "8px" }} border={1}>
+<TableContainer sx={{mt:2}}>
+                        <Table >
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Timestamp</TableCell>
@@ -355,6 +377,7 @@ export default function TabDEvaluation() {
                                 )}
                             </TableBody>
                         </Table>
+                        </TableContainer>
                     </CardContent>
                 </Card>
             </CardContent>

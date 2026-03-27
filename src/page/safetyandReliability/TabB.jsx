@@ -15,7 +15,7 @@ import {
     Autocomplete,
     Switch,
     Divider,
-    Chip,
+    Chip,TableContainer
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -130,7 +130,7 @@ export default function TabBCoverage() {
                         <Typography variant="h6" fontWeight={700}>
                             B. Coverage
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" >
                             Define reliability benchmarks (SLO/SLA), standards alignment, and cadence.
                         </Typography>
                     </Box>
@@ -149,11 +149,20 @@ export default function TabBCoverage() {
                 <Card variant="outlined" >
                     <CardContent>
                         <Stack direction="row" justifyContent="space-between">
-                            <Typography fontWeight={600}>
+                            <Typography variant="h6">
                                 Reliability Benchmarks (SLO/SLA)
                             </Typography>
-                            <Chip label="COMPLETE" color="success" size="small" />
-                        </Stack>
+ <Chip 
+                                        label="COMPLETE" 
+                                        size="small"
+                                        sx={(theme) => ({
+                                            bgcolor: theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(34, 197, 94, 0.08)',
+                                            border: '1px solid',
+                                            borderColor: theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.4)' : 'rgba(34, 197, 94, 0.3)',
+                                            color: '#4caf50',
+                                            fontWeight: 600,
+                                        })}
+                                    />                        </Stack>
 
                         <Grid container spacing={2} mt={1}>
                             {numField(formik, "sloUptime", "Uptime SLO (%)")}
@@ -256,7 +265,7 @@ export default function TabBCoverage() {
                         <Stack direction="row" justifyContent="space-between">
 
 
-                            <Typography fontWeight={600}>Audit Trail Notes</Typography>
+                            <Typography variant="h6">Audit Trail Notes</Typography>
 
                             <Button size="small" onClick={addNote} disabled={!canAddNote}>
                                 Add Note
@@ -284,7 +293,9 @@ export default function TabBCoverage() {
                             </Grid>
                         </Grid>
 
-                        <Table size="small" sx={{ mt: 2, borderColor: "#ccc", borderRadius: "8px" }} border={1}>
+<TableContainer sx={{mt:2}}>
+                        <Table 
+                         >
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Timestamp</TableCell>
@@ -311,6 +322,7 @@ export default function TabBCoverage() {
                                 )}
                             </TableBody>
                         </Table>
+                        </TableContainer>
                     </CardContent>
                 </Card>
 

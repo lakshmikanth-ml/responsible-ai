@@ -20,7 +20,7 @@ import {
     Grid,
     TextField,
     MenuItem
-    , Stack, Table, TableHead, TableRow, TableCell, TableBody, TableContainer, Divider
+    , Stack, Table, TableHead, TableRow, TableCell, TableBody, TableContainer, Divider, Autocomplete
 } from "@mui/material";
 
 /* ================= INITIAL VALUES ================= */
@@ -195,36 +195,53 @@ export default function EvidenceTab({ initialValues, onSave }) {
     };
 
     return (
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 2 }}>
             <Grid container spacing={3}>
                 <Grid size={{ xs: 12, md: 8 }}>
-                    <Typography fontWeight={700} mb={1}>G. Evidence</Typography>
-                    <Typography variant="body2" color="text.secondary" mb={2}>
+                    <Typography variant='h6' fontWeight={700}
+                     >G. Evidence</Typography>
+                    <Typography variant="body2" 
+                     mb={2}>
                         Upload proof that inclusiveness controls exist and were validated. In demo, files are stored as metadata in localStorage. Mark evidence items as Reviewed/Approved to affect gates.                    </Typography>
 
                     {formik.values.evidenceItems.map((item, i) => (
                         <Card key={item.key} variant="outlined" sx={{ p: 2, mb: 2 }}>
-                            <Typography fontWeight={600}>{item.label}</Typography>
-                            <Typography variant="caption" color="text.secondary">{item.description}</Typography>
+                            <Typography variant='h6'>{item.label}</Typography>
+                            <Typography variant="caption" >{item.description}</Typography>
 
                             <Grid container spacing={2} mt={1}>
                                 <Grid size={{ xs: 12, md: 4 }}>
-                                    <TextField
-                                        select
-                                        fullWidth
+                                    <Autocomplete
                                         size="small"
-                                        label="Owner"
-                                        value={item.owner}
-                                        onChange={(e) =>
-                                            formik.setFieldValue(`evidenceItems.${i}.owner`, e.target.value)
+                                        options={[
+                                            { value: 'head_product', label: 'Head of Product' },
+                                            { value: 'accessibility_lead', label: 'Accessibility Lead' },
+                                            { value: 'qa', label: 'QA Lead' },
+                                            { value: 'customer_experience', label: 'Customer Experience' },
+                                            { value: 'support_ops', label: 'Support Operations Lead' },
+                                        ]}
+                                        getOptionLabel={(option) => option.label}
+                                        value={item.owner ? 
+                                            [
+                                                { value: 'head_product', label: 'Head of Product' },
+                                                { value: 'accessibility_lead', label: 'Accessibility Lead' },
+                                                { value: 'qa', label: 'QA Lead' },
+                                                { value: 'customer_experience', label: 'Customer Experience' },
+                                                { value: 'support_ops', label: 'Support Operations Lead' },
+                                            ].find(option => option.value === item.owner) || null
+                                            : null
                                         }
-                                    >
-                                        <MenuItem value="head_product">Head of Product</MenuItem>
-                                        <MenuItem value="accessibility_lead">Accessibility Lead</MenuItem>
-                                        <MenuItem value="qa">QA Lead</MenuItem>
-                                        <MenuItem value="customer_experience">Customer Experience</MenuItem>
-                                        <MenuItem value="support_ops">Support Operations Lead</MenuItem>
-                                    </TextField>
+                                        onChange={(event, newValue) => {
+                                            formik.setFieldValue(`evidenceItems.${i}.owner`, newValue ? newValue.value : '');
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                fullWidth
+                                                label="Owner"
+                                            />
+                                        )}
+                                    />
                                 </Grid>
 
                                 <Grid size={{ xs: 12, md: 4 }}>
@@ -246,16 +263,42 @@ export default function EvidenceTab({ initialValues, onSave }) {
                                 <Grid size={{ xs: 12, md: 4 }} sx={{ display: 'flex', gap: 1, }}>
                                     <Chip
                                         label={item.status === 'missing' ? 'Missing' : item.status === 'reviewed' ? 'Not reviewed' : 'Approved'}
-                                        color={item.status === 'approved' ? 'success' : item.status === 'reviewed' ? 'warning' : 'error'}
                                         size="medium"
+                                        sx={(theme) => {
+                                            if (item.status === 'approved') {
+                                                return {
+                                                    bgcolor: theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(34, 197, 94, 0.08)',
+                                                    border: '1px solid',
+                                                    borderColor: theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.4)' : 'rgba(34, 197, 94, 0.3)',
+                                                    color: '#4caf50',
+                                                    fontWeight: 600,
+                                                };
+                                            } else if (item.status === 'reviewed') {
+                                                return {
+                                                    bgcolor: theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.15)' : 'rgba(251, 146, 60, 0.08)',
+                                                    border: '1px solid',
+                                                    borderColor: theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.4)' : 'rgba(251, 146, 60, 0.3)',
+                                                    color: '#f97316',
+                                                    fontWeight: 600,
+                                                };
+                                            } else {
+                                                return {
+                                                    bgcolor: theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(239, 68, 68, 0.08)',
+                                                    border: '1px solid',
+                                                    borderColor: theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(239, 68, 68, 0.3)',
+                                                    color: '#f44336',
+                                                    fontWeight: 600,
+                                                };
+                                            }
+                                        }}
                                     />
                                 </Grid>
                             </Grid>
 
                             <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
-                                <Button size="small" onClick={() => setStatus(i, 'reviewed')}>Mark Reviewed</Button>
+                                <Button size="small" variant='outlined' onClick={() => setStatus(i, 'reviewed')}>Mark Reviewed</Button>
                                 <Button size="small" variant="contained" onClick={() => setStatus(i, 'approved')}>Approve</Button>
-                                <Button size="small" color="error" onClick={() => setStatus(i, 'missing')}>Clear</Button>
+                                <Button size="small" variant='outlined' color="error" onClick={() => setStatus(i, 'missing')}>Clear</Button>
                             </Box>
                         </Card>
                     ))}
@@ -268,7 +311,7 @@ export default function EvidenceTab({ initialValues, onSave }) {
                     <Stack spacing={2}>
                         {/* Quick Actions */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Quick Actions</Typography>
+                            <Typography variant='h6' mb={2}>Quick Actions</Typography>
                             <Stack spacing={1}>
                                 <Button
                                     variant="outlined"
@@ -285,10 +328,10 @@ export default function EvidenceTab({ initialValues, onSave }) {
 
                        {/* Action Items */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Action Items</Typography>
-                            <TableContainer sx={{ mb: 2 }} component={Paper}>
+                            <Typography variant='h6' mb={2}>Action Items</Typography>
+                            <TableContainer  >
 
-                                <Table size="small">
+                                <Table>
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>Priority</TableCell>
@@ -326,7 +369,7 @@ export default function EvidenceTab({ initialValues, onSave }) {
 
                         {/* Policy Pack Preview */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Policy Pack Preview</Typography>
+                            <Typography variant='h6' mb={2}>Policy Pack Preview</Typography>
                             <Box
                                 sx={{
                                     bgcolor: '#0f172a',
@@ -346,7 +389,7 @@ export default function EvidenceTab({ initialValues, onSave }) {
 
                         {/* Status Summary */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Status Summary</Typography>
+                            <Typography variant='h6' mb={2}>Status Summary</Typography>
                             <Typography variant="body2">
                                 <b>Coverage:</b> {coveragePercent}%
                                 <br />

@@ -183,21 +183,60 @@ const TabB = () => {
     };
 
     const renderKPIBadge = (status) => {
-        const colorMap = {
-            'Missing': 'error',
-            'Not Run': 'error',
-            'Complete': 'success',
-            'Blocks Training': 'error',
-            'Ready': 'success',
+        const colorConfig = {
+            'Missing': { 
+                light: { bg: '#ffebee', color: '#c62828', border: '#ef9a9a' },
+                dark: { bg: 'rgba(244, 67, 54, 0.16)', color: '#ef5350', border: 'rgba(244, 67, 54, 0.32)' }
+            },
+            'Not Run': { 
+                light: { bg: '#ffebee', color: '#c62828', border: '#ef9a9a' },
+                dark: { bg: 'rgba(244, 67, 54, 0.16)', color: '#ef5350', border: 'rgba(244, 67, 54, 0.32)' }
+            },
+            'Complete': { 
+                light: { bg: '#e8f5e8', color: '#2e7d32', border: '#81c784' },
+                dark: { bg: 'rgba(76, 175, 80, 0.16)', color: '#81c784', border: 'rgba(76, 175, 80, 0.32)' }
+            },
+            'Blocks Training': { 
+                light: { bg: '#ffebee', color: '#c62828', border: '#ef9a9a' },
+                dark: { bg: 'rgba(244, 67, 54, 0.16)', color: '#ef5350', border: 'rgba(244, 67, 54, 0.32)' }
+            },
+            'Ready': { 
+                light: { bg: '#e8f5e8', color: '#2e7d32', border: '#81c784' },
+                dark: { bg: 'rgba(76, 175, 80, 0.16)', color: '#81c784', border: 'rgba(76, 175, 80, 0.32)' }
+            },
         };
+
+        const config = colorConfig[status];
+        if (!config) {
+            return (
+                <Chip
+                    label={status}
+                    size="small"
+                    sx={{
+                        bgcolor: 'grey.100',
+                        color: 'grey.700',
+                        fontWeight: 600,
+                        border: '1px solid',
+                        borderColor: 'grey.300',
+                    }}
+                />
+            );
+        }
+
         return (
             <Chip
                 label={status}
                 size="small"
                 sx={{
-                    bgcolor: colorMap[status] ? `${colorMap[status]}.light` : undefined,
-                    color: colorMap[status] ? `${colorMap[status]}.dark` : undefined,
+                    bgcolor: (theme) => theme.palette.mode === 'dark' ? config.dark.bg : config.light.bg,
+                    color: (theme) => theme.palette.mode === 'dark' ? config.dark.color : config.light.color,
                     fontWeight: 600,
+                    border: '1px solid',
+                    borderColor: (theme) => theme.palette.mode === 'dark' ? config.dark.border : config.light.border,
+                    '&:hover': {
+                        bgcolor: (theme) => theme.palette.mode === 'dark' ? config.dark.bg : config.light.bg,
+                        opacity: 0.8,
+                    },
                 }}
             />
         );
@@ -244,18 +283,57 @@ const TabB = () => {
                 gridTemplateColumns: {
                     xs: '1fr',
                     md: '1fr 1fr 1fr'
-                }, gap: 2, mb: 3, mt: 1
+                }, gap: 2, mb: 2, mt: 1
             }}>
                 {kpiConfig.map((kpi) => (
-                    <Card key={kpi.id} variant="outlined">
-                        <CardContent sx={{ pb: 2 }}>
-                            <Typography variant="caption" color="text.secondary">
+                    <Card 
+                        key={kpi.id}
+                        variant="outlined"
+                        sx={{
+                            transition: 'all 0.2s ease-in-out',
+                            '&:hover': {
+                                transform: 'translateY(-2px)',
+                                boxShadow: (theme) => theme.palette.mode === 'dark' 
+                                    ? '0 4px 20px rgba(0, 0, 0, 0.3)' 
+                                    : '0 4px 20px rgba(0, 0, 0, 0.12)',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(255, 255, 255, 0.12)' 
+                                    : 'rgba(0, 0, 0, 0.12)',
+                            },
+                            bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                ? 'background.paper' 
+                                : '#ffffff',
+                            borderColor: (theme) => theme.palette.mode === 'dark' 
+                                ? 'rgba(255, 255, 255, 0.08)' 
+                                : 'rgba(0, 0, 0, 0.08)',
+                        }}
+                    >
+                        <CardContent sx={{ p: 2, pb: '16px !important' }}>
+                            <Typography 
+                                variant="caption" 
+                                color="text.secondary"
+                                sx={{ 
+                                    fontWeight: 500,
+                                    fontSize: '0.75rem',
+                            
+                                    letterSpacing: '0.5px',
+                                }}
+                            >
                                 {kpi.label}
                             </Typography>
-                            <Box sx={{ mt: 1 }}>
+                            <Box sx={{ mt: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
                                 {renderKPIBadge(kpi.status)}
                             </Box>
-                            <Typography variant="caption" sx={{ mt: 1, display: 'block', color: 'text.secondary' }}>
+                            <Typography 
+                                variant="caption"
+                                sx={{ 
+                                    mt: 1.5, 
+                                    display: 'block', 
+                                    color: 'text.secondary',
+                                    fontSize: '0.7rem',
+                                    lineHeight: 1.4,
+                                }}
+                            >
                                 {kpi.description}
                             </Typography>
                         </CardContent>
@@ -271,7 +349,7 @@ const TabB = () => {
             )}
 
             {/* B.1 Section */}
-            <Card variant="outlined" sx={{ mb: 3 }}>
+            <Card variant="outlined" sx={{ mb: 2 }}>
                 <CardContent>
                     <Typography variant="h6" gutterBottom>
                         B.1 Select Fairness Metrics
@@ -279,20 +357,31 @@ const TabB = () => {
                     <Grid container spacing={2} sx={{ mt: 1 }}>
                         {/* Core Metrics */}
                         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                            <Card variant="outlined" sx={{
+                            <Card variant="outlined" 
+                            
+                            sx={{
                                 border: "1px solid gray.300",
                                 borderLeft: "6px solid #93c5fd",
                                 padding: "12px",
                                 borderRadius: "12px",
-                                background: "#f8fafc",
-                                p: 2, bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column'
+                                background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.neutral : "#f8fafc",
+                                p: 2,
+                                
+                        bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : 'grey.50',
+                        
+                        height: '100%', 
+                        
+                        display: 'flex', flexDirection: 'column'
                             }}>
-                                <Typography variant="subtitle2" fontWeight={600} gutterBottom>
+                                <Typography 
+                                variant="subtitle2" 
+                                fontWeight={600} 
+                                gutterBottom>
                                     Core Metrics
                                 </Typography>
-                                <FormGroup sx={{ flex: 1 }}>
-                                    {coreMetrics.map((metric) => (
-                                        <FormControlLabel
+                       <FormGroup sx={{ flex: 1 }}>
+                   {coreMetrics.map((metric) => (
+                     <FormControlLabel
                                             key={metric}
                                             control={
                                                 <Checkbox
@@ -316,9 +405,9 @@ const TabB = () => {
                                 borderLeft: "6px solid #93c5fd",
                                 padding: "12px",
                                 borderRadius: "12px",
-                                background: "#f8fafc",
+                                background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.neutral : "#f8fafc",
                                 p: 2,
-                                bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column'
+                                bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : 'grey.50', height: '100%', display: 'flex', flexDirection: 'column'
                             }}>
                                 <Typography variant="subtitle2" fontWeight={600} gutterBottom>
                                     Model Quality by Group
@@ -349,7 +438,7 @@ const TabB = () => {
                                 borderLeft: "6px solid #93c5fd",
                                 padding: "12px",
                                 borderRadius: "12px",
-                                background: "#f8fafc", p: 2, bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column'
+                                background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.neutral : "#f8fafc", p: 2, bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : 'grey.50', height: '100%', display: 'flex', flexDirection: 'column'
                             }}>
                                 <Typography variant="subtitle2" fontWeight={600} gutterBottom>
                                     Evaluation Configuration
@@ -407,12 +496,12 @@ const TabB = () => {
             </Card>
 
             {/* B.2 Section */}
-            <Card variant="outlined" sx={{ mb: 3 }}>
+            <Card variant="outlined" sx={{ mb: 2 }}>
                 <CardContent>
                     <Typography variant="h6" gutterBottom>
                         B.2 Run Baseline Evaluation
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    <Typography variant="body2"  sx={{ mb: 2 }}>
                         In production, this triggers your evaluation pipeline and stores results in Evidence Vault.
                     </Typography>
 
@@ -486,7 +575,9 @@ const TabB = () => {
             </Card>
 
             {/* Demo Data Note & Reset Section */}
-            <Card variant="outlined" sx={{ bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
+            <Card variant="outlined"
+ sx={{ bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : '#fafafa',
+  borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(171, 171, 171, 0.15)' : '#e0e0e0' }}>
                 <CardContent sx={{ pb: 0 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
                         <Box>

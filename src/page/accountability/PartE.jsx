@@ -272,7 +272,7 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
                                 Ingest DFA JSON
                             </Button>
                         </Box>
-                        <Typography variant="caption" sx={{ display: 'block', mb: 1, color: 'text.secondary' }}>
+                        <Typography variant="caption" sx={{ display: 'block', mb: 1,  }}>
                             Paste DFA JSON from the separate Data Foundation Analyzer app. This populates Tab C and influences gates.                        </Typography>
                         <TextField
                             multiline
@@ -441,7 +441,7 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
 
                                 <Table size="small">
                                     <TableHead>
-                                        <TableRow sx={{ bgcolor: '#fafafa' }}>
+                                        <TableRow sx={{ bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : '#fafafa' }}>
                                             <TableCell sx={{ fontWeight: 600, minWidth: 200 }}>Risk</TableCell>
                                             <TableCell sx={{ fontWeight: 600, minWidth: 100 }}>Severity</TableCell>
                                             <TableCell sx={{ fontWeight: 600, minWidth: 100 }}>Phase</TableCell>
@@ -452,7 +452,7 @@ const PartE = ({ projectContext = {}, onStatusMessage }) => {
                                     </TableHead>
                                     <TableBody>
                                         {risks.map((risk, idx) => (
-                                            <TableRow key={risk.id} sx={{ '&:hover': { bgcolor: '#fafafa' } }}>
+                                            <TableRow key={risk.id} sx={{ '&:hover': { bgcolor: (theme) => theme.palette.mode === 'dark' ? theme.palette.action.hover : '#fafafa' } }}>
                                                 <TableCell>
                                                     <Typography variant="caption" sx={{ fontWeight: 600, display: 'block' }}>
                                                         {risk.id} — {risk.title}

@@ -22,6 +22,7 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
+    TableContainer,Autocomplete
 } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import AddIcon from "@mui/icons-material/Add";
@@ -38,7 +39,7 @@ const SAMPLE_RISKS = [
         title: "Missing citations spike (critical)",
         desc: "Missing citation rate is 0.5. Explanations are not defensible for mandatory outputs.",
         severity: "Critical",
-        stage: "production",
+        stage: "Production",
         source: "Guardian",
         status: "open",
     },
@@ -47,7 +48,7 @@ const SAMPLE_RISKS = [
         title: "Unclear explanations spike (critical)",
         desc: "Unclear explanation rate is 0.5. Users cannot understand outputs; requires template/prompt fixes.",
         severity: "Critical",
-        stage: "production",
+        stage: "Production",
         source: "Guardian",
         status: "open",
     },
@@ -56,7 +57,7 @@ const SAMPLE_RISKS = [
         title: "Citation integrity below threshold",
         desc: "Citation integrity score is 50%, below threshold 95%.",
         severity: "Critical",
-        stage: "release",
+        stage: "Release",
         source: "Evaluation",
         status: "open",
     },
@@ -65,7 +66,7 @@ const SAMPLE_RISKS = [
         title: "Explainability coverage below threshold",
         desc: "Explainability coverage score is 25%, below threshold 90%.",
         severity: "Critical",
-        stage: "release",
+        stage: "Release",
         source: "Evaluation",
         status: "open",
     },
@@ -74,7 +75,7 @@ const SAMPLE_RISKS = [
         title: "Explanation clarity below threshold",
         desc: "Clarity score is 50%, below threshold 85%.",
         severity: "Warning",
-        stage: "release",
+        stage: "Release",
         source: "Evaluation",
         status: "open",
     },
@@ -83,7 +84,7 @@ const SAMPLE_RISKS = [
         title: "Manual risk added",
         desc: "Describe the gap and impact.",
         severity: "Warning",
-        stage: "release",
+        stage: "Release",
         source: "SME",
         status: "open",
     },
@@ -92,7 +93,7 @@ const SAMPLE_RISKS = [
         title: "Manual risk added",
         desc: "Describe the gap and impact.",
         severity: "Warning",
-        stage: "release",
+        stage: "Release",
         source: "SME",
         status: "open",
     },
@@ -101,7 +102,7 @@ const SAMPLE_RISKS = [
         title: "Manual risk added",
         desc: "Describe the gap and impact.",
         severity: "Warning",
-        stage: "release",
+        stage: "Release",
         source: "SME",
         status: "open",
     },
@@ -193,7 +194,7 @@ export default function TabERisks() {
                         <Typography variant="h6" fontWeight={700}>
                             E. Gaps, Risks &amp; Failure Modes (Risk Register)
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" mt={0.5} maxWidth={760}>
+                        <Typography variant="body2"  mt={0.5} maxWidth={760}>
                             Single source of truth for explainability risks. Risks can originate from DFA, Evaluation, Guardian, or SME feedback.
                         </Typography>
                     </Box>
@@ -218,21 +219,47 @@ export default function TabERisks() {
                                 variant="outlined"
                                 sx={{
                                     p: 2,
-                                    borderColor: kpi.error ? "error.light" : "divider",
-                                    background: kpi.error ? "linear-gradient(120deg, #ffebee 0%, #fff5f5 100%)" : "transparent",
+                                    borderColor: (theme) => kpi.error 
+                                        ? (theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.4)' : 'error.light')
+                                        : (theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'divider'),
+                                    background: (theme) => kpi.error 
+                                        ? (theme.palette.mode === 'dark' 
+                                            ? 'linear-gradient(120deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%)' 
+                                            : 'linear-gradient(120deg, #ffebee 0%, #fff5f5 100%)')
+                                        : (theme.palette.mode === 'dark' 
+                                            ? 'rgba(255, 255, 255, 0.02)' 
+                                            : 'transparent'),
                                 }}
                             >
-                                <Typography variant="caption" color="text.secondary">
+                                <Typography 
+                                    variant="caption" 
+                                    sx={{
+                                        color: (theme) => theme.palette.mode === 'dark' 
+                                            ? 'rgba(255, 255, 255, 0.7)' 
+                                            : 'rgba(0, 0, 0, 0.7)',
+                                    }}
+                                >
                                     {kpi.title}
                                 </Typography>
                                 <Typography
                                     variant="h5"
-                                    color={kpi.error ? "error.main" : "text.primary"}
+                                    color={kpi.error 
+                                        ? "error.main" 
+                                        : (theme) => theme.palette.mode === 'dark' 
+                                            ? 'rgba(255, 255, 255, 0.9)' 
+                                            : 'text.primary'}
                                     sx={kpi.mono ? { fontFamily: "monospace", fontSize: 14 } : { fontWeight: 700, mt: 0.5 }}
                                 >
                                     {kpi.value}
                                 </Typography>
-                                <Typography variant="caption" color="text.secondary">
+                                <Typography 
+                                    variant="caption" 
+                                    sx={{
+                                        color: (theme) => theme.palette.mode === 'dark' 
+                                            ? 'rgba(255, 255, 255, 0.6)' 
+                                            : 'rgba(0, 0, 0, 0.6)',
+                                    }}
+                                >
                                     {kpi.desc}
                                 </Typography>
                             </Card>
@@ -240,16 +267,14 @@ export default function TabERisks() {
                     ))}
                 </Grid>
 
-                <Box
-                    sx={{
-                        overflowX: "auto",
-                        border: "1px solid",
-                        borderColor: "divider",
-                        borderRadius: 2,
-                        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)",
-                    }}
+               
+               <TableContainer 
+                  
                 >
-                    <Table stickyHeader sx={{ minWidth: 1000 }}>
+                    <Table 
+                        stickyHeader
+                        sx={{ minWidth: 1000 }}
+                    >
                         <TableHead>
                             <TableRow>
                                 <TableCell sx={{ width: 160 }}>Risk ID</TableCell>
@@ -280,29 +305,59 @@ export default function TabERisks() {
                                         <Chip
                                             size="small"
                                             label={row.severity}
-                                            color={row.severity === "Critical" ? "error" : "warning"}
-                                            sx={{ fontWeight: 600 }}
+                                            sx={(theme) => ({
+                                                fontWeight: 600,
+                                                bgcolor: row.severity === "Critical" 
+                                                    ? (theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(239, 68, 68, 0.08)')
+                                                    : (theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.15)' : 'rgba(251, 146, 60, 0.08)'),
+                                                border: '1px solid',
+                                                borderColor: row.severity === "Critical"
+                                                    ? (theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(239, 68, 68, 0.3)')
+                                                    : (theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.4)' : 'rgba(251, 146, 60, 0.3)'),
+                                                color: row.severity === "Critical" ? '#f44336' : '#ff9800',
+                                            })}
                                         />
                                     </TableCell>
 
                                     <TableCell>
-                                        <Chip size="small" label={row.stage} variant="outlined" sx={{ fontWeight: 600 }} />
+                                        <Chip 
+                                            size="small" 
+                                            label={row.stage} 
+                                            variant="outlined" 
+                                            sx={(theme) => ({
+                                                fontWeight: 600,
+                                                bgcolor: theme.palette.mode === 'dark' ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.05)',
+                                                border: '1px solid',
+                                                borderColor: theme.palette.mode === 'dark' ? 'rgba(59, 130, 246, 0.3)' : 'rgba(59, 130, 246, 0.2)',
+                                                color: theme.palette.mode === 'dark' ? '#90caf9' : '#1976d2',
+                                            })}
+                                        />
                                     </TableCell>
 
                                     <TableCell>
-                                        <Chip size="small" label={row.source} color="info" sx={{ fontWeight: 600 }} />
+                                        <Chip 
+                                            size="small" 
+                                            label={row.source} 
+                                            sx={(theme) => ({
+                                                fontWeight: 600,
+                                                bgcolor: theme.palette.mode === 'dark' ? 'rgba(76, 175, 80, 0.15)' : 'rgba(76, 175, 80, 0.08)',
+                                                border: '1px solid',
+                                                borderColor: theme.palette.mode === 'dark' ? 'rgba(76, 175, 80, 0.4)' : 'rgba(76, 175, 80, 0.3)',
+                                                color: '#4caf50',
+                                            })}
+                                        />
                                     </TableCell>
 
                                     <TableCell>
-                                        <TextField
-                                            select
+                                        <Autocomplete
                                             size="small"
+                                            options={['open', 'done']}
                                             value={row.status}
-                                            onChange={(e) => updateRisk(row.id, "status", e.target.value)}
-                                        >
-                                            <MenuItem value="open">open</MenuItem>
-                                            <MenuItem value="done">done</MenuItem>
-                                        </TextField>
+                                            onChange={(_, newValue) => updateRisk(row.id, "status", newValue)}
+                                            renderInput={(params) => (
+                                                <TextField {...params} />
+                                            )}
+                                        />
                                     </TableCell>
 
                                     <TableCell align="center">
@@ -316,7 +371,7 @@ export default function TabERisks() {
                             ))}
                         </TableBody>
                     </Table>
-
+</TableContainer>
                     <TablePagination
                         component="div"
                         count={risks.length}
@@ -329,7 +384,7 @@ export default function TabERisks() {
                         }}
                         rowsPerPageOptions={[5, 8, 15]}
                     />
-                </Box>
+                
 
                 <Box
                     sx={{
@@ -339,7 +394,7 @@ export default function TabERisks() {
                         border: "1px solid",
                         borderColor: "divider",
                         borderLeft: "4px solid #184ea4",
-                        background: "#f8fafc",
+                        background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.neutral : "#f8fafc",
                         display: "flex",
                         gap: 1,
                         alignItems: "flex-start",

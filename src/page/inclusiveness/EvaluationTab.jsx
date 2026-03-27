@@ -30,7 +30,7 @@ import {
     Paper,
     Stack,
     Chip,
-    Divider,
+    Divider,Autocomplete 
 } from "@mui/material";
 
 const validationSchema = Yup.object({
@@ -93,12 +93,14 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
 
 
     return (
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 2 }}>
             <Grid container spacing={3}>
                 {/* LEFT: form */}
                 <Grid size={{ xs: 12, md: 8 }}>
-                    <Typography fontWeight={700} mb={1}>D. Evaluation</Typography>
-                    <Typography variant="body2" color="text.secondary" mb={2}>
+                    <Typography variant='h6'
+                     fontWeight={700} >D. Evaluation</Typography>
+                    <Typography variant="body2" 
+                     mb={2}>
                         Prove inclusiveness before release through accessibility tests and diverse user usability testing.
                     </Typography>
 
@@ -106,7 +108,17 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                         {/* Evaluation Toggles */}
                         <Grid container spacing={2} mb={2}>
                             <Grid size={{ xs: 12, md: 4 }}>
-                                <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: 1 }}>
+                                <Box sx={{ 
+                                    border: '1px solid',
+                                    borderColor: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(171, 171, 171, 0.15)' 
+                                        : 'rgba(117, 117, 117, 0.2)',
+                                    borderRadius: 1, 
+                                    p: 1,
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}>
                                     <FormControlLabel
                                         control={
                                             <Switch
@@ -114,16 +126,30 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                                                 onChange={(e) => formik.setFieldValue('axeCompleted', e.target.checked)}
                                             />
                                         }
-                                        label="Axe / Lighthouse Scan Completed"
+                                        label={
+                                            <Typography sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : 'rgb(26, 26, 26)' }}>
+                                                Axe / Lighthouse Scan Completed
+                                            </Typography>
+                                        }
                                     />
-                                    <Typography variant="caption" color="text.secondary">
+                                    <Typography variant="caption">
                                         Automated accessibility validation executed.
                                     </Typography>
                                 </Box>
                             </Grid>
 
                             <Grid size={{ xs: 12, md: 4 }}>
-                                <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: 1 }}>
+                                <Box sx={{ 
+                                    border: '1px solid',
+                                    borderColor: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(171, 171, 171, 0.15)' 
+                                        : 'rgba(117, 117, 117, 0.2)',
+                                    borderRadius: 1, 
+                                    p: 1,
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}>
                                     <FormControlLabel
                                         control={
                                             <Switch
@@ -131,16 +157,30 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                                                 onChange={(e) => formik.setFieldValue('manualAuditCompleted', e.target.checked)}
                                             />
                                         }
-                                        label="Manual Accessibility Audit Completed"
+                                        label={
+                                            <Typography sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : 'rgb(26, 26, 26)' }}>
+                                                Manual Accessibility Audit Completed
+                                            </Typography>
+                                        }
                                     />
-                                    <Typography variant="caption" color="text.secondary">
+                                    <Typography variant="caption" >
                                         Screen reader and keyboard-only journey validated.
                                     </Typography>
                                 </Box>
                             </Grid>
 
                             <Grid size={{ xs: 12, md: 4 }}>
-                                <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: 1 }}>
+                                <Box sx={{ 
+                                    border: '1px solid',
+                                    borderColor: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(171, 171, 171, 0.15)' 
+                                        : 'rgba(117, 117, 117, 0.2)',
+                                    borderRadius: 1, 
+                                    p: 1,
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}>
                                     <FormControlLabel
                                         control={
                                             <Switch
@@ -148,9 +188,13 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                                                 onChange={(e) => formik.setFieldValue('diverseUserTestingCompleted', e.target.checked)}
                                             />
                                         }
-                                        label="Diverse User Testing Completed"
+                                        label={
+                                            <Typography sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : 'rgb(26, 26, 26)' }}>
+                                                Diverse User Testing Completed
+                                            </Typography>
+                                        }
                                     />
-                                    <Typography variant="caption" color="text.secondary">
+                                    <Typography variant="caption" >
                                         At least 3 user groups tested on real journeys.
                                     </Typography>
                                 </Box>
@@ -194,8 +238,8 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                         </Grid>
 
                         {/* User Testing Sessions */}
-                        <Typography fontWeight={600} mb={1}>User Testing Sessions</Typography>
-                        <TableContainer sx={{ mb: 2 }} component={Paper}>
+                        <Typography variant='h6' mb={1}>User Testing Sessions</Typography>
+                        <TableContainer sx={{ mb: 2 }} >
                             <Table>
                                 <TableHead>
                                     <TableRow>
@@ -212,28 +256,74 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                                             <TableCell>{row.userGroup}</TableCell>
                                             <TableCell>{row.scenario}</TableCell>
                                             <TableCell>
-                                                <TextField
-                                                    fullWidth
-                                                    select size="small"
-                                                    value={row.result}
-                                                    onChange={(e) => formik.setFieldValue(`userTestingSessions.${i}.result`, e.target.value)}
-                                                >
-                                                    <MenuItem value="miss">Miss</MenuItem>
-                                                    <MenuItem value="partial">Partial</MenuItem>
-                                                    <MenuItem value="pass">Pass</MenuItem>
-                                                </TextField>
+                                                <Autocomplete
+                                                    size="small"
+                                                    options={[
+                                                        { value: 'miss', label: 'Miss' },
+                                                        { value: 'partial', label: 'Partial' },
+                                                        { value: 'pass', label: 'Pass' },
+                                                    ]}
+                                                    getOptionLabel={(option) => option.label}
+                                                    value={row.result ? 
+                                                        [
+                                                            { value: 'miss', label: 'Miss' },
+                                                            { value: 'partial', label: 'Partial' },
+                                                            { value: 'pass', label: 'Pass' },
+                                                        ].find(option => option.value === row.result) || null
+                                                        : null
+                                                    }
+                                                    onChange={(event, newValue) => {
+                                                        formik.setFieldValue(`userTestingSessions.${i}.result`, newValue ? newValue.value : '');
+                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            fullWidth
+                                                            sx={{
+                                                                '& .MuiOutlinedInput-root': {
+                                                                    height: '40px',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                }
+                                                            }}
+                                                        />
+                                                    )}
+                                                />
                                             </TableCell>
                                             <TableCell>
-                                                <TextField
-                                                    fullWidth
-                                                    select size="small"
-                                                    value={row.owner}
-                                                    onChange={(e) => formik.setFieldValue(`userTestingSessions.${i}.owner`, e.target.value)}
-                                                >
-                                                    <MenuItem value="product">Product</MenuItem>
-                                                    <MenuItem value="customer">Customer Experience</MenuItem>
-                                                    <MenuItem value="qa">QA Lead</MenuItem>
-                                                </TextField>
+                                                <Autocomplete
+                                                    size="small"
+                                                    options={[
+                                                        { value: 'product', label: 'Product' },
+                                                        { value: 'customer', label: 'Customer Experience' },
+                                                        { value: 'qa', label: 'QA Lead' },
+                                                    ]}
+                                                    getOptionLabel={(option) => option.label}
+                                                    value={row.owner ? 
+                                                        [
+                                                            { value: 'product', label: 'Product' },
+                                                            { value: 'customer', label: 'Customer Experience' },
+                                                            { value: 'qa', label: 'QA Lead' },
+                                                        ].find(option => option.value === row.owner) || null
+                                                        : null
+                                                    }
+                                                    onChange={(event, newValue) => {
+                                                        formik.setFieldValue(`userTestingSessions.${i}.owner`, newValue ? newValue.value : '');
+                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            fullWidth
+                                                            sx={{
+                                                                '& .MuiOutlinedInput-root': {
+                                                                    height: '40px',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                }
+                                                            }}
+                                                        />
+                                                    )}
+                                                />
                                             </TableCell>
                                             <TableCell>
                                                 <TextField
@@ -262,7 +352,7 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                     <Stack spacing={2}>
                         {/* Quick Actions */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Quick Actions</Typography>
+                            <Typography variant='h6' mb={2}>Quick Actions</Typography>
                             <Stack spacing={1}>
                                 <Button
                                     variant="outlined"
@@ -278,10 +368,10 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                         </Card>
                         {/* Action Items */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Action Items</Typography>
-                            <TableContainer sx={{ mb: 2 }} component={Paper}>
+                            <Typography variant='h6' sx={{mb:2}}>Action Items</Typography>
+                            <TableContainer  >
 
-                                <Table size="small">
+                                <Table >
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>Priority</TableCell>
@@ -319,7 +409,7 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
 
                         {/* Policy Pack Preview */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Policy Pack Preview</Typography>
+                            <Typography variant='h6' mb={2}>Policy Pack Preview</Typography>
                             <Box
                                 sx={{
                                     bgcolor: '#0f172a',
@@ -338,8 +428,9 @@ export default function EvaluationTab({ initialValues, onSave, onLoadSample }) {
                         </Card>
 
                         {/* Status Summary */}
-                        <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Status Summary</Typography>
+                        <Card variant="outlined"
+                         sx={{ p: 2 }}>
+          <Typography variant="h6" mb={2}>Status Summary</Typography>
                             <Typography variant="body2">
                                 <b>Coverage:</b> {coveragePercent}%
                                 <br />

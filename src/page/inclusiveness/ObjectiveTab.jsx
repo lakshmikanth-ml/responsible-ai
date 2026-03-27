@@ -279,7 +279,8 @@ export default function ObjectiveTab() {
     const renderTabA = () => (
         <Box>
             <Typography variant="h6" sx={{ mb: 1, fontWeight: 700 }}>A. Objective &amp; Inclusion Intent</Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
+            <Typography variant="body2"
+             sx={{  mb: 2 }}>
                 Define why inclusiveness is required, who is accountable, which groups must be supported, and what failure looks like.
                 Missing objectives can block training and release for customer-facing or decision-influencing systems.
             </Typography>
@@ -358,7 +359,7 @@ export default function ObjectiveTab() {
             <Divider sx={{ my: 2 }} />
 
             <Grid container spacing={2} sx={{ mb: 2 }}>
-                <Grid size={{ xs: 12, sm: 6 }}>
+                <Grid size={{ xs: 12, sm: 12 }}>
                     <Autocomplete
                         multiple
                         options={criticalUserGroupsOptions}
@@ -370,34 +371,167 @@ export default function ObjectiveTab() {
                                 label="Critical User Groups (Required coverage)"
                                 size="small"
                                 placeholder="Select at least 3 groups"
+                               
                             />
                         )}
                         noOptionsText="No groups available"
+                      
                     />
-                    <Typography variant="caption" sx={{ color: 'text.secondary', mt: 1, display: 'block' }}>Tip: choose at least 3 groups for customer-facing flows.</Typography>
+                    <Typography 
+                        variant="caption" 
+                        sx={{ 
+                            color: 'text.secondary', 
+                            mt: 1, 
+                            display: 'block',
+                            fontWeight: 500,
+                            fontSize: '0.8rem',
+                        }}
+                    >
+                        💡 Tip: choose at least 3 groups for customer-facing flows.
+                    </Typography>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
+                <Grid size={{ xs: 12, sm: 12 }}>
                     <Stack spacing={2}>
-                        <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: 2 }}>
-                            <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-                                <Box>
-                                    <Typography sx={{ fontWeight: 600, mb: 0.5 }}>Language Localization Required</Typography>
-                                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>Enable multilingual support for inputs/outputs and UI labels.</Typography>
+                        <Box 
+                            sx={{ 
+                                border: '1px solid',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(59, 130, 246, 0.2)' 
+                                    : 'rgba(59, 130, 246, 0.15)',
+                                borderRadius: 2, 
+                                p: 2.5,
+                                bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(59, 130, 246, 0.04)' 
+                                    : 'rgba(59, 130, 246, 0.02)',
+                                transition: 'all 0.2s ease-in-out',
+                                '&:hover': {
+                                    borderColor: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(59, 130, 246, 0.4)' 
+                                        : 'rgba(59, 130, 246, 0.3)',
+                                    bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(59, 130, 246, 0.08)' 
+                                        : 'rgba(59, 130, 246, 0.04)',
+                                },
+                            }}
+                        >
+                            <Stack 
+                                direction="row"
+                                justifyContent="space-between"
+                                alignItems="flex-start"
+                            >
+                                <Box sx={{ flex: 1 }}>
+                                    <Typography
+                                        variant='h6' 
+                                        sx={{ 
+                                            fontWeight: 700,
+                                            color: (theme) => theme.palette.mode === 'dark' 
+                                                ? '#60a5fa' 
+                                                : '#2563eb',
+                                            mb: 1,
+                                        }}
+                                    >
+                                        🌐 Language Localization Required
+                                    </Typography>
+                                    <Typography 
+                                        variant="caption" 
+                                        sx={{ 
+                                            color: 'text.secondary',
+                                            lineHeight: 1.4,
+                                            display: 'block',
+                                        }}
+                                    >
+                                        Enable multilingual support for inputs/outputs and UI labels.
+                                    </Typography>
                                 </Box>
-                                <Switch checked={tabA.localizationRequired} onChange={(e) => setTabA({ ...tabA, localizationRequired: e.target.checked })} />
+                                <Switch 
+                                    checked={tabA.localizationRequired} 
+                                    onChange={(e) => setTabA({ ...tabA, localizationRequired: e.target.checked })}
+                                />
                             </Stack>
                         </Box>
-                        <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: 2 }}>
+                        <Box 
+                            sx={{ 
+                                border: '1px solid',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(168, 85, 247, 0.2)' 
+                                    : 'rgba(168, 85, 247, 0.15)',
+                                borderRadius: 2, 
+                                p: 2.5,
+                                bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(168, 85, 247, 0.04)' 
+                                    : 'rgba(168, 85, 247, 0.02)',
+                                transition: 'all 0.2s ease-in-out',
+                                '&:hover': {
+                                    borderColor: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(168, 85, 247, 0.4)' 
+                                        : 'rgba(168, 85, 247, 0.3)',
+                                    bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(168, 85, 247, 0.08)' 
+                                        : 'rgba(168, 85, 247, 0.04)',
+                                },
+                            }}
+                        >
                             <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-                                <Box>
-                                    <Typography sx={{ fontWeight: 600, mb: 0.5 }}>Assistive UX Required</Typography>
-                                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>Keyboard navigation, screen-reader labels, readable contrast.</Typography>
+                                <Box sx={{ flex: 1 }}>
+                                    <Typography 
+                                        variant='h6'
+                                        sx={{ 
+                                            fontWeight: 700,
+                                            color: (theme) => theme.palette.mode === 'dark' 
+                                                ? '#c084fc' 
+                                                : '#9333ea',
+                                            mb: 1,
+                                        }}
+                                    >
+                                        ♿ Assistive UX Required
+                                    </Typography>
+                                    <Typography 
+                                        variant="caption"
+                                        sx={{ 
+                                            color: 'text.secondary',
+                                            lineHeight: 1.4,
+                                            display: 'block',
+                                        }}
+                                    >
+                                        Keyboard navigation, screen-reader labels, readable contrast.
+                                    </Typography>
                                 </Box>
-                                <Switch checked={tabA.accessibilityRequired} onChange={(e) => setTabA({ ...tabA, accessibilityRequired: e.target.checked })} />
+                                <Switch 
+                                    checked={tabA.accessibilityRequired} 
+                                    onChange={(e) => setTabA({ ...tabA, accessibilityRequired: e.target.checked })}
+                                />
                             </Stack>
                         </Box>
-                        <Box sx={{ p: 2, backgroundColor: '#fafafa', borderRadius: 1 }}>
-                            <Typography variant="caption" sx={{ fontStyle: 'italic', color: '#444' }}>Failure definition should be explicit: "A rural applicant cannot complete the quote journey due to connectivity or UX constraints."</Typography>
+                        <Box 
+                            sx={{ 
+                                p: 2.5, 
+                                borderRadius: 2,
+                                bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(251, 146, 60, 0.08)' 
+                                    : 'rgba(251, 146, 60, 0.04)',
+                                border: '1px solid',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(251, 146, 60, 0.2)' 
+                                    : 'rgba(251, 146, 60, 0.15)',
+                                borderLeft: '4px solid',
+                                borderLeftColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? '#fdba74' 
+                                    : '#f97316',
+                            }}
+                        >
+                            <Typography 
+                                variant="caption" 
+                                sx={{ 
+                                    fontStyle: 'italic', 
+                                    color: (theme) => theme.palette.mode === 'dark' 
+                                        ? '#fdba74' 
+                                        : '#f97316',
+                                    lineHeight: 1.4,
+                                    fontWeight: 500,
+                                }}
+                            >
+                                💡 Failure definition should be explicit: "A rural applicant cannot complete the quote journey due to connectivity or UX constraints."
+                            </Typography>
                         </Box>
                     </Stack>
                 </Grid>
@@ -466,7 +600,7 @@ export default function ObjectiveTab() {
                     <Stack spacing={2}>
                         {/* Quick Actions */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Quick Actions</Typography>
+                            <Typography variant="h6" mb={2}>Quick Actions</Typography>
                             <Stack spacing={1}>
                                 <Button
                                     variant="outlined"
@@ -483,10 +617,10 @@ export default function ObjectiveTab() {
 
                         {/* Action Items */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Action Items</Typography>
-                            <TableContainer sx={{ mb: 2 }} component={Paper}>
+                            <Typography variant="h6" mb={2}>Action Items</Typography>
+                            <TableContainer >
 
-                                <Table size="small">
+                                <Table >
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>Priority</TableCell>
@@ -523,7 +657,7 @@ export default function ObjectiveTab() {
 
                         {/* Policy Pack Preview */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Policy Pack Preview</Typography>
+                            <Typography variant="h6" mb={2}>Policy Pack Preview</Typography>
                             <Box
                                 sx={{
                                     bgcolor: '#0f172a',
@@ -543,7 +677,7 @@ export default function ObjectiveTab() {
 
                         {/* Status Summary */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Status Summary</Typography>
+                            <Typography variant="h6" mb={2}>Status Summary</Typography>
                             <Typography variant="body2">
                                 <b>Coverage:</b> {coveragePercent}%
                                 <br />

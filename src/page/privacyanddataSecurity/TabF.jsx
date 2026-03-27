@@ -212,7 +212,9 @@ const TabF = ({ projectContext = {}, onStatusMessage }) => {
             <Grid size={{ xs: 12, sm: 4, md: 4 }}
 
             >
-                <Box sx={{ p: 2, border: '1px solid rgba(117, 117, 117, 0.2)', borderRadius: 2, p: 2 }}>
+                 <Card elevation={0}
+                    sx={{ position: 'sticky', top: 20 }}>
+                    <CardContent>
                     <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
                         Project Context
                     </Typography>
@@ -315,17 +317,20 @@ const TabF = ({ projectContext = {}, onStatusMessage }) => {
                         </Button>
                     </Box>
 
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 2, fontStyle: 'italic' }}>
+                    <Typography variant="caption"  sx={{ display: 'block',
+                         mt: 2,  }}>
                         Data persists locally (browser localStorage) for demo realism.
                     </Typography>
-                </Box>
+           </CardContent> </Card>
             </Grid>
 
             {/* RIGHT PANEL: Metrics & Actions */}
             <Grid size={{ xs: 12, sm: 8, md: 8 }}
                 sx={{
                     p: 2,
-                    border: '1px solid rgba(117, 117, 117, 0.2)', borderRadius: 2
+                    border: (theme) => `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(117, 117, 117, 0.2)'}`,
+                    borderRadius: 2,
+                    background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.paper : '#FFFFFF',
                 }}>
 
                 <TabFMitigation

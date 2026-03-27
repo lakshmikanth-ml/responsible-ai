@@ -109,7 +109,7 @@ export default function ObjectiveTabA() {
                         <Typography variant="h6" fontWeight={700}>
                             A. Objective
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" >
                             Define safety intent, failure definition, and accountable owners.
                         </Typography>
                     </Box>
@@ -133,15 +133,26 @@ export default function ObjectiveTabA() {
                         <Card variant="outlined">
                             <CardContent>
                                 <Stack direction="row" justifyContent="space-between">
-                                    <Box>
-                                        <Typography fontWeight={600}>
+                                    <Box  sx={{mb:2}}>
+                         <Typography variant="h6" >
                                             Safety & Reliability Intent
                                         </Typography>
-                                        <Typography variant="caption" color="text.secondary">
+                             <Typography variant="caption"
+                              >
                                             Define why safety/reliability is required, what failure looks like, and who is accountable.
                                         </Typography>
                                     </Box>
-                                    <Chip label="COMPLETE" color="success" size="small" />
+                                    <Chip 
+                                        label="COMPLETE" 
+                                        size="small"
+                                        sx={(theme) => ({
+                                            bgcolor: theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(34, 197, 94, 0.08)',
+                                            border: '1px solid',
+                                            borderColor: theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.4)' : 'rgba(34, 197, 94, 0.3)',
+                                            color: '#4caf50',
+                                            fontWeight: 600,
+                                        })}
+                                    />
                                 </Stack>
 
                                 <Grid container spacing={2} mt={1}>
@@ -243,7 +254,15 @@ export default function ObjectiveTabA() {
                                 </Box>
 
                                 {/* Toggle 1: Human Oversight */}
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 2, mb: 2, p: 1.5, border: '1px solid #e0e0e0', borderRadius: 1 }}>
+                                <Box sx={{ display: 'flex',
+                                     justifyContent: 'space-between',
+                                      alignItems: 'flex-start',
+                                       gap: 2, mb: 2, p: 1.5, 
+                                       border: '1px solid',
+                                       borderColor: (theme) => theme.palette.mode === 'dark' 
+                                           ? 'rgba(171, 171, 171, 0.15)' 
+                                           : 'rgba(117, 117, 117, 0.2)',
+                                       borderRadius: 1 }}>
                                     <Box>
                                         <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.25 }}>
                                             Human oversight is enabled
@@ -264,7 +283,16 @@ export default function ObjectiveTabA() {
                                 <Box sx={{ height: 10 }} />
 
                                 {/* Toggle 2: Incident Owners */}
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 2, mb: 2, p: 1.5, border: '1px solid #e0e0e0', borderRadius: 1 }}>
+                                <Box sx={{ display: 'flex',
+                                     justifyContent: 'space-between',
+                                      alignItems: 'flex-start', gap: 2, mb: 2, 
+                                      p: 1.5, 
+                                      border: '1px solid', 
+                         borderColor: (theme) => theme.palette.mode === 'dark' 
+                                           ? 'rgba(171, 171, 171, 0.15)' 
+                                           : 'rgba(117, 117, 117, 0.2)',
+                                       
+                                      borderRadius: 1 }}>
                                     <Box>
                                         <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.25 }}>
                                             Incident escalation owners assigned
@@ -282,9 +310,21 @@ export default function ObjectiveTabA() {
                                 </Box>
 
                                 {/* Muted Callout */}
-                                <Card variant="outlined" sx={{ bgcolor: '#fafafa', border: 'none', mb: 2 }}>
+                                <Card variant="outlined" sx={{ 
+                                    bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#fafafa', 
+                                    border: '1px solid',
+                                    borderColor: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(171, 171, 171, 0.15)' 
+                                        : 'rgba(117, 117, 117, 0.2)',
+                                    mb: 2 
+                                }}>
                                     <CardContent sx={{ py: 1, px: 1.5, '&:last-child': { pb: 1 } }}>
-                                        <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.8rem' }}>
+                                        <Typography variant="caption" sx={{ 
+                                            color: (theme) => theme.palette.mode === 'dark' 
+                                                ? 'rgba(255, 255, 255, 0.7)' 
+                                                : 'text.secondary',
+                                            fontSize: '0.8rem' 
+                                        }}>
                                             These switches are read-only indicators; set values using dropdowns.
                                         </Typography>
                                     </CardContent>
@@ -304,7 +344,14 @@ export default function ObjectiveTabA() {
                                 </Button>
 
                                 {/* Muted Callout */}
-                                <Card variant="outlined" sx={{ bgcolor: '#fafafa', border: 'none' }}>
+                                <Card variant="outlined" sx={{ 
+                                    bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#fafafa', 
+                                    border: '1px solid',
+                                    borderColor: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(171, 171, 171, 0.15)' 
+                                        : 'rgba(117, 117, 117, 0.2)',
+                                    mb: 2 
+                                }}>
                                     <CardContent sx={{ py: 1, px: 1.5, '&:last-child': { pb: 1 } }}>
                                         <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.8rem' }}>
                                             Generates a risk register and mitigation plan based on missing items across tabs.

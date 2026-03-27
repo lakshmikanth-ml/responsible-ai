@@ -103,18 +103,36 @@ const TabE = () => {
     const getStatusColor = (status) => {
         switch (status) {
             case 'Present':
-                return { bg: '#c8e6c9', border: '#4caf50', accent: '#2e7d32', label: 'success' };
+                return { 
+                    light: { bg: '#e8f5e8', border: '#81c784', accent: '#2e7d32' },
+                    dark: { bg: 'rgba(76, 175, 80, 0.16)', border: 'rgba(76, 175, 80, 0.32)', accent: '#81c784' },
+                    label: 'success' 
+                };
             case 'Missing':
-                return { bg: '#ffcdd2', border: '#f44336', accent: '#d32f2f', label: 'error' };
+                return { 
+                    light: { bg: '#ffebee', border: '#ef9a9a', accent: '#c62828' },
+                    dark: { bg: 'rgba(244, 67, 54, 0.16)', border: 'rgba(244, 67, 54, 0.32)', accent: '#ef5350' },
+                    label: 'error' 
+                };
             default:
-                return { bg: '#e3f2fd', border: '#2196f3', accent: '#1976d2', label: 'info' };
+                return { 
+                    light: { bg: '#e3f2fd', border: '#64b5f6', accent: '#1976d2' },
+                    dark: { bg: 'rgba(25, 118, 210, 0.16)', border: 'rgba(25, 118, 210, 0.32)', accent: '#64b5f6' },
+                    label: 'info' 
+                };
         }
     };
 
     const getStageColor = (stage) => {
         return stage === 'Baseline'
-            ? { bg: '#e3f2fd', border: '#2196f3', accent: '#1976d2' }
-            : { bg: '#f3e5f5', border: '#9c27b0', accent: '#7b1fa2' };
+            ? { 
+                light: { bg: '#e3f2fd', border: '#64b5f6', accent: '#1976d2' },
+                dark: { bg: 'rgba(25, 118, 210, 0.16)', border: 'rgba(25, 118, 210, 0.32)', accent: '#64b5f6' }
+              }
+            : { 
+                light: { bg: '#f3e5f5', border: '#ce93d8', accent: '#7b1fa2' },
+                dark: { bg: 'rgba(156, 39, 176, 0.16)', border: 'rgba(156, 39, 176, 0.32)', accent: '#ba68c8' }
+              };
     };
 
     const uploadArtifact = (index, event) => {
@@ -227,7 +245,7 @@ th { background: #f5f5f5; text-align: left; }
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 1 }}>
                 E. Evidence & Artifacts
             </Typography>
-            <Typography variant="body2"  sx={{ mb: 3 }}>
+            <Typography variant="body2"  sx={{ mb: 2 }}>
                 Required artifacts are structured. Evidence is versioned and exportable.
             </Typography>
 
@@ -239,7 +257,7 @@ th { background: #f5f5f5; text-align: left; }
             )}
 
             {/* KPI Dashboard */}
-            <Box sx={{ display: 'flex', gap: 1.5, mb: 3, flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                 {[
                     {
                         label: 'Required Artifacts Complete',
@@ -305,12 +323,12 @@ th { background: #f5f5f5; text-align: left; }
             </Box>
 
             {/* Required Artifacts Section */}
-            <Card variant="outlined" sx={{ mb: 3 }}>
+            <Card variant="outlined" sx={{ mb: 2 }}>
                 <CardContent>
                     <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 1 }}>
                         Required Artifacts
                     </Typography>
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 2 }}>
+                    <Typography variant="caption"  sx={{ display: 'block', mb: 2 }}>
                         v1 default set (you can customize per client). Mark "Approved" after review.
                     </Typography>
 
@@ -343,7 +361,8 @@ th { background: #f5f5f5; text-align: left; }
                                     return (
                                         <TableRow key={artifact.id} sx={{ '&:hover': { bgcolor: '#f9f9f9' } }}>
                                             <TableCell>
-                                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
+                                                <Typography variant="subtitle2"
+                                                 sx={{ fontWeight: 600, mb: 0.5 }}>
                                                     {artifact.name}
                                                 </Typography>
                                                 <Typography variant="caption" color="text.secondary">
@@ -359,10 +378,14 @@ th { background: #f5f5f5; text-align: left; }
                                                     label={artifact.stage}
                                                     size="small"
                                                     sx={{
-                                                        bgcolor: stageColor.bg,
-                                                        borderColor: stageColor.border,
-                                                        color: stageColor.accent,
+                                                        bgcolor: (theme) => theme.palette.mode === 'dark' ? stageColor.dark.bg : stageColor.light.bg,
+                                                        borderColor: (theme) => theme.palette.mode === 'dark' ? stageColor.dark.border : stageColor.light.border,
+                                                        color: (theme) => theme.palette.mode === 'dark' ? stageColor.dark.accent : stageColor.light.accent,
                                                         fontWeight: 600,
+                                                        '&:hover': {
+                                                            bgcolor: (theme) => theme.palette.mode === 'dark' ? stageColor.dark.bg : stageColor.light.bg,
+                                                            opacity: 0.8,
+                                                        },
                                                     }}
                                                     variant="outlined"
                                                 />
@@ -373,10 +396,14 @@ th { background: #f5f5f5; text-align: left; }
                                                     label={artifact.status}
                                                     size="small"
                                                     sx={{
-                                                        bgcolor: statusColor.bg,
-                                                        borderColor: statusColor.border,
-                                                        color: statusColor.accent,
+                                                        bgcolor: (theme) => theme.palette.mode === 'dark' ? statusColor.dark.bg : statusColor.light.bg,
+                                                        borderColor: (theme) => theme.palette.mode === 'dark' ? statusColor.dark.border : statusColor.light.border,
+                                                        color: (theme) => theme.palette.mode === 'dark' ? statusColor.dark.accent : statusColor.light.accent,
                                                         fontWeight: 600,
+                                                        '&:hover': {
+                                                            bgcolor: (theme) => theme.palette.mode === 'dark' ? statusColor.dark.bg : statusColor.light.bg,
+                                                            opacity: 0.8,
+                                                        },
                                                     }}
                                                     variant="outlined"
                                                 />
@@ -497,28 +524,31 @@ th { background: #f5f5f5; text-align: left; }
             </Alert>
 
             {/* Demo Data Note & Reset Section */}
-            <Card variant="outlined" sx={{ mt: 2, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
-                <CardContent sx={{ pb: 0 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-                        <Box>
-                            <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>
-                                v1 note:
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                                This file stores state in localStorage for demo purposes. Replace with GenAI Foundry backend APIs for enterprise deployments.
-                            </Typography>
-                        </Box>
-                        <Button
-                            variant="outlined"
-                            size="small"
-                            onClick={resetAll}
-                            sx={{ whiteSpace: 'nowrap' }}
-                        >
-                            Reset Demo Data
-                        </Button>
-                    </Box>
-                </CardContent>
-            </Card>
+           <Card variant="outlined" sx={{ mt: 2,
+                           bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : '#fafafa',
+                           borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(171, 171, 171, 0.15)' : '#e0e0e0'  }}>
+                          <CardContent sx={{ pb: 0 }}>
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+                                  <Box>
+                                      <Typography variant="caption" sx={{ fontWeight: 600,
+                                           display: 'block', mb: 0.5 }}>
+                                          v1 note:
+                                      </Typography>
+                                      <Typography variant="caption" color="text.secondary">
+                                          This file stores state in localStorage for demo purposes. Replace with GenAI Foundry backend APIs for enterprise deployments.
+                                      </Typography>
+                                  </Box>
+                                  <Button
+                                      variant="outlined"
+                                      size="small"
+                                      onClick={resetAll}
+                                      sx={{ whiteSpace: 'nowrap' }}
+                                  >
+                                      Reset Demo Data
+                                  </Button>
+                              </Box>
+                          </CardContent>
+                      </Card>
         </Box>
     );
 };

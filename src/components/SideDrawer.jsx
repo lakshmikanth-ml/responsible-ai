@@ -70,7 +70,7 @@ export default function SideDrawer({
               </Typography>
             )}
             {subtitle && (
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="caption" >
                 {subtitle}
               </Typography>
             )}

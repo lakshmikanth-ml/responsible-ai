@@ -178,10 +178,9 @@ const TabD = ({ projectContext = {}, onStatusMessage }) => {
             {/* LEFT PANEL: PROJECT CONTEXT */}
             <Grid size={{ xs: 12, sm: 4, md: 4 }}
             >
-                <Box sx={{
-                    border: "1px solid rgba(117, 117, 117, 0.2)",
-                    p: 2, borderRadius: 2, mb: 2
-                }}>
+                <Card elevation={0}
+                    sx={{ position: 'sticky', top: 20 }}>
+                    <CardContent>
                     <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
                         Project Context
                     </Typography>
@@ -284,19 +283,22 @@ const TabD = ({ projectContext = {}, onStatusMessage }) => {
                         </Button>
                     </Box>
 
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 2, fontStyle: 'italic' }}>
+                    <Typography variant="caption"  sx={{ display: 'block',
+                         mt: 2, }}>
                         Data persists locally (browser localStorage) for demo realism.
                     </Typography>
-                </Box>
+                </CardContent></Card>
             </Grid>
 
             {/* RIGHT PANEL: EVALUATION CONTENT */}
             <Grid size={{ xs: 12, sm: 8, md: 8 }} sx={{ p: 0 }}>
-                <Box sx={{ mb: 2, border: "1px solid rgba(117, 117, 117, 0.2)", p: 2, borderRadius: 2 }}>
+                <Card elevation={0}
+                    sx={{ position: 'sticky', top: 20 }}>
+                    <CardContent>
                     <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
                         🧪 D. Evaluation (Privacy & Security Testing)
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    <Typography variant="body2"  sx={{ mb: 2 }}>
                         Define the test suite that must pass before release: PII leakage tests, prompt-injection tests, exfiltration tests, RBAC/entitlement checks, and redaction correctness.
                     </Typography>
                     <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
@@ -307,17 +309,18 @@ const TabD = ({ projectContext = {}, onStatusMessage }) => {
                             Save Evaluation
                         </Button>
                     </Box>
-                </Box>
+                </CardContent></Card>
 
-                <Card variant="outlined" sx={{ mb: 2 }}>
+                <Card variant="outlined" sx={{ mb: 2,mt:2 }}>
                     <CardContent>
                         <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
                             Evaluation Suite (must-run)
                         </Typography>
-                        <TableContainer component={Paper} variant="outlined">
-                            <Table size="small">
+                        <TableContainer 
+                       >
+                            <Table  size="small">
                                 <TableHead>
-                                    <TableRow sx={{ bgcolor: '#f5f5f5' }}>
+        <TableRow >
                                         <TableCell sx={{ fontWeight: 600, width: '220px' }}>Test Category</TableCell>
                                         <TableCell sx={{ fontWeight: 600, width: '260px' }}>Test</TableCell>
                                         <TableCell sx={{ fontWeight: 600, width: '160px' }}>Required Threshold</TableCell>

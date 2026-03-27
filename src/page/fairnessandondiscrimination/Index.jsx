@@ -292,7 +292,7 @@ const Index = () => {
                         variant="outlined"
                         sx={{
                             borderRadius: '14px',
-                            background: '#f8fafc',
+                            background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.neutral : '#f8fafc',
                             border: '1px solid lightgray',
                             borderLeft: '4px solid #184ea4',
                         }}
@@ -327,7 +327,7 @@ const Index = () => {
                 <Tabs
                     value={activeTab}
                     onChange={handleTabChange}
-                    variant="scrollable"
+                     variant="scrollable"
                     scrollButtonsDisplay="auto"
                     sx={{
                         borderBottom: 1,

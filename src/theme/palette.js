@@ -122,11 +122,13 @@ const palette = (mode) => {
       primary: GREY[800],
       secondary: GREY[700],
       disabled: GREY[1000],
+       darkGrey:"#757575",
     },
     background: {
       paper: GREY[0],
       default: GREY[100],
       neutral: GREY[200],
+        tableHeader: '#F8F8F8',
     },
     action: {
       ...COMMON.action,
@@ -144,12 +146,14 @@ const palette = (mode) => {
       // secondary: "#9CA3AF",
       secondary: "#f8f8f8",
       disabled: "#6B7280",
+       darkGrey:"#757575",
     },
 
     background: {
       paper: "#1a1a1a", //GREY[700]",
       default: GREY[800],
       neutral: alpha(GREY[500], 0.12),
+        tableHeader: '#F8F8F8',
     },
     action: {
       ...COMMON.action,

@@ -211,7 +211,7 @@ export default function TabBCoverage() {
                         <Typography variant="h6" fontWeight={700}>
                             B. Scope & Explainability Coverage Matrix
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" mt={0.5} maxWidth={760}>
+                        <Typography variant="body2" mt={0.5} maxWidth={760}>
                             Transparency equivalent of “impacted groups.” Define mandatory outputs and required explanation components.
                             Missing coverage blocks training.
                         </Typography>
@@ -335,13 +335,22 @@ export default function TabBCoverage() {
                 <Divider sx={{ my: 2 }} />
 
                 <Grid container spacing={2}>
-                    <Grid size={{ xs: 12, md: 4 }}>
+                    <Grid size={{ xs: 12, md: 4 }} sx={{ display: "flex" }}>
                         <Card
                             variant="outlined"
                             sx={{
                                 p: 2,
-                                background: "linear-gradient(120deg, #e3f2fd 0%, #f5f8ff 100%)",
-                                borderColor: "#bbdefb",
+                                height: "100%",
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between",
+                                background: (theme) =>
+                                    theme.palette.mode === "dark"
+                                        ? "linear-gradient(120deg, rgba(23,79,162,0.22) 0%, rgba(58,134,255,0.12) 100%)"
+                                        : "linear-gradient(120deg, #e3f2fd 0%, #f5f8ff 100%)",
+                                borderColor: (theme) =>
+                                    theme.palette.mode === "dark" ? "rgba(79,127,196,0.35)" : "#bbdefb",
                             }}
                         >
                             <Stack direction="row" spacing={1} alignItems="center">
@@ -362,13 +371,22 @@ export default function TabBCoverage() {
                             </Typography>
                         </Card>
                     </Grid>
-                    <Grid size={{ xs: 12, md: 4 }}>
+                    <Grid size={{ xs: 12, md: 4 }} sx={{ display: "flex" }}>
                         <Card
                             variant="outlined"
                             sx={{
                                 p: 2,
-                                background: "linear-gradient(120deg, #fff3e0 0%, #fff7ed 100%)",
-                                borderColor: "#ffe0b2",
+                                height: "100%",
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between",
+                                background: (theme) =>
+                                    theme.palette.mode === "dark"
+                                        ? "linear-gradient(120deg, rgba(255,171,0,0.18) 0%, rgba(255,243,224,0.08) 100%)"
+                                        : "linear-gradient(120deg, #fff3e0 0%, #fff7ed 100%)",
+                                borderColor: (theme) =>
+                                    theme.palette.mode === "dark" ? "rgba(255,214,102,0.28)" : "#ffe0b2",
                             }}
                         >
                             <Stack direction="row" spacing={1} alignItems="center">
@@ -385,8 +403,23 @@ export default function TabBCoverage() {
                             </Typography>
                         </Card>
                     </Grid>
-                    <Grid size={{ xs: 12, md: 4 }}>
-                        <Card variant="outlined" sx={{ p: 2, borderColor: "divider" }}>
+                    <Grid size={{ xs: 12, md: 4 }} sx={{ display: "flex" }}>
+                        <Card
+                            variant="outlined"
+                            sx={{
+                                p: 2,
+                                height: "100%",
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between",
+                                borderColor: "divider",
+                                background: (theme) =>
+                                    theme.palette.mode === "dark"
+                                        ? "linear-gradient(120deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)"
+                                        : theme.palette.background.paper,
+                            }}
+                        >
                             <Typography variant="subtitle2" color="text.secondary">
                                 Policy Pack Preview
                             </Typography>
@@ -554,7 +587,7 @@ export default function TabBCoverage() {
                         mt: 2,
                         border: "1px solid",
                         borderColor: "primary.100",
-                        background: "#f8fafc",
+                        background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.neutral : "#f8fafc",
                     }}
                 >
                     Hard rule: any mandatory output must have at least one explanation component enabled.

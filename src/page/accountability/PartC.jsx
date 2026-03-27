@@ -209,7 +209,7 @@ const PartC = ({ projectContext = {}, onStatusMessage }) => {
                                 Ingest DFA JSON
                             </Button>
                         </Box>
-                        <Typography variant="caption" sx={{ display: 'block', mb: 1, color: 'text.secondary' }}>
+                        <Typography variant="caption" sx={{ display: 'block', mb: 1,  }}>
                             Paste DFA JSON from the separate Data Foundation Analyzer app. This populates Tab C and influences gates.                        </Typography>
                         <TextField
                             multiline
@@ -352,7 +352,7 @@ const PartC = ({ projectContext = {}, onStatusMessage }) => {
                         </Box>
 
                         {/* How to use this tab */}
-                        <Card variant="outlined" sx={{ mb: 2, p: 1.5, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
+                        <Card variant="outlined" sx={{ mb: 2, p: 1.5, bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : '#fafafa', borderColor: '#e0e0e0' }}>
                             <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
                                 How to use this tab
                             </Typography>

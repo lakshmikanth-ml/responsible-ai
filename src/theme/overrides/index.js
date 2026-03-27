@@ -9,7 +9,7 @@ import { MuiTextField } from './MuiTextField';
 import { MuiButton } from './MuiButton';
 import { MuiChip } from './MuiChip';
 // import { MuiCheckbox } from './MuiCheckbox';
-import { MuiTable } from './MuiTable';
+import { MuiTable, MuiTableContainer, MuiTableRow, MuiTableCell, MuiTablePagination } from './MuiTable';
 import { MuiTypography } from './MuiTypography';
 export const components = {
   MuiCssBaseline,
@@ -24,5 +24,9 @@ export const components = {
   MuiChip,
   // MuiCheckbox,
   MuiTable,
+  MuiTableContainer,
+  MuiTableRow,
+  MuiTableCell,
+  MuiTablePagination,
   MuiTypography
 };

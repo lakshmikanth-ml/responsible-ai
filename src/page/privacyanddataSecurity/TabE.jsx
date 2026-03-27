@@ -184,12 +184,9 @@ const TabE = ({ projectContext = {}, onStatusMessage }) => {
             {/* LEFT PANEL: PROJECT CONTEXT */}
             <Grid size={{ xs: 12, sm: 4, md: 4 }}
             >
-                <Box sx={{
-                    border: '1px solid #e0e0e0',
-                    p: 2,
-                    borderRadius: 2,
-                    mb: 2,
-                }}>
+              <Card elevation={0}
+                    sx={{ position: 'sticky', top: 20 }}>
+                    <CardContent>
                     <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
                         Project Context
                     </Typography>
@@ -292,19 +289,17 @@ const TabE = ({ projectContext = {}, onStatusMessage }) => {
                         </Button>
                     </Box>
 
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 2, fontStyle: 'italic' }}>
+                    <Typography variant="caption"  sx={{ display: 'block', 
+                        mt: 2,  }}>
                         Data persists locally (browser localStorage) for demo realism.
                     </Typography>
-                </Box>
+                </CardContent></Card>
             </Grid>
 
             {/* RIGHT PANEL: Risks & Gaps */}
             <Grid size={{ xs: 12, sm: 8, md: 8 }}
-                sx={{
-                    p: 2,
-                    border: "1px solid rgba(117, 117, 117, 0.2)",
-                    borderRadius: 2
-                }}>
+               
+                >
 
 
 
@@ -325,7 +320,7 @@ const TabE = ({ projectContext = {}, onStatusMessage }) => {
                                 <Typography variant="h6" fontWeight={700}>
                                     E. Gaps & Risks (Auto + Manual)
                                 </Typography>
-                                <Typography variant="body2" color="text.secondary">
+                                <Typography variant="body2" >
                                     Auto-generated risks come from DFA and missing coverage/evaluation. You can also add controlled “manual risks” using dropdowns (no free text unless needed).
                                 </Typography>
                             </Box>
@@ -344,7 +339,7 @@ const TabE = ({ projectContext = {}, onStatusMessage }) => {
                                 mt: 2,
                                 p: 1.5,
                                 borderRadius: 2,
-                                background: "#f8fafc",
+                                background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.neutral : "#f8fafc",
                                 borderLeft: "4px solid #184ea4",
                             }}
                         >

@@ -286,7 +286,7 @@ const TabA = ({ projectContext = {}, onStatusMessage }) => {
                             </Button>
                         </Box>
 
-                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.6 }}>
+                        <Typography variant="caption"  sx={{ display: 'block', lineHeight: 1.6 }}>
                             Data persists locally (browser localStorage) for demo realism.
                         </Typography>
                     </CardContent>
@@ -295,19 +295,15 @@ const TabA = ({ projectContext = {}, onStatusMessage }) => {
 
             {/* RIGHT PANEL: TAB A CONTENT */}
             <Grid size={{ xs: 12, md: 8, lg: 8 }}>
-                <Box sx={{
-                    p: 0,
-                    border: "1px solid rgba(117, 117, 117, 0.2)",
-                    borderRadius: "8px",
-                    padding: "16px",
-
-                }}>
+                 <Card elevation={0}
+                   >
+                    <CardContent>
                     {/* Header */}
                     <Box sx={{ mb: 4 }}>
                         <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
                             A. Privacy Objective &amp; Security Ownership
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                        <Typography variant="body2"  sx={{ mb: 2 }}>
                             Set the privacy promise, define what must never happen (leakage), and assign accountable owners. Missing owners can block release for regulated data use cases.
                         </Typography>
                         <Box sx={{ display: 'flex', gap: 2 }}>
@@ -416,33 +412,102 @@ const TabA = ({ projectContext = {}, onStatusMessage }) => {
                                     </Typography>
                                     <FormGroup>
                                         <FormControlLabel
-                                            control={<Checkbox
-                                                checked={formData?.dataTypes?.pii} onChange={() => handleCheckboxChange('pii')} />}
-                                            label="PII (names, SSN, address)"
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData?.dataTypes?.pii} 
+                                                    onChange={() => handleCheckboxChange('pii')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    PII (names, SSN, address)
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData?.dataTypes?.phi} onChange={() => handleCheckboxChange('phi')} />}
-                                            label="PHI (health info)"
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData?.dataTypes?.phi} 
+                                                    onChange={() => handleCheckboxChange('phi')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    PHI (health info)
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData?.dataTypes?.pci} onChange={() => handleCheckboxChange('pci')} />}
-                                            label="PCI (card data)"
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData?.dataTypes?.pci} 
+                                                    onChange={() => handleCheckboxChange('pci')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    PCI (card data)
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData?.dataTypes?.secrets} onChange={() => handleCheckboxChange('secrets')} />}
-                                            label="Secrets (keys/tokens)"
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData?.dataTypes?.secrets} 
+                                                    onChange={() => handleCheckboxChange('secrets')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    Secrets (keys/tokens)
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData?.dataTypes?.policyData} onChange={() => handleCheckboxChange('policyData')} />}
-                                            label="Policy / Claims Documents"
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData?.dataTypes?.policyData} 
+                                                    onChange={() => handleCheckboxChange('policyData')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    Policy / Claims Documents
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData?.dataTypes?.internalDocs} onChange={() => handleCheckboxChange('internalDocs')} />}
-                                            label="Internal SOP / Guidelines"
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData?.dataTypes?.internalDocs} 
+                                                    onChange={() => handleCheckboxChange('internalDocs')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    Internal SOP / Guidelines
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox checked={formData?.dataTypes?.customerChats} onChange={() => handleCheckboxChange('customerChats')} />}
-                                            label="Customer chat transcripts"
+                                            control={
+                                                <Checkbox
+                                                    size='small'
+                                                    checked={formData?.dataTypes?.customerChats} 
+                                                    onChange={() => handleCheckboxChange('customerChats')} 
+                                                />
+                                            }
+                                            label={
+                                                <Typography variant='body2'>
+                                                    Customer chat transcripts
+                                                </Typography>
+                                            }
                                         />
                                     </FormGroup>
                                 </CardContent>
@@ -536,7 +601,7 @@ const TabA = ({ projectContext = {}, onStatusMessage }) => {
                             </Typography>
                         </CardContent>
                     </Card>
-                </Box>
+                </CardContent></Card>
             </Grid>
         </Grid >
     );

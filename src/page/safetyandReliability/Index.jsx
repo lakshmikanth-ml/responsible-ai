@@ -102,7 +102,7 @@ const ProjectContextCard = ({
                 </Typography>
             )}
 
-            <Typography variant="caption" color="text.secondary" mt={1} display="block">
+            <Typography variant="caption"  mt={1} display="block">
                 Data persists locally (browser localStorage) for demo realism.
             </Typography>
         </CardContent>
@@ -319,8 +319,37 @@ const Index = () => {
                             msg: 'No Guardian runtime signals loaded yet.'
                         },
                     ].map((gate, idx) => (
-                        <Card key={idx} variant="outlined" sx={{ p: 2 }}>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                        <Card 
+                            key={idx} 
+                            variant="outlined" 
+                            sx={{ 
+                                p: 2,
+                                height: '100%',
+                                transition: 'all 0.2s ease-in-out',
+                                '&:hover': {
+                                    transform: 'translateY(-2px)',
+                                    boxShadow: (theme) => theme.palette.mode === 'dark' 
+                                        ? `0 4px 20px ${gate.color}40` 
+                                        : `0 4px 20px ${gate.color}20`,
+                                    borderColor: (theme) => theme.palette.mode === 'dark' 
+                                        ? `${gate.color}60` 
+                                        : `${gate.color}40`,
+                                },
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? `${gate.color}40` 
+                                    : `${gate.color}20`,
+                                borderLeft: '4px solid',
+                                borderLeftColor: gate.color,
+                            }}
+                        >
+                            <Typography 
+                                variant="subtitle2" 
+                                sx={{ 
+                                    fontWeight: 700, 
+                                    mb: 1,
+                                    color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : 'rgba(0, 0, 0, 0.87)',
+                                }}
+                            >
                                 {gate.name}
                             </Typography>
                             <Box sx={{
@@ -328,22 +357,49 @@ const Index = () => {
                                 alignItems: 'center',
                                 gap: 1,
                                 mb: 1.5,
-                                p: 1,
-                                bgcolor: gate.color + '15',
-                                borderRadius: '4px',
+                                p: "6px",
+                                borderRadius: '8px',
                                 width: 'fit-content',
+                                background: (theme) => theme.palette.mode === 'dark' 
+                                    ? `linear-gradient(135deg, ${gate.color}25 0%, ${gate.color}15 100%)` 
+                                    : `linear-gradient(135deg, ${gate.color}15 0%, ${gate.color}08 100%)`,
+                                border: '1px solid',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? `${gate.color}50` 
+                                    : `${gate.color}30`,
                             }}>
                                 <Box sx={{
-                                    width: 10,
-                                    height: 10,
+                                    width: 12,
+                                    height: 12,
                                     borderRadius: '50%',
                                     bgcolor: gate.color,
+                                    boxShadow: (theme) => theme.palette.mode === 'dark' 
+                                        ? `0 0 8px ${gate.color}60` 
+                                        : `0 0 8px ${gate.color}40`,
                                 }} />
-                                <Typography variant="caption" sx={{ fontWeight: 700, color: gate.color }}>
+                                <Typography 
+                                    variant="caption" 
+                                    sx={{ 
+                                        fontWeight: 700, 
+                                        color: gate.color,
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.5px',
+                                    }}
+                                >
                                     {gate.status}
                                 </Typography>
                             </Box>
-                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.5 }}>
+                            <Typography 
+                                variant="caption" 
+                                sx={{ 
+                                    display: 'block', 
+                                    lineHeight: 1.6,
+                                    color: (theme) => theme.palette.mode === 'dark' 
+                                        ? 'rgba(255, 255, 255, 0.7)' 
+                                        : 'rgba(0, 0, 0, 0.6)',
+                                    fontSize: '0.75rem',
+                                }}
+                            >
                                 {gate.msg}
                             </Typography>
                         </Card>
@@ -354,7 +410,7 @@ const Index = () => {
 
 
                     {/* Right Panel: Tabs */}
-                    <Grid item xs={12} md={9}>
+                    <Grid size={{xs:12}}>
                         {/* Tab Navigation */}
                         <Tabs
                             value={activeTab}

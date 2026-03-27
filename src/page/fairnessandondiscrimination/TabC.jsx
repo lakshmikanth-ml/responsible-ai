@@ -231,7 +231,7 @@ const TabC = () => {
             {/* KPI Dashboard - Risk Counts */}
             <Box sx={{
                 display: 'flex', gap: 2,
-                mb: 3, flexWrap: 'wrap'
+                mb: 2, flexWrap: 'wrap'
             }}>
                 {[
                     { label: 'Critical Risks', count: riskCounts.Critical, desc: 'Must be addressed to pass Baseline.', bg: '#ffebee', border: '#ef5350', accent: '#d32f2f' },
@@ -284,7 +284,7 @@ const TabC = () => {
             )}
 
             {/* Active Risks Section */}
-            <Card variant="outlined" sx={{ mb: 3 }}>
+            <Card variant="outlined" sx={{ mb: 2 }}>
                 <CardContent>
                     <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
                         Active Risks
@@ -509,29 +509,31 @@ const TabC = () => {
                 </DialogActions>
             </Dialog>
 
-            {/* Demo Data Note & Reset Section */}
-            <Card variant="outlined" sx={{ mb: 0, bgcolor: '#fafafa', borderColor: '#e0e0e0' }}>
-                <CardContent sx={{ pb: 0 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-                        <Box>
-                            <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>
-                                v1 note:
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                                This file stores state in localStorage for demo purposes. Replace with GenAI Foundry backend APIs for enterprise deployments.
-                            </Typography>
-                        </Box>
-                        <Button
-                            variant="outlined"
-                            size="small"
-                            onClick={resetAll}
-                            sx={{ whiteSpace: 'nowrap' }}
-                        >
-                            Reset Demo Data
-                        </Button>
-                    </Box>
-                </CardContent>
-            </Card>
+         <Card variant="outlined" sx={{ mt: 2,
+                         bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.neutral' : '#fafafa',
+                         borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(171, 171, 171, 0.15)' : '#e0e0e0'  }}>
+                        <CardContent sx={{ pb: 0 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+                                <Box>
+                                    <Typography variant="caption" sx={{ fontWeight: 600,
+                                         display: 'block', mb: 0.5 }}>
+                                        v1 note:
+                                    </Typography>
+                                    <Typography variant="caption" color="text.secondary">
+                                        This file stores state in localStorage for demo purposes. Replace with GenAI Foundry backend APIs for enterprise deployments.
+                                    </Typography>
+                                </Box>
+                                <Button
+                                    variant="outlined"
+                                    size="small"
+                                    onClick={resetAll}
+                                    sx={{ whiteSpace: 'nowrap' }}
+                                >
+                                    Reset Demo Data
+                                </Button>
+                            </Box>
+                        </CardContent>
+                    </Card>
         </Box>
     );
 };

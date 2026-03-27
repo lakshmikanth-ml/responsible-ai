@@ -152,7 +152,8 @@ export default function TabCTrainingReadiness() {
                         <Typography variant="h6" fontWeight={700}>
                             C. Training-Time Explainability Readiness (DFA + Config)
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" mt={0.5}>
+                        <Typography variant="body2"
+                          mt={0.5}>
                             Ingest Data Foundation Analyzer signals and determine whether citations and explanations can be trusted
                             before training. DFA generates risks/actions and constrains policy.
                         </Typography>
@@ -206,13 +207,20 @@ export default function TabCTrainingReadiness() {
                             sx={{
                                 mt: 0.5,
                                 p: 1,
-                                bgcolor: "grey.50",
+                                bgcolor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(255, 255, 255, 0.05)' 
+                                    : 'grey.50',
                                 borderRadius: 1.5,
                                 border: "1px solid",
-                                borderColor: "divider",
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(255, 255, 255, 0.1)' 
+                                    : 'divider',
                                 whiteSpace: "pre-wrap",
                                 fontFamily: "monospace",
                                 fontSize: 12,
+                                color: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(255, 255, 255, 0.9)' 
+                                    : 'rgba(0, 0, 0, 0.9)',
                             }}
                         >
                             {dfa?.controls || "No controls generated."}
@@ -271,7 +279,7 @@ export default function TabCTrainingReadiness() {
                         border: "1px solid",
                         borderColor: "divider",
                         borderLeft: "4px solid #184ea4",
-                        background: "#f8fafc",
+                        background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.neutral : "#f8fafc",
                         display: "flex",
                         gap: 1,
                         alignItems: "flex-start",

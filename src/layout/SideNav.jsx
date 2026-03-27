@@ -62,7 +62,7 @@ const StyledDrawer = styled(Drawer, {
   "& .MuiDrawer-paper": {
     width: open ? drawerWidth : collapsedWidth,
     backgroundColor: theme.palette.background.paper,
-     borderRight: `none`,
+    borderRight: "1px solid rgba(117, 117, 117, 0.2)",
     boxShadow: "none",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -76,7 +76,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   // padding: "8px",
-  borderBottom: `1px solid ${theme.palette.divider}`,
   ...theme.mixins.toolbar,
 }));
 
@@ -328,7 +327,7 @@ export default function SideNav({
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
-            
+            borderRight: "1px solid rgba(117, 117, 117, 0.2)",
           },
         }}
       >

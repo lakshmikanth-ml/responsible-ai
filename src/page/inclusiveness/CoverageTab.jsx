@@ -27,7 +27,7 @@ import {
     TableBody,
     Button,
     Chip,
-    TableContainer,
+    TableContainer,Autocomplete,
     Paper
 } from "@mui/material";
 
@@ -101,12 +101,21 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
     };
 
     return (
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 2 }}>
             <Grid container spacing={3}>
                 {/* LEFT: form */}
                 <Grid size={{ xs: 12, md: 8 }}>
-                    <Typography fontWeight={700} mb={1}>B. Coverage</Typography>
-                    <Typography variant="body2" color="text.secondary" mb={2}>
+             <Typography 
+                variant='h6' 
+                sx={{ 
+                    fontWeight: 700,
+                 
+                    mb: 2,
+                }}
+             >B. Coverage</Typography>
+                    <Typography variant="body2" 
+                    
+                     mb={2}>
                         Declare which journeys, channels, languages, and accessibility requirements are in scope. Coverage drives your coverage % chip and gate checks.
                     </Typography>
 
@@ -114,7 +123,19 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                         {/* Journey Coverage */}
                         <Grid container spacing={2} mb={2}>
                             <Grid size={{ xs: 12, md: 4 }}>
-                                <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: 1 }}>
+                                <Box 
+                                    sx={{ 
+                                        border: '1px solid',
+                                        borderColor: (theme) => theme.palette.mode === 'dark' 
+                                            ? 'rgba(171, 171, 171, 0.15)' 
+                                            : 'rgba(0, 0, 0, 0.2)',
+                                        borderRadius: 1,
+                                        p: 2,
+                                        height: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                    }}
+                                >
                                     <FormControlLabel
                                         control={
                                             <Switch
@@ -122,9 +143,14 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                                                 onChange={(e) => formik.setFieldValue('quoteJourney', e.target.checked)}
                                             />
                                         }
-                                        label="Quote Journey Coverage"
+                                        label={
+                                            <Typography sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : 'rgb(26, 26, 26)' }}>
+                                                Quote Journey Coverage
+                                            </Typography>
+                                        }
                                     />
-                                    <Typography variant="caption" color="text.secondary">
+                                    <Typography variant="caption" 
+                                    >
                                         Inclusive flows from start to bind (where applicable).
                                     </Typography>
                                 </Box>
@@ -132,7 +158,19 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                             </Grid>
 
                             <Grid size={{ xs: 12, md: 4 }}>
-                                <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: 1 }}>
+                                <Box 
+                                    sx={{ 
+                                        border: '1px solid',
+                                          borderColor: (theme) => theme.palette.mode === 'dark' 
+                                            ? 'rgba(171, 171, 171, 0.15)' 
+                                            : 'rgba(0, 0, 0, 0.2)',
+                                        borderRadius: 1,
+                                        p: 2,
+                                        height: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                    }}
+                                >
                                     <FormControlLabel
                                         control={
                                             <Switch
@@ -140,9 +178,13 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                                                 onChange={(e) => formik.setFieldValue('claimsJourney', e.target.checked)}
                                             />
                                         }
-                                        label="Claims Journey Coverage"
+                                        label={
+                                            <Typography sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : 'rgb(26, 26, 26)' }}>
+                                                Claims Journey Coverage
+                                            </Typography>
+                                        }
                                     />
-                                    <Typography variant="caption" color="text.secondary">
+                                    <Typography variant="caption">
                                         FNOL, status, documentation, escalations.
                                     </Typography>
                                 </Box>
@@ -150,7 +192,19 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                             </Grid>
 
                             <Grid size={{ xs: 12, md: 4 }}>
-                                <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: 1 }}>
+                                <Box 
+                                    sx={{ 
+                                        border: '1px solid',
+                                            borderColor: (theme) => theme.palette.mode === 'dark' 
+                                            ? 'rgba(171, 171, 171, 0.15)' 
+                                            : 'rgba(0, 0, 0, 0.2)',
+                                        borderRadius: 1,
+                                        p: 2,
+                                        height: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                    }}
+                                >
                                     <FormControlLabel
                                         control={
                                             <Switch
@@ -158,9 +212,13 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                                                 onChange={(e) => formik.setFieldValue('customerSupport', e.target.checked)}
                                             />
                                         }
-                                        label="Customer Support Coverage"
+                                        label={
+                                            <Typography sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : 'rgb(26, 26, 26)' }}>
+                                                Customer Support Coverage
+                                            </Typography>
+                                        }
                                     />
-                                    <Typography variant="caption" color="text.secondary">
+                                    <Typography variant="caption" >
                                         CSR assistance, chat/voice templates.
                                     </Typography>
 
@@ -172,7 +230,19 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                         {/* Standards */}
                         <Grid container spacing={2} mb={2}>
                             <Grid size={{ xs: 12, md: 4 }}>
-                                <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: 1 }}>
+                                <Box 
+                                    sx={{ 
+                                        border: '1px solid',
+                                        borderColor: (theme) => theme.palette.mode === 'dark' 
+                                            ? 'rgba(171, 171, 171, 0.15)' 
+                                            : 'rgba(0, 0, 0, 0.2)',
+                                        borderRadius: 1,
+                                        p: 2,
+                                        height: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                    }}
+                                >
                                     <FormControlLabel
                                         control={
                                             <Switch
@@ -180,53 +250,103 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                                                 onChange={(e) => formik.setFieldValue('wcagRequired', e.target.checked)}
                                             />
                                         }
-                                        label="WCAG Compliance Required"
+                                        label={
+                                            <Typography sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#ffffff' : 'rgb(26, 26, 26)' }}>
+                                                WCAG Compliance Required
+                                            </Typography>
+                                        }
                                     />
 
-                                    <Typography variant="caption" color="text.secondary">
+                                    <Typography variant="caption">
                                         Target WCAG level for UI and outputs.
                                     </Typography>
                                 </Box>
                             </Grid>
 
                             <Grid size={{ xs: 12, md: 4 }}>
-                                <TextField
+                                <Autocomplete
                                     size="small"
-                                    select
+                                    options={[
+                                        { value: 'wcag_aa', label: 'WCAG 2.1 AA' },
+                                        { value: 'wcag_aaa', label: 'WCAG 2.1 AAA' },
+                                        { value: 'internal', label: 'Internal Standard' },
+                                    ]}
+                                    getOptionLabel={(option) => option.label}
+                                    value={formik.values.targetStandard ? 
+                                        [
+                                            { value: 'wcag_aa', label: 'WCAG 2.1 AA' },
+                                            { value: 'wcag_aaa', label: 'WCAG 2.1 AAA' },
+                                            { value: 'internal', label: 'Internal Standard' },
+                                        ].find(option => option.value === formik.values.targetStandard) || null
+                                        : null
+                                    }
+                                    onChange={(event, newValue) => {
+                                        formik.setFieldValue('targetStandard', newValue ? newValue.value : '');
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Target Standard"
+                                            error={formik.touched.targetStandard && Boolean(formik.errors.targetStandard)}
+                                            helperText={formik.touched.targetStandard && formik.errors.targetStandard}
+                                        />
+                                    )}
                                     fullWidth
-                                    label="Target Standard"
-                                    {...formik.getFieldProps('targetStandard')}
-                                    error={formik.touched.targetStandard && Boolean(formik.errors.targetStandard)}
-                                    helperText={formik.touched.targetStandard && formik.errors.targetStandard}
-                                >
-                                    <MenuItem value="wcag_aa">WCAG 2.1 AA</MenuItem>
-                                    <MenuItem value="wcag_aaa">WCAG 2.1 AAA</MenuItem>
-                                    <MenuItem value="internal">Internal Standard</MenuItem>
-                                </TextField>
+                                    sx={{ mb: 2 }}
+                                />
+                                <Autocomplete
+                                    size="small"
+                                    multiple
+                                    options={[
+                                        { value: 'axe', label: 'Axe' },
+                                        { value: 'lighthouse', label: 'Lighthouse' },
+                                        { value: 'manual', label: 'Manual Audit' },
+                                        { value: 'keyboard', label: 'Keyboard-only Journey' },
+                                    ]}
+                                    getOptionLabel={(option) => option.label}
+                                    value={formik.values.validationTools && formik.values.validationTools.length > 0 ? 
+                                        [
+                                            { value: 'axe', label: 'Axe' },
+                                            { value: 'lighthouse', label: 'Lighthouse' },
+                                            { value: 'manual', label: 'Manual Audit' },
+                                            { value: 'keyboard', label: 'Keyboard-only Journey' },
+                                        ].filter(option => formik.values.validationTools.includes(option.value))
+                                        : []
+                                    }
+                                    onChange={(event, newValue) => {
+                                        formik.setFieldValue('validationTools', newValue.map(option => option.value));
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Validation Tools"
+                                            error={formik.touched.validationTools && Boolean(formik.errors.validationTools)}
+                                            helperText={formik.touched.validationTools && formik.errors.validationTools}
+                                        />
+                                    )}
+                                    fullWidth
+                                />
                             </Grid>
 
-                            <Grid size={{ xs: 12, md: 4 }}>
-                                <TextField
-                                    size="small"
-                                    select
-                                    fullWidth
-                                    SelectProps={{ multiple: true }}
-                                    label="Validation Tools"
-                                    {...formik.getFieldProps('validationTools')}
-                                    error={formik.touched.validationTools && Boolean(formik.errors.validationTools)}
-                                    helperText={formik.touched.validationTools && formik.errors.validationTools}
-                                >
-                                    <MenuItem value="axe">Axe</MenuItem>
-                                    <MenuItem value="lighthouse">Lighthouse</MenuItem>
-                                    <MenuItem value="manual">Manual Audit</MenuItem>
-                                    <MenuItem value="keyboard">Keyboard-only Journey</MenuItem>
-                                </TextField>
-                            </Grid>
+                          
                         </Grid>
 
                         {/* Coverage Checklist */}
-                        <Typography fontWeight={600} mb={1}>Coverage Checklist</Typography>
-                        <TableContainer sx={{ mb: 2 }} component={Paper}>
+                        <Typography 
+                            variant='h6' 
+                            sx={{ 
+                                fontWeight: 700,
+                              
+                                mb: 2,
+                            }}
+                        >Coverage Checklist</Typography>
+                        <TableContainer 
+                            sx={{ 
+                                mb: 2,
+                               
+                                
+                            }}
+                        >
                             <Table >
                                 <TableHead>
                                     <TableRow>
@@ -241,35 +361,62 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                                         <TableRow key={row.key}>
                                             <TableCell>{row.label}</TableCell>
                                             <TableCell>
-                                                <TextField
-                                                    fullWidth
-                                                    select
+                                                <Autocomplete
                                                     size="small"
-                                                    value={row.status}
-                                                    onChange={(e) =>
-                                                        formik.setFieldValue(`checklist.${i}.status`, e.target.value)
+                                                    options={[
+                                                        { value: 'miss', label: 'Miss' },
+                                                        { value: 'partial', label: 'Partial' },
+                                                        { value: 'complete', label: 'Complete' },
+                                                    ]}
+                                                    getOptionLabel={(option) => option.label}
+                                                    value={row.status ? 
+                                                        [
+                                                            { value: 'miss', label: 'Miss' },
+                                                            { value: 'partial', label: 'Partial' },
+                                                            { value: 'complete', label: 'Complete' },
+                                                        ].find(option => option.value === row.status) || null
+                                                        : null
                                                     }
-                                                >
-                                                    <MenuItem value="miss">Miss</MenuItem>
-                                                    <MenuItem value="partial">Partial</MenuItem>
-                                                    <MenuItem value="complete">Complete</MenuItem>
-                                                </TextField>
+                                                    onChange={(event, newValue) => {
+                                                        formik.setFieldValue(`checklist.${i}.status`, newValue ? newValue.value : '');
+                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            fullWidth
+                                                        />
+                                                    )}
+                                                />
                                             </TableCell>
                                             <TableCell>
-                                                <TextField
-                                                    fullWidth
-                                                    select
+                                                <Autocomplete
                                                     size="small"
-                                                    value={row.owner}
-                                                    onChange={(e) =>
-                                                        formik.setFieldValue(`checklist.${i}.owner`, e.target.value)
+                                                    options={[
+                                                        { value: 'product', label: 'Product' },
+                                                        { value: 'design', label: 'Design' },
+                                                        { value: 'qa', label: 'QA' },
+                                                        { value: 'engineering', label: 'Engineering' },
+                                                    ]}
+                                                    getOptionLabel={(option) => option.label}
+                                                    value={row.owner ? 
+                                                        [
+                                                            { value: 'product', label: 'Product' },
+                                                            { value: 'design', label: 'Design' },
+                                                            { value: 'qa', label: 'QA' },
+                                                            { value: 'engineering', label: 'Engineering' },
+                                                        ].find(option => option.value === row.owner) || null
+                                                        : null
                                                     }
-                                                >
-                                                    <MenuItem value="product">Product</MenuItem>
-                                                    <MenuItem value="design">Design</MenuItem>
-                                                    <MenuItem value="qa">QA</MenuItem>
-                                                    <MenuItem value="engineering">Engineering</MenuItem>
-                                                </TextField>
+                                                    onChange={(event, newValue) => {
+                                                        formik.setFieldValue(`checklist.${i}.owner`, newValue ? newValue.value : '');
+                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            fullWidth
+                                                        />
+                                                    )}
+                                                />
                                             </TableCell>
                                             <TableCell>
                                                 <TextField
@@ -299,8 +446,22 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                 <Grid size={{ xs: 12, md: 4 }}>
                     <Stack spacing={2}>
                         {/* Quick Actions */}
-                        <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Quick Actions</Typography>
+                        <Card 
+                            variant="outlined" 
+                            sx={{ 
+                                p: 2,
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                            }}
+                        >
+                            <Typography 
+                                variant="h6"
+                                sx={{ 
+                                    
+                                    mb: 2,
+                                }}
+                            >Quick Actions</Typography>
                             <Stack spacing={1}>
                                 <Button
                                     variant="outlined"
@@ -316,11 +477,26 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                         </Card>
 
                         {/* Action Items */}
-                        <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Action Items</Typography>
-                            <TableContainer sx={{ mb: 2 }} component={Paper}>
+                        <Card 
+                            variant="outlined" 
+                            sx={{ 
+                                p: 2,
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                            }}
+                        >
+                            <Typography 
+                               variant="h6"
+                                sx={{ 
+                                   
+                                    mb: 2,
+                                }}
+                            >Action Items</Typography>
+                            <TableContainer 
+                            >
 
-                                <Table size="small">
+                                <Table >
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>Priority</TableCell>
@@ -357,10 +533,24 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
 
 
                         {/* Policy Pack Preview */}
-                        <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Policy Pack Preview</Typography>
+                        <Card 
+                            variant="outlined" 
+                            sx={{ 
+                                p: 2,
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                            }}
+                        >
+                            <Typography 
+                               variant="h6"
+                                sx={{ 
+                                   
+                                    mb: 2,
+                                }}
+                            >Policy Pack Preview</Typography>
                             <Box
-                                sx={{
+                                  sx={{
                                     bgcolor: '#0f172a',
                                     color: '#e5e7eb',
                                     p: 2,
@@ -377,8 +567,22 @@ export default function CoverageTab({ initialValues, onSave, onLoadSample }) {
                         </Card>
 
                         {/* Status Summary */}
-                        <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Status Summary</Typography>
+                        <Card 
+                            variant="outlined" 
+                            sx={{ 
+                                p: 1,
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column', p: 2,
+                            }}
+                        >
+                            <Typography 
+                                variant="h6"
+                                sx={{ 
+                                  
+                                    mb: 2,
+                                }}
+                            >Status Summary</Typography>
                             <Typography variant="body2">
                                 <b>Coverage:</b> {coveragePercent}%
                                 <br />

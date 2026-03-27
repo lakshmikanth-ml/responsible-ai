@@ -252,10 +252,8 @@ const TabH = ({ projectContext = {}, onStatusMessage }) => {
         <Grid container spacing={2} sx={{ p: 0 }}>
             <Grid size={{ xs: 12, md: 4 }}
             >
-                <Box sx={{
-                    border: '1px solid #e0e0e0',
-                    mb: 2, pb: 1, p: 2, borderRadius: 2
-                }}>
+                 <Card elevation={0} sx={{ position: 'sticky', top: 20 }}>
+                        <CardContent>
                     <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
                         Project Context
                     </Typography>
@@ -363,20 +361,25 @@ const TabH = ({ projectContext = {}, onStatusMessage }) => {
                         </Button>
                     </Box>
 
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 2, fontStyle: 'italic' }}>
+                    <Typography variant="caption"  sx={{ display: 'block', mt: 2,  }}>
                         Data persists locally (browser localStorage) for demo realism.
                     </Typography>
-                </Box>
+                </CardContent></Card>
             </Grid>
 
-            <Grid size={{ xs: 12, md: 8 }} sx={{ p: 0 }}>
+            <Grid size={{ xs: 12, md: 8 }} sx={{ p: 0, }}>
                 {/* Section Header */}
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 3, mb: 3 }}>
+               
+  <Card elevation={0} sx={{ position: 'sticky', top: 20 }}>
+                        <CardContent>
+                             <Box sx={{ display: 'flex', justifyContent: 'space-between',
+                     alignItems: 'flex-start', gap: 3, mb: 3,
+                    }}>
                     <Box>
                         <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>
                             H. Gates &amp; Monitoring (Production Governance)
                         </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.secondary', maxWidth: 600 }}>
+                        <Typography variant="body2" sx={{  maxWidth: 600 }}>
                             Define runtime KPIs and thresholds that Guardian must log and enforce. This is the "always-on" privacy protection after deployment.
                         </Typography>
                     </Box>
@@ -410,46 +413,87 @@ const TabH = ({ projectContext = {}, onStatusMessage }) => {
                         </CardContent>
                     </Card>
                 )}
-
                 {/* 2-Column Grid: Signals + Thresholds */}
                 <Grid container spacing={2} sx={{ mb: 2 }}>
                     {/* Guardian Runtime Signals */}
                     <Grid size={{ xs: 12, md: 6 }}>
-                        <Card variant="outlined">
-                            <CardContent>
+                           <Card elevation={0} sx={{ position: 'sticky', top: 20 }}>
+                                                <CardContent>
                                 <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 2 }}>
                                     Guardian Runtime Signals (must log)
                                 </Typography>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
                                     <FormControlLabel
-                                        control={<Checkbox checked={monitoringData.signals.pii} onChange={(e) => handleMonitoringChange('signals.pii', e.target.checked)} />}
-                                        label="PII detections + redactions"
+                                        control={
+                                            <Checkbox
+                                                size="small"
+                                                checked={monitoringData.signals.pii}
+                                                onChange={(e) => handleMonitoringChange('signals.pii', e.target.checked)}
+                                            />
+                                        }
+                                        label={<Typography variant="body2">PII detections + redactions</Typography>}
                                     />
                                     <FormControlLabel
-                                        control={<Checkbox checked={monitoringData.signals.secrets} onChange={(e) => handleMonitoringChange('signals.secrets', e.target.checked)} />}
-                                        label="Secrets detections"
+                                        control={
+                                            <Checkbox
+                                                size="small"
+                                                checked={monitoringData.signals.secrets}
+                                                onChange={(e) => handleMonitoringChange('signals.secrets', e.target.checked)}
+                                            />
+                                        }
+                                        label={<Typography variant="body2">Secrets detections</Typography>}
                                     />
                                     <FormControlLabel
-                                        control={<Checkbox checked={monitoringData.signals.injection} onChange={(e) => handleMonitoringChange('signals.injection', e.target.checked)} />}
-                                        label="Prompt-injection flags"
+                                        control={
+                                            <Checkbox
+                                                size="small"
+                                                checked={monitoringData.signals.injection}
+                                                onChange={(e) => handleMonitoringChange('signals.injection', e.target.checked)}
+                                            />
+                                        }
+                                        label={<Typography variant="body2">Prompt-injection flags</Typography>}
                                     />
                                     <FormControlLabel
-                                        control={<Checkbox checked={monitoringData.signals.exfil} onChange={(e) => handleMonitoringChange('signals.exfil', e.target.checked)} />}
-                                        label="Exfiltration intent flags"
+                                        control={
+                                            <Checkbox
+                                                size="small"
+                                                checked={monitoringData.signals.exfil}
+                                                onChange={(e) => handleMonitoringChange('signals.exfil', e.target.checked)}
+                                            />
+                                        }
+                                        label={<Typography variant="body2">Exfiltration intent flags</Typography>}
                                     />
                                 </Box>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, mt: 1 }}>
                                     <FormControlLabel
-                                        control={<Checkbox checked={monitoringData.signals.rbac} onChange={(e) => handleMonitoringChange('signals.rbac', e.target.checked)} />}
-                                        label="Entitlement decisions (allow/deny)"
+                                        control={
+                                            <Checkbox
+                                                size="small"
+                                                checked={monitoringData.signals.rbac}
+                                                onChange={(e) => handleMonitoringChange('signals.rbac', e.target.checked)}
+                                            />
+                                        }
+                                        label={<Typography variant="body2">Entitlement decisions (allow/deny)</Typography>}
                                     />
                                     <FormControlLabel
-                                        control={<Checkbox checked={monitoringData.signals.toolCalls} onChange={(e) => handleMonitoringChange('signals.toolCalls', e.target.checked)} />}
-                                        label="Tool calls (allowed/blocked)"
+                                        control={
+                                            <Checkbox
+                                                size="small"
+                                                checked={monitoringData.signals.toolCalls}
+                                                onChange={(e) => handleMonitoringChange('signals.toolCalls', e.target.checked)}
+                                            />
+                                        }
+                                        label={<Typography variant="body2">Tool calls (allowed/blocked)</Typography>}
                                     />
                                     <FormControlLabel
-                                        control={<Checkbox checked={monitoringData.signals.overrides} onChange={(e) => handleMonitoringChange('signals.overrides', e.target.checked)} />}
-                                        label="SME overrides"
+                                        control={
+                                            <Checkbox
+                                                size="small"
+                                                checked={monitoringData.signals.overrides}
+                                                onChange={(e) => handleMonitoringChange('signals.overrides', e.target.checked)}
+                                            />
+                                        }
+                                        label={<Typography variant="body2">SME overrides</Typography>}
                                     />
                                 </Box>
                             </CardContent>
@@ -565,9 +609,9 @@ const TabH = ({ projectContext = {}, onStatusMessage }) => {
                             Guardian Health (runtime placeholder)
                         </Typography>
                         <TableContainer>
-                            <Table size="small" stickyHeader>
+                            <Table size="small" >
                                 <TableHead>
-                                    <TableRow sx={{ bgcolor: '#f5f5f5' }}>
+                                    <TableRow >
                                         <TableCell sx={{ fontWeight: 700, width: 260 }}>Signal</TableCell>
                                         <TableCell sx={{ fontWeight: 700, width: 160 }}>Last 7 days</TableCell>
                                         <TableCell sx={{ fontWeight: 700, width: 160 }}>Status</TableCell>
@@ -677,7 +721,7 @@ const TabH = ({ projectContext = {}, onStatusMessage }) => {
 
 
 
-
+</CardContent></Card>
 
             </Grid>
         </Grid>

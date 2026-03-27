@@ -97,7 +97,7 @@ const ProjectContextCard = ({
         </Typography>
       )}
 
-      <Typography variant="caption" color="text.secondary" mt={1} display="block">
+      <Typography variant="caption"  mt={1} display="block">
         Data persists locally (browser localStorage) for demo realism.
       </Typography>
     </CardContent>
@@ -154,12 +154,9 @@ export default function TransparencyExplainabilityContainer() {
         gap: 2,
       }}
     >
-      {/* <Card variant="outlined" sx={{ p: 2 }}>
-        <KpiGateRow />
-      </Card> */}
-      {/* <Card variant="outlined" sx={{ p: 2 }}> */}
+      
       <TabPanel />
-      {/* </Card> */}
+     
       <Box mt={0}>
         <ProjectContextCard
           context={projectContext}

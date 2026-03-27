@@ -203,11 +203,9 @@ const TabC = ({ projectContext = {}, onStatusMessage }) => {
             {/* LEFT PANEL: PROJECT CONTEXT */}
             <Grid size={{ xs: 12, md: 4 }}
             >
-                <Box sx={{
-                    border: "1px solid rgba(117, 117, 117, 0.2)",
-                    p: 2,
-                    borderRadius: 2,
-                }}>
+                 <Card elevation={0}
+                    sx={{ position: 'sticky', top: 20 }}>
+                    <CardContent>
                     <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
                         Project Context
                     </Typography>
@@ -215,7 +213,7 @@ const TabC = ({ projectContext = {}, onStatusMessage }) => {
                     {statusMessage && (
                         <Card variant="outlined" sx={{ mb: 2, bgcolor: '#c8e6c9', borderColor: '#4caf50' }}>
                             <CardContent sx={{ p: 1, '&:last-child': { pb: 1 } }}>
-                                <Typography variant="caption" sx={{ color: '#2e7d32', fontWeight: 600 }}>
+                                <Typography variant="subtitle2" sx={{ color: '#2e7d32', fontWeight: 400 }}>
                                     {statusMessage}
                                 </Typography>
                             </CardContent>
@@ -310,19 +308,19 @@ const TabC = ({ projectContext = {}, onStatusMessage }) => {
                         </Button>
                     </Box>
 
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 2, fontStyle: 'italic' }}>
+                    <Typography variant="subtitle2" sx={{ display: 'block', mt: 2,
+                         }}>
                         Data persists locally (browser localStorage) for demo realism.
                     </Typography>
-                </Box>
+                </CardContent></Card>
             </Grid>
 
             {/* RIGHT PANEL: DFA CONTENT */}
-            <Grid size={{ xs: 12, md: 8 }} sx={{
-                p: 0,
-                border: "1px solid rgba(117, 117, 117, 0.2)",
-                p: 2,
-                borderRadius: 2
-            }}>
+            <Grid size={{ xs: 12, md: 8 }}
+            >
+                 <Card elevation={0}
+                    sx={{ position: 'sticky', top: 20 }}>
+                    <CardContent>
                 {/* Header */}
                 <Box sx={{
                     mb: 0,
@@ -330,7 +328,7 @@ const TabC = ({ projectContext = {}, onStatusMessage }) => {
                     <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
                         📊 C. Training Readiness (DFA Ingestion)
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2, lineHeight: 1.6 }}>
+                    <Typography variant="body2"  sx={{ mb: 2, lineHeight: 1.6 }}>
                         Paste/upload DFA JSON from your Data Foundation Analyzer. We compute privacy readiness and create auto-risks (PII, duplicates, OCR quality, outdated docs).
                     </Typography>
                     <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
@@ -351,7 +349,7 @@ const TabC = ({ projectContext = {}, onStatusMessage }) => {
                     <Grid size={{ xs: 12, md: 6 }}>
                         <Card variant="outlined">
                             <CardContent>
-                                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                                <Typography variant="h6" sx={{mb:2}}>
                                     DFA JSON Input
                                 </Typography>
                                 <TextField
@@ -375,71 +373,73 @@ const TabC = ({ projectContext = {}, onStatusMessage }) => {
                     <Grid size={{ xs: 12, md: 6 }}>
                         <Card variant="outlined">
                             <CardContent>
-                                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                                <Typography variant="h6" sx={{  mb: 2 }}>
                                     Computed Privacy Readiness (from DFA)
                                 </Typography>
                                 <Grid container spacing={2}>
                                     <Grid size={{ xs: 6 }}>
-                                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+                            <Typography variant="subtitle2"
+                           sx={{ display: 'block', mb: 0.5 }}>
                                             AI Readiness Score
                                         </Typography>
-                                        <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
+                                        <Typography sx={{ fontSize: '16px', fontWeight: 400 }}>
                                             {getScore()}%
                                         </Typography>
                                     </Grid>
                                     <Grid size={{ xs: 6 }}>
-                                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+                                        <Typography variant="subtitle2"  sx={{ display: 'block', mb: 0.5 }}>
                                             PII Detected
                                         </Typography>
-                                        <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
+                                        <Typography sx={{ fontSize: '16px',
+                                             fontWeight: 400 }}>
                                             {dfaData?.pii_detected ? 'Yes' : 'No'}
                                         </Typography>
                                     </Grid>
                                     <Grid size={{ xs: 6 }}>
-                                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+                                        <Typography variant="subtitle2"  sx={{ display: 'block', mb: 0.5 }}>
                                             PII Files Flagged
                                         </Typography>
-                                        <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
+                                        <Typography sx={{ fontSize: '16px', fontWeight: 400 }}>
                                             {dfaData?.pii_files || '—'}
                                         </Typography>
                                     </Grid>
                                     <Grid size={{ xs: 6 }}>
-                                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+                                        <Typography variant="subtitle2"  sx={{ display: 'block', mb: 0.5 }}>
                                             OCR Quality Avg
                                         </Typography>
-                                        <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
+                                        <Typography sx={{ fontSize: '16px', fontWeight: 400 }}>
                                             {dfaData?.ocr_quality ? (dfaData.ocr_quality * 100).toFixed(1) + '%' : '—'}
                                         </Typography>
                                     </Grid>
                                     <Grid size={{ xs: 6 }}>
-                                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+                                        <Typography variant="subtitle2"  sx={{ display: 'block', mb: 0.5 }}>
                                             Duplicates
                                         </Typography>
-                                        <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
+                                        <Typography sx={{ fontSize: '16px', fontWeight: 400 }}>
                                             {dfaData?.duplicates || '—'}
                                         </Typography>
                                     </Grid>
                                     <Grid size={{ xs: 6 }}>
-                                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+                                        <Typography variant="subtitle2"  sx={{ display: 'block', mb: 0.5 }}>
                                             Conflicting Versions
                                         </Typography>
-                                        <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
+                                        <Typography sx={{ fontSize: '16px', fontWeight: 400 }}>
                                             {dfaData?.conflicting_versions || '—'}
                                         </Typography>
                                     </Grid>
                                     <Grid size={{ xs: 6 }}>
-                                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+                                        <Typography variant="subtitle2"  sx={{ display: 'block', mb: 0.5 }}>
                                             Outdated Docs
                                         </Typography>
-                                        <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
+                                        <Typography sx={{ fontSize: '16px', fontWeight: 400 }}>
                                             {dfaData?.outdated_docs || '—'}
                                         </Typography>
                                     </Grid>
                                     <Grid size={{ xs: 6 }}>
-                                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+                                        <Typography variant="subtitle2"  sx={{ display: 'block', mb: 0.5 }}>
                                             Issues
                                         </Typography>
-                                        <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
+                                        <Typography sx={{ fontSize: '16px', fontWeight: 400 }}>
                                             {dfaData?.issues || '—'}
                                         </Typography>
                                     </Grid>
@@ -452,22 +452,22 @@ const TabC = ({ projectContext = {}, onStatusMessage }) => {
                 {/* Recommendations */}
                 <Card variant="outlined" sx={{ mb: 2 }}>
                     <CardContent>
-                        <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                        <Typography variant="h6" sx={{ fontWeight: 400, mb: 2 }}>
                             🎯 DFA Recommendations (Auto-Generated)
                         </Typography>
                         <TableContainer component={Paper} variant="outlined">
                             <Table size="small">
                                 <TableHead>
                                     <TableRow sx={{ bgcolor: '#f5f5f5' }}>
-                                        <TableCell sx={{ fontWeight: 600, width: '140px' }}>Source</TableCell>
-                                        <TableCell sx={{ fontWeight: 600 }}>Recommendation</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, width: '170px' }}>Mapped Risk</TableCell>
+                                        <TableCell sx={{ fontWeight: 400, width: '140px' }}>Source</TableCell>
+                                        <TableCell sx={{ fontWeight: 400 }}>Recommendation</TableCell>
+                                        <TableCell sx={{ fontWeight: 400, width: '170px' }}>Mapped Risk</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {recommendations.length === 0 ? (
                                         <TableRow>
-                                            <TableCell colSpan={3} sx={{ color: '#999', fontWeight: 600, textAlign: 'center', py: 3 }}>
+                                            <TableCell colSpan={3} sx={{ color: '#999', fontWeight: 400, textAlign: 'center', py: 3 }}>
                                                 No DFA ingested yet.
                                             </TableCell>
                                         </TableRow>
@@ -508,6 +508,7 @@ const TabC = ({ projectContext = {}, onStatusMessage }) => {
                         </Box>
                     </CardContent>
                 </Card>
+                </CardContent></Card>
             </Grid>
         </Grid>
     );

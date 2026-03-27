@@ -12,6 +12,7 @@ import {
     MenuItem,
     Button,
     Stack,
+    Autocomplete,
     Divider,
     Table,
     TableHead,
@@ -108,11 +109,13 @@ export default function GatesMonitoringTab({
                 <CardContent>
                     <Grid container spacing={3}>
                         <Grid size={{ xs: 12, md: 8 }}>
-                            <Typography variant="h6" fontWeight={600} gutterBottom>
+                            <Typography variant="h6"
+                             fontWeight={600} 
+                             >
                                 H. Gates & Monitoring
                             </Typography>
 
-                            <Typography variant="body2" color="text.secondary" mb={3}>
+  <Typography variant="body2"  mb={3}>
                                 Define runtime monitoring for inclusiveness and accessibility, and
                                 show how Guardian runtime signals feed this pillar. Guardian Health
                                 is derived from violations and feedback trends.
@@ -120,13 +123,16 @@ export default function GatesMonitoringTab({
 
                             {/* ---------------- Monitoring Toggles ---------------- */}
                             <Grid container spacing={2} mb={3} display={"flex"}>
-                                <Grid size={{ xs: 12, md: 4 }} sx={{ display: "flex", flexDirection: "column" }}>
+                                <Grid size={{ xs: 12, md: 4 }} 
+                                sx={{ display: "flex",
+                                 flexDirection: "column" }}>
                                     <Card sx={{ flex: 1 }} variant="outlined">
                                         <CardContent>
-                                            <Typography fontWeight={500}>
+                                            <Typography variant="subtitle1">
                                                 Accessibility Alerts Enabled
                                             </Typography>
-                                            <Typography variant="caption" color="text.secondary">
+                                            <Typography variant="caption" 
+                                            >
                                                 Alert on repeated “cannot complete journey” or UI issues.
                                             </Typography>
                                             <br />
@@ -153,10 +159,10 @@ export default function GatesMonitoringTab({
                                 <Grid size={{ xs: 12, md: 4 }} sx={{ display: "flex", flexDirection: "column" }}>
                                     <Card sx={{ flex: 1 }} variant="outlined">
                                         <CardContent>
-                                            <Typography fontWeight={500}>
+                                            <Typography variant="subtitle1">
                                                 Language Comprehension Monitoring
                                             </Typography>
-                                            <Typography variant="caption" color="text.secondary">
+                                            <Typography variant="caption" >
                                                 Track confusion signals and low satisfaction by locale.
                                             </Typography>
                                             <br />
@@ -183,10 +189,10 @@ export default function GatesMonitoringTab({
                                 <Grid size={{ xs: 12, md: 4 }} sx={{ display: "flex", flexDirection: "column" }}>
                                     <Card sx={{ flex: 1 }} variant="outlined">
                                         <CardContent>
-                                            <Typography fontWeight={500}>
+                                            <Typography  variant="subtitle1">
                                                 Underserved Feedback Priority
                                             </Typography>
-                                            <Typography variant="caption" color="text.secondary">
+                                            <Typography variant="caption" >
                                                 Escalate issues affecting selected critical groups first.
                                             </Typography>
                                             <br />
@@ -214,60 +220,87 @@ export default function GatesMonitoringTab({
                             {/* ---------------- Governance Controls ---------------- */}
                             <Grid container spacing={2} mb={3}>
                                 <Grid size={{ xs: 12, md: 6 }}>
-                                    <TextField
+                                    <Autocomplete
                                         size="small"
-                                        select
-                                        fullWidth
-                                        label="Review Cadence"
-                                        name="reviewCadence"
-                                        value={values.reviewCadence}
-                                        onChange={handleChange}
-                                        error={touched.reviewCadence && Boolean(errors.reviewCadence)}
-                                        helperText={touched.reviewCadence && errors.reviewCadence}
-                                    >
-                                        <MenuItem value="weekly">Weekly</MenuItem>
-                                        <MenuItem value="monthly">Monthly</MenuItem>
-                                        <MenuItem value="quarterly">Quarterly</MenuItem>
-                                    </TextField>
+                                        options={[
+                                            { value: 'weekly', label: 'Weekly' },
+                                            { value: 'monthly', label: 'Monthly' },
+                                            { value: 'quarterly', label: 'Quarterly' },
+                                        ]}
+                                        getOptionLabel={(option) => option.label}
+                                        value={values.reviewCadence ? 
+                                            [
+                                                { value: 'weekly', label: 'Weekly' },
+                                                { value: 'monthly', label: 'Monthly' },
+                                                { value: 'quarterly', label: 'Quarterly' },
+                                            ].find(option => option.value === values.reviewCadence) || null
+                                            : null
+                                        }
+                                        onChange={(event, newValue) => {
+                                            setFieldValue('reviewCadence', newValue ? newValue.value : '');
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                fullWidth
+                                                label="Review Cadence"
+                                                name="reviewCadence"
+                                                error={touched.reviewCadence && Boolean(errors.reviewCadence)}
+                                                helperText={touched.reviewCadence && errors.reviewCadence}
+                                            />
+                                        )}
+                                    />
                                 </Grid>
 
                                 <Grid size={{ xs: 12, md: 6 }}>
-                                    <TextField
+                                    <Autocomplete
                                         size="small"
-                                        select
-                                        fullWidth
-                                        label="Escalation Route (Owner Role)"
-                                        name="escalationOwnerRole"
-                                        value={values.escalationOwnerRole}
-                                        onChange={handleChange}
-                                        error={
-                                            touched.escalationOwnerRole &&
-                                            Boolean(errors.escalationOwnerRole)
+                                        options={[
+                                            { value: 'head_product', label: 'Head of Product' },
+                                            { value: 'accessibility_lead', label: 'Accessibility Lead' },
+                                            { value: 'qa_lead', label: 'QA Lead' },
+                                            { value: 'engineering_manager', label: 'Engineering Manager' },
+                                        ]}
+                                        getOptionLabel={(option) => option.label}
+                                        value={values.escalationOwnerRole ? 
+                                            [
+                                                { value: 'head_product', label: 'Head of Product' },
+                                                { value: 'accessibility_lead', label: 'Accessibility Lead' },
+                                                { value: 'qa_lead', label: 'QA Lead' },
+                                                { value: 'engineering_manager', label: 'Engineering Manager' },
+                                            ].find(option => option.value === values.escalationOwnerRole) || null
+                                            : null
                                         }
-                                        helperText={
-                                            touched.escalationOwnerRole &&
-                                            errors.escalationOwnerRole
-                                        }
-                                    >
-                                        <MenuItem value="head_product">Head of Product</MenuItem>
-                                        <MenuItem value="accessibility_lead">
-                                            Accessibility Lead
-                                        </MenuItem>
-                                        <MenuItem value="qa_lead">QA Lead</MenuItem>
-                                        <MenuItem value="engineering_manager">
-                                            Engineering Manager
-                                        </MenuItem>
-                                    </TextField>
+                                        onChange={(event, newValue) => {
+                                            setFieldValue('escalationOwnerRole', newValue ? newValue.value : '');
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                fullWidth
+                                                label="Escalation Route (Owner Role)"
+                                                name="escalationOwnerRole"
+                                                error={
+                                                    touched.escalationOwnerRole &&
+                                                    Boolean(errors.escalationOwnerRole)
+                                                }
+                                                helperText={
+                                                    touched.escalationOwnerRole &&
+                                                    errors.escalationOwnerRole
+                                                }
+                                            />
+                                        )}
+                                    />
                                 </Grid>
                             </Grid>
 
                             {/* ---------------- Runtime Signals ---------------- */}
                             <Divider sx={{ my: 2 }} />
 
-                            <Typography fontWeight={600} mb={1}>
+                            <Typography variant="h6" mb={1}>
                                 Guardian Runtime Signals (Reference)
                             </Typography>
-                            <Typography variant="body2" color="text.secondary" mb={2}>
+                            <Typography variant="body2" mb={2}>
                                 Guardian captures runtime events. This table clarifies what feeds
                                 monitoring and Guardian Health.
                             </Typography>
@@ -279,7 +312,7 @@ export default function GatesMonitoringTab({
                                 <Button variant="outlined">Recompute Guardian Health</Button>
                             </Stack>
 
-                            <TableContainer component={Paper}>
+                            <TableContainer >
                                 <Table >
                                     <TableHead>
                                         <TableRow>
@@ -353,7 +386,7 @@ export default function GatesMonitoringTab({
                             <Stack spacing={2}>
                                 {/* Quick Actions */}
                                 <Card variant="outlined" sx={{ p: 2 }}>
-                                    <Typography fontWeight={600} mb={2}>Quick Actions</Typography>
+                    <Typography variant="h6" mb={2}>Quick Actions</Typography>
                                     <Stack spacing={1}>
                                         <Button
                                             variant="outlined"
@@ -370,10 +403,10 @@ export default function GatesMonitoringTab({
 
                               {/* Action Items */}
                         <Card variant="outlined" sx={{ p: 2 }}>
-                            <Typography fontWeight={600} mb={2}>Action Items</Typography>
-                            <TableContainer sx={{ mb: 2 }} component={Paper}>
+                            <Typography variant="h6" mb={2}>Action Items</Typography>
+                            <TableContainer >
 
-                                <Table size="small">
+                                <Table >
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>Priority</TableCell>
@@ -411,7 +444,7 @@ export default function GatesMonitoringTab({
 
                                 {/* Policy Pack Preview */}
                                 <Card variant="outlined" sx={{ p: 2 }}>
-                                    <Typography fontWeight={600} mb={2}>Policy Pack Preview</Typography>
+                                    <Typography variant="h6" mb={2}>Policy Pack Preview</Typography>
                                     <Box
                                         sx={{
                                             bgcolor: '#0f172a',
@@ -431,7 +464,7 @@ export default function GatesMonitoringTab({
 
                                 {/* Status Summary */}
                                 <Card variant="outlined" sx={{ p: 2 }}>
-                                    <Typography fontWeight={600} mb={2}>Status Summary</Typography>
+                                    <Typography variant="h6" mb={2}>Status Summary</Typography>
                                     <Typography variant="body2">
                                         <b>Coverage:</b> {coveragePercent}%
                                         <br />

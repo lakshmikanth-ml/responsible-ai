@@ -85,7 +85,7 @@ export default function TabHGatesMonitoring() {
                         <Typography variant="h6" fontWeight={700}>
                             H. Gates & Monitoring
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2">
                             Connect runtime signals (Guardian) to monitoring thresholds and escalation.
                         </Typography>
                     </Box>
@@ -103,22 +103,31 @@ export default function TabHGatesMonitoring() {
                 <Card variant="outlined">
                     <CardContent>
                         <Stack direction="row" justifyContent="space-between">
-                            <Typography fontWeight={600}>
+                            <Typography variant="h6" >
                                 Monitoring Thresholds & Alert Routing
-                                <Typography variant="body2" color="text.secondary" display="block" gutterBottom>
+                                <Typography variant="body2"display="block" gutterBottom>
                                     These values become enforcement thresholds in Guardian policy pack and drive Production Gate.
                                 </Typography>
 
                             </Typography>
-                            <Chip
-                                label={monitoringEnabled ? "PARTIAL" : "BLOCKED"}
-                                color={monitoringEnabled ? "warning" : "error"}
-                                size="small"
-                            />
+                           
+                             <Chip 
+                                     label={monitoringEnabled ? "PARTIAL" : "BLOCKED"} 
+                                                                                size="small"
+                                                                                sx={(theme) => ({
+                                                                                    bgcolor: theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(239, 68, 68, 0.08)',
+                                                                                    border: '1px solid',
+                                                                                    borderColor: theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(239, 68, 68, 0.3)',
+                                                                                    color: '#f44336',
+                                                                                    fontWeight: 600,
+                                                                                })}
+                                                                            />
                         </Stack>
 
                         <Grid container spacing={2} mt={1}>
-                            <Grid size={{ xs: 12, md: 4 }}>
+                            <Grid size={{ xs: 12, md: 6 }}>
+
+                           
                                 <Box
                                     sx={{
                                         border: "1px solid",
@@ -129,8 +138,10 @@ export default function TabHGatesMonitoring() {
                                 >
                                     <Stack direction="row" justifyContent="space-between">
                                         <Box>
-                                            <Typography fontWeight={500}>Monitoring Enabled</Typography>
-                                            <Typography variant="caption" color="text.secondary">
+                                            <Typography variant="h6">Monitoring Enabled</Typography>
+                                            <Typography variant="caption" 
+                                            
+                                            >
                                                 If disabled, production gate will remain blocked.
                                             </Typography>
                                         </Box>
@@ -142,7 +153,11 @@ export default function TabHGatesMonitoring() {
                                 </Box>
                             </Grid>
 
-                            <Grid size={{ xs: 12, md: 4 }}>
+                            <Grid size={{ xs: 12, md: 6 ,
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "space-between",
+                            }}>
                                 <Autocomplete
                                     options={OWNER_ROLES}
                                     value={primaryOwner}
@@ -151,10 +166,7 @@ export default function TabHGatesMonitoring() {
                                         <TextField {...p} label="Primary Alert Owner" size="small" />
                                     )}
                                 />
-                            </Grid>
-
-                            <Grid size={{ xs: 12, md: 4 }}>
-                                <Autocomplete
+                                 <Autocomplete
                                     options={OWNER_ROLES}
                                     value={secondaryOwner}
                                     onChange={(_, v) => setSecondaryOwner(v)}
@@ -163,6 +175,8 @@ export default function TabHGatesMonitoring() {
                                     )}
                                 />
                             </Grid>
+
+                            
                         </Grid>
 
                         <Grid container spacing={2} mt={2}>
@@ -178,6 +192,7 @@ export default function TabHGatesMonitoring() {
                             </Grid>
                             <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField
+                                fullWidth
                                     size="small"
                                     label="Uptime threshold (24h, %)"
                                     value={thresholds.uptime24h}
@@ -186,6 +201,7 @@ export default function TabHGatesMonitoring() {
                             </Grid>
                             <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField
+                                fullWidth
                                     size="small"
                                     label="Latency P95 threshold (ms)"
                                     value={thresholds.p95LatencyMs}
@@ -197,6 +213,7 @@ export default function TabHGatesMonitoring() {
                         <Grid container spacing={2} mt={2}>
                             <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField
+                                fullWidth
                                     size="small"
                                     label="Error rate threshold (%)"
                                     value={thresholds.errorRatePct}
@@ -205,6 +222,7 @@ export default function TabHGatesMonitoring() {
                             </Grid>
                             <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField
+                                fullWidth
                                     size="small"
                                     label="Violation rate threshold (%)"
                                     value={thresholds.violationRatePct}
@@ -213,6 +231,7 @@ export default function TabHGatesMonitoring() {
                             </Grid>
                             <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField
+                                fullWidth
                                     size="small"
                                     label="Drift score threshold"
                                     value={thresholds.driftScore}
@@ -222,12 +241,19 @@ export default function TabHGatesMonitoring() {
                         </Grid>
 
                         <Box mt={2} color="text.secondary"
-                            sx={{
-                                border: "1px solid #dbe6ff",
-                                background: "linear-gradient(180deg, #f5f8ff 0%, #f2f6ff 100%)",
-                                borderRadius: "14px",
-                                padding: "12px",
-                                color: "#0b2a70"
+                           sx={{
+                                border: '1px solid',
+                                borderColor: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(171, 171, 171, 0.15)' 
+                                    : '#888f9e',
+                                background: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%)' 
+                                    : 'linear-gradient(180deg, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0.02) 100%)',
+                                borderRadius: '14px',
+                                padding: '12px',
+                                color: (theme) => theme.palette.mode === 'dark' 
+                                    ? 'rgba(255, 255, 255, 0.9)' 
+                                    : '#0b2a70'
                             }}
 
                         >
@@ -239,8 +265,8 @@ export default function TabHGatesMonitoring() {
                 {/* GUARDIAN SIGNALS */}
                 <Card variant="outlined" sx={{ mt: 2 }}>
                     <CardContent>
-                        <Typography fontWeight={600}>Guardian Runtime Signals (Ingest)</Typography>
-                        <Typography variant="caption" color="text.secondary">
+                        <Typography variant="h6" >Guardian Runtime Signals (Ingest)</Typography>
+                        <Typography variant="caption" >
                             Runtime events table (from Guardian). In demo, load sample or paste JSON array.
                         </Typography>
 
@@ -273,11 +299,11 @@ export default function TabHGatesMonitoring() {
                             <Grid size={{ xs: 12, md: 6 }}>
                                 <Card variant="outlined">
                                     <CardContent>
-                                        <Typography fontWeight={600}>Health Rollup (Last 24h)</Typography>
-                                        <Typography variant="caption" color="text.secondary">
+                                        <Typography variant="h6" >Health Rollup (Last 24h)</Typography>
+                                        <Typography variant="caption" >
                                             Computed summary from Guardian signals.
                                         </Typography>
-                                        <Box mt={1} color="text.secondary">
+                                        <Box mt={1} >
                                             {signals.length === 0
                                                 ? "No runtime signals loaded yet."
                                                 : "Signals detected – review thresholds."}
@@ -289,7 +315,6 @@ export default function TabHGatesMonitoring() {
 
                         <TableContainer sx={{
                             mt: 2,
-                            border: "1px solid #ccc", borderRadius: 2
                         }}>
                             <Table size="small" >
                                 <TableHead>
@@ -359,7 +384,6 @@ export default function TabHGatesMonitoring() {
                         </Grid>
                         <TableContainer sx={{
                             mt: 2,
-                            border: "1px solid #ccc", borderRadius: 2
                         }}>
                             <Table size="small">
                                 <TableHead>

@@ -15,7 +15,7 @@ import {
     Autocomplete,
     Switch,
     Divider,
-    Chip,
+    Chip,TableContainer
 } from "@mui/material";
 import { useState } from "react";
 
@@ -152,6 +152,7 @@ export default function TabCTrainingReadiness() {
     };
 
     return (
+
         <Card sx={{ mt: 2 }}>
             <CardContent>
                 {/* ================= HEADER ================= */}
@@ -160,7 +161,7 @@ export default function TabCTrainingReadiness() {
                         <Typography variant="h6" fontWeight={700}>
                             C. Training Readiness (DFA)
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" >
                             Ingest DFA JSON and validate training data readiness.
                         </Typography>
                     </Box>
@@ -174,21 +175,32 @@ export default function TabCTrainingReadiness() {
                 <Divider sx={{ my: 2 }} />
 
                 {/* ================= INGEST ================= */}
-                <Box className="block" sx={{ mt: 2, border: '1px solid #e0e0e0', borderRadius: 1, p: 2 }}>
+                <Box className="block" sx={{ mt: 2, border: '1px solid #e0e0e0',
+                     borderRadius: 1, p: 2 }}>
                     {/* Block Title */}
                     <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box>
                             <Typography variant="h6" fontWeight={700}>
                                 Ingest DFA JSON
                             </Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                            <Typography variant="body2" sx={{ mt: 0.5 }}>
                                 Paste DFA output JSON (from the Data Foundation Analyzer app) and ingest to populate readiness fields.
                             </Typography>
                         </Box>
                         <Chip
                             label={dfaIngested ? "INGESTED" : "MISSING"}
-                            color={dfaIngested ? "success" : "warning"}
                             size="small"
+                            sx={(theme) => ({
+                                bgcolor: dfaIngested 
+                                    ? (theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(34, 197, 94, 0.08)')
+                                    : (theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.15)' : 'rgba(251, 146, 60, 0.08)'),
+                                border: '1px solid',
+                                borderColor: dfaIngested 
+                                    ? (theme.palette.mode === 'dark' ? 'rgba(34, 197, 94, 0.4)' : 'rgba(34, 197, 94, 0.3)')
+                                    : (theme.palette.mode === 'dark' ? 'rgba(251, 146, 60, 0.4)' : 'rgba(251, 146, 60, 0.3)'),
+                                color: dfaIngested ? '#4caf50' : '#f97316',
+                                fontWeight: 600,
+                            })}
                         />
                     </Box>
 
@@ -230,7 +242,7 @@ export default function TabCTrainingReadiness() {
                             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ p: 1.5, border: '1px solid #e0e0e0', borderRadius: 1, height: '100%' }}>
                                 <Box>
                                     <Typography fontWeight={600} variant="body2">DFA Ingested</Typography>
-                                    <Typography variant="caption" color="text.secondary">Must be true to pass Pre-Training Gate.</Typography>
+                                    <Typography variant="caption" >Must be true to pass Pre-Training Gate.</Typography>
                                 </Box>
                                 <Switch checked={dfaIngested} disabled />
                             </Stack>
@@ -277,7 +289,7 @@ export default function TabCTrainingReadiness() {
                                 <Typography variant="h6" fontWeight={700} sx={{ mb: 0.5 }}>
                                     DFA Readiness Summary
                                 </Typography>
-                                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 2 }}>
+                                <Typography variant="caption" sx={{ display: 'block', mb: 2 }}>
                                     Populated after ingest.
                                 </Typography>
 
@@ -342,7 +354,7 @@ export default function TabCTrainingReadiness() {
                 <Card variant="outlined" sx={{ mt: 2 }}>
                     <CardContent>
                         <Stack direction="row" justifyContent="space-between">
-                            <Typography fontWeight={600}>Audit Trail Notes</Typography>
+                            <Typography variant="h6" >Audit Trail Notes</Typography>
                             <Button size="small" onClick={addNote} disabled={!canAdd}>Add Note</Button>
                         </Stack>
 
@@ -369,7 +381,8 @@ export default function TabCTrainingReadiness() {
                             </Grid>
                         </Grid>
 
-                        <Table size="small" sx={{ mt: 2, borderColor: "#ccc", borderRadius: "8px" }} border={1}>
+<TableContainer sx={{mt:2}}>
+                        <Table size="small" >
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Timestamp</TableCell>
@@ -394,9 +407,12 @@ export default function TabCTrainingReadiness() {
                                 )}
                             </TableBody>
                         </Table>
+                        </TableContainer>
                     </CardContent>
                 </Card>
             </CardContent >
         </Card >
+
+
     );
 }

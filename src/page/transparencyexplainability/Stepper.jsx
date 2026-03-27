@@ -525,7 +525,7 @@ export default function TransparencyExplainabilityHeader() {
                             <Tab key={label} label={label} />
                         ))}
                     </Tabs>
-
+<Box mt={-1}>
                     <TabPanel value={tab} index={0}>
                         <TabAObjective />
                     </TabPanel>
@@ -557,6 +557,7 @@ export default function TransparencyExplainabilityHeader() {
                     <TabPanel value={tab} index={7}>
                         <TabHLifecycleMonitoring />
                     </TabPanel>
+                    </Box>
               </Box>
 
             <Dialog

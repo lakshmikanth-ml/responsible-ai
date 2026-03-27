@@ -190,7 +190,7 @@ export default function TabDEvaluation() {
                         <Typography variant="h6" fontWeight={700}>
                             D. Explainability Methods &amp; Validation (Evaluation)
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" mt={0.5}>
+                        <Typography variant="body2" mt={0.5}>
                             Run baseline (pre-training) and post-training validation. Failures automatically create risks and can block release.
                         </Typography>
                     </Box>
@@ -265,21 +265,47 @@ export default function TabDEvaluation() {
                                 sx={{
                                     height: "100%",
                                     p: 2,
-                                    borderColor: kpi.warn ? "warning.light" : "divider",
-                                    background: kpi.warn ? "linear-gradient(120deg, #fff3e0 0%, #fff7ed 100%)" : "transparent",
+                                    borderColor: (theme) => kpi.warn 
+                                        ? (theme.palette.mode === 'dark' ? 'rgba(255, 152, 0, 0.4)' : 'warning.light')
+                                        : (theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'divider'),
+                                    background: (theme) => kpi.warn 
+                                        ? (theme.palette.mode === 'dark' 
+                                            ? 'linear-gradient(120deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 152, 0, 0.05) 100%)' 
+                                            : 'linear-gradient(120deg, #fff3e0 0%, #fff7ed 100%)')
+                                        : (theme.palette.mode === 'dark' 
+                                            ? 'rgba(255, 255, 255, 0.02)' 
+                                            : 'transparent'),
                                 }}
                             >
-                                <Typography variant="caption" color="text.secondary">
+                                <Typography 
+                                    variant="caption"
+                                    sx={{
+                                        color: (theme) => theme.palette.mode === 'dark' 
+                                            ? 'rgba(255, 255, 255, 0.7)' 
+                                            : 'rgba(0, 0, 0, 0.7)',
+                                    }}
+                                >
                                     {kpi.title}
                                 </Typography>
                                 <Typography
                                     variant="h5"
-                                    color={kpi.warn ? "warning.main" : "text.primary"}
+                                    color={kpi.warn 
+                                        ? "warning.main" 
+                                        : (theme) => theme.palette.mode === 'dark' 
+                                            ? 'rgba(255, 255, 255, 0.9)' 
+                                            : 'text.primary'}
                                     sx={{ fontWeight: 700, mt: 0.5 }}
                                 >
                                     {kpi.value}
                                 </Typography>
-                                <Typography variant="caption" color="text.secondary">
+                                <Typography 
+                                    variant="caption"
+                                    sx={{
+                                        color: (theme) => theme.palette.mode === 'dark' 
+                                            ? 'rgba(255, 255, 255, 0.6)' 
+                                            : 'rgba(0, 0, 0, 0.6)',
+                                    }}
+                                >
                                     {kpi.desc}
                                 </Typography>
                             </Card>
@@ -362,7 +388,7 @@ export default function TabDEvaluation() {
           pl: 0.5,
           fontWeight: 600,
           color: selected ? "#0b3b91" : "#334155",
-          backgroundColor: selected ? "#dbeafe" : "#f8fafc",
+          backgroundColor: (theme) => selected ? "#dbeafe" : (theme.palette.mode === 'dark' ? theme.palette.background.neutral : "#f8fafc"),
           border: selected ? "1px solid #60a5fa" : "1px solid #cbd5e1",
           "&:hover": {
             backgroundColor: selected ? "#bfdbfe" : "#f1f5f9",
@@ -401,7 +427,7 @@ export default function TabDEvaluation() {
                         border: "1px solid",
                         borderColor: "divider",
                         borderLeft: "4px solid #184ea4",
-                        background: "#f8fafc",
+                        background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.neutral : "#f8fafc",
                         display: "flex",
                         gap: 1,
                         alignItems: "flex-start",

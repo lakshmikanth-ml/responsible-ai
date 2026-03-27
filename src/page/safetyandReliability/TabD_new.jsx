@@ -95,7 +95,7 @@ export default function TabDEvaluation() {
                 <Stack direction="row" justifyContent="space-between">
                     <Box>
                         <Typography variant="h6" fontWeight={700}>D. Evaluation</Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" >
                             Pre-deployment testing: stress, chaos, edge cases, and UAT.
                         </Typography>
                     </Box>

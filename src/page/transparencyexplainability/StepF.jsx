@@ -19,7 +19,7 @@ import {
     MenuItem,
     IconButton,
     Chip,
-    TablePagination,
+    TablePagination,TableContainer
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
@@ -91,7 +91,7 @@ export default function TabFMitigation() {
                                                 <Typography variant="h6">
                                                     F. Mitigation & Re-evaluation
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary">
+                                                <Typography variant="body2">
                                                     Actions linked to risks. Actions are not “Done” until
                                                     re-check passes and evidence is attached.
                                                 </Typography>
@@ -133,15 +133,13 @@ export default function TabFMitigation() {
 
 
                                         {/* STICKY + SCROLL TABLE */}
-                                        <Box
-                                            sx={{
-                                                overflowX: "auto",
-                                                border: "1px solid",
-                                                borderColor: "divider",
-                                                borderRadius: 1,
-                                            }}
-                                        >
-                                            <Table stickyHeader size="small" sx={{ minWidth: 1000 }}>
+                                        <TableContainer 
+                    variant="outlined" 
+                 
+                >
+                    <Table 
+                       
+                    >
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell width={140}>Action ID</TableCell>
@@ -318,7 +316,8 @@ export default function TabFMitigation() {
                                                         })}
                                                 </TableBody>
                                             </Table>
-                                        </Box>
+                                 </TableContainer>
+                                        
                                         <Stack direction="row" justifyContent="flex-end" mb={1}>
                                             <TablePagination
                                                 component="div"
@@ -351,7 +350,7 @@ export default function TabFMitigation() {
                                 marginTop: "12px",
                                 padding: "12px",
                                 borderRadius: "14px",
-                                background: "#f8fafc",
+                                background: (theme) => theme.palette.mode === 'dark' ? theme.palette.background.neutral : "#f8fafc",
                                 border: "1px solid lightgray",
                                 borderLeft: "4px solid #184ea4"
                             }}>
