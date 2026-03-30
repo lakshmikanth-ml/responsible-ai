@@ -12,7 +12,7 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-    TextField,Chip
+    TextField,Chip,Grid
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -26,6 +26,37 @@ import TabFMitigation from "./StepF";
 import TabGEvidenceAudit from "./StepG";
 import TabHLifecycleMonitoring from "./StepH";
 import KpiGateRow from "./cards";
+import { GateCard } from '../../components/card/GateCards';
+
+
+
+const gateCards = [
+  {
+    title: "Pre-Training Gate",
+    status: "CONDITIONAL",
+    description:
+      "Citations required but no DFA snapshot loaded. Recommended to ingest DFA before training.",
+  },
+  {
+    title: "Release Gate",
+    status: "BLOCKED",
+    description:
+      "Explainability Owner is missing in section A.",
+  },
+  {
+    title: "Production Gate",
+    status: "BLOCKED",
+    description:
+      "Production blocked because release gate is blocked.",
+  },
+  {
+    title: "Guardian Health",
+    status: "UNKNOWN",
+    description:
+      "Derived from runtime signals ingested in section H.",
+  },
+];
+
 
 const TABS = [
     "A. Objective",
@@ -505,7 +536,18 @@ export default function TransparencyExplainabilityHeader() {
 
 
                     {/* <Card variant="outlined" sx={{ p: 2 }}> */}
-                    <KpiGateRow />
+                  
+                     <Grid container spacing={2} mb={2} mt={2}>
+                      {gateCards.map((gate, index) => (
+                        <Grid key={index} size={{ xs: 12, sm: 6, md: 6, lg: 3 }}>
+                          <GateCard
+                            title={gate?.title}
+                            status={gate?.status}
+                            description={gate?.description}
+                          />
+                        </Grid>
+                      ))}
+                    </Grid>
                     {/* </Card> */}
 
 <Box mt={2}>

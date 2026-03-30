@@ -35,6 +35,37 @@ import GapsRisksTab from "./GapsRisksTab";
 import MitigationTab from "./MitigationTab";
 import EvidenceTab from "./EvidenceTab";
 import GatesMonitoringTab from "./GatesMonitoringTab";
+import { GateCard } from '../../components/card/GateCards';
+
+
+
+const gateCards = [
+  {
+    title: "Pre-Training Gate",
+    status: "PASS",
+    description:
+      "Pre-training inclusiveness prerequisites met (DFA ingested + groups + WCAG scope).",
+  },
+  {
+    title: "Release Gate",
+    status: "BLOCKED",
+    description:
+      "Accessibility testing and/or diverse testing and/or evidence approvals incomplete; critical risks may be open.",
+  },
+  {
+    title: "Production Gate",
+    status: "BLOCKED",
+    description:
+      "Production blocked because release gate is blocked or monitoring configuration is incomplete.",
+  },
+  {
+    title: "Guardian Health",
+    status: "DEGRADED",
+    description:
+      "Guardian indicates repeated inclusiveness/usability issues. Route to owner for remediation.",
+  },
+];
+
 
 const TABS = [
     "A. Objective",
@@ -876,37 +907,16 @@ export default function InclusivenessFormikPage() {
                 </Stack>
 
                 <Grid container spacing={2} mb={2}>
-                    <Grid size={{ xs: 12, md: 3 }}>
-                        <GateCard
-                            title="Pre-Training Gate"
-                            status="PASS"
-                            description="Pre-training inclusiveness prerequisites met (DFA ingested + groups + WCAG scope)."
-                        />
-                    </Grid>
-
-                    <Grid size={{ xs: 12, md: 3 }}>
-                        <GateCard
-                            title="Release Gate"
-                            status="BLOCKED"
-                            description="Accessibility testing and/or diverse testing and/or evidence approvals incomplete; critical risks may be open."
-                        />
-                    </Grid>
-
-                    <Grid size={{ xs: 12, md: 3 }}>
-                        <GateCard
-                            title="Production Gate"
-                            status="BLOCKED"
-                            description="Production blocked because release gate is blocked or monitoring configuration is incomplete."
-                        />
-                    </Grid>
-                    <Grid size={{ xs: 12, md: 3 }}>
-                        <GateCard
-                            title="Guardian Health"
-                            status="DEGRADED"
-                            description="Guardian indicates repeated inclusiveness/usability issues. Route to owner for remediation."
-                        />
-                    </Grid>
-                </Grid>
+  {gateCards.map((gate, index) => (
+    <Grid key={index} size={{ xs: 12, sm: 6, md: 6, lg: 3 }}>
+      <GateCard
+        title={gate?.title}
+        status={gate?.status}
+        description={gate?.description}
+      />
+    </Grid>
+  ))}
+</Grid>
 
                 {statusMessage && (
                     <Alert
@@ -1066,111 +1076,111 @@ export default function InclusivenessFormikPage() {
 }
 
 
-const STATUS_CONFIG = {
-    PASS: {
-        label: "PASS",
-        light: { bg: 'rgba(34, 197, 94, 0.08)', border: 'rgba(34, 197, 94, 0.3)', color: '#16a34a' },
-        dark: { bg: 'rgba(34, 197, 94, 0.16)', border: 'rgba(34, 197, 94, 0.4)', color: '#4ade80' },
-    },
-    BLOCKED: {
-        label: "BLOCKED",
-        light: { bg: 'rgba(239, 68, 68, 0.08)', border: 'rgba(239, 68, 68, 0.3)', color: '#dc2626' },
-        dark: { bg: 'rgba(239, 68, 68, 0.16)', border: 'rgba(239, 68, 68, 0.4)', color: '#f87171' },
-    },
-    DEGRADED: {
-        label: "DEGRADED",
-        light: { bg: 'rgba(251, 146, 60, 0.08)', border: 'rgba(251, 146, 60, 0.3)', color: '#f97316' },
-        dark: { bg: 'rgba(251, 146, 60, 0.16)', border: 'rgba(251, 146, 60, 0.4)', color: '#fdba74' },
-    },
-};
+// const STATUS_CONFIG = {
+//     PASS: {
+//         label: "PASS",
+//         light: { bg: 'rgba(34, 197, 94, 0.08)', border: 'rgba(34, 197, 94, 0.3)', color: '#16a34a' },
+//         dark: { bg: 'rgba(34, 197, 94, 0.16)', border: 'rgba(34, 197, 94, 0.4)', color: '#4ade80' },
+//     },
+//     BLOCKED: {
+//         label: "BLOCKED",
+//         light: { bg: 'rgba(239, 68, 68, 0.08)', border: 'rgba(239, 68, 68, 0.3)', color: '#dc2626' },
+//         dark: { bg: 'rgba(239, 68, 68, 0.16)', border: 'rgba(239, 68, 68, 0.4)', color: '#f87171' },
+//     },
+//     DEGRADED: {
+//         label: "DEGRADED",
+//         light: { bg: 'rgba(251, 146, 60, 0.08)', border: 'rgba(251, 146, 60, 0.3)', color: '#f97316' },
+//         dark: { bg: 'rgba(251, 146, 60, 0.16)', border: 'rgba(251, 146, 60, 0.4)', color: '#fdba74' },
+//     },
+// };
 
-/* ---------------- Card Component ---------------- */
-function GateCard({ title, status, description }) {
-    const config = STATUS_CONFIG[status];
+// /* ---------------- Card Component ---------------- */
+// function GateCard({ title, status, description }) {
+//     const config = STATUS_CONFIG[status];
 
-    return (
-        <Card
-            variant="outlined"
-            sx={{
-                borderRadius: 2,
-                height: "100%",
-                transition: 'all 0.2s ease-in-out',
-                '&:hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: (theme) => theme.palette.mode === 'dark' 
-                        ? `0 4px 20px ${config.dark.border.replace('0.4', '0.3')}` 
-                        : `0 4px 20px ${config.light.border.replace('0.3', '0.15')}`,
-                    borderColor: (theme) => theme.palette.mode === 'dark' 
-                        ? config.dark.border 
-                        : config.light.border,
-                },
-                bgcolor: (theme) => theme.palette.mode === 'dark' 
-                    ? config.dark.bg 
-                    : config.light.bg,
-                borderColor: (theme) => theme.palette.mode === 'dark' 
-                    ? config.dark.border 
-                    : config.light.border,
-                borderLeft: '4px solid',
-                borderLeftColor: (theme) => theme.palette.mode === 'dark' 
-                    ? config.dark.color 
-                    : config.light.color,
-            }}
-        >
-            <CardContent sx={{ p: 2.5 }}>
-                <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    mb={1.5}
-                >
-                    <Typography 
-                        fontWeight={700}
-                        sx={{ 
-                            fontSize: '1rem',
-                            color: (theme) => theme.palette.mode === 'dark' 
-                                ? theme.palette.text.primary 
-                                : 'inherit',
-                        }}
-                    >
-                        {title}
-                    </Typography>
-                    <Chip
-                        label={config.label}
-                        variant="outlined"
-                        size="small"
-                        sx={{
-                            fontWeight: 700,
-                            bgcolor: (theme) => theme.palette.mode === 'dark' 
-                                ? config.dark.bg 
-                                : config.light.bg,
-                            borderColor: (theme) => theme.palette.mode === 'dark' 
-                                ? config.dark.border 
-                                : config.light.border,
-                            color: (theme) => theme.palette.mode === 'dark' 
-                                ? config.dark.color 
-                                : config.light.color,
-                            '&:hover': {
-                                bgcolor: (theme) => theme.palette.mode === 'dark' 
-                                    ? config.dark.bg 
-                                    : config.light.bg,
-                                opacity: 0.8,
-                            },
-                        }}
-                    />
-                </Box>
+//     return (
+//         <Card
+//             variant="outlined"
+//             sx={{
+//                 borderRadius: 2,
+//                 height: "100%",
+//                 transition: 'all 0.2s ease-in-out',
+//                 '&:hover': {
+//                     transform: 'translateY(-2px)',
+//                     boxShadow: (theme) => theme.palette.mode === 'dark' 
+//                         ? `0 4px 20px ${config.dark.border.replace('0.4', '0.3')}` 
+//                         : `0 4px 20px ${config.light.border.replace('0.3', '0.15')}`,
+//                     borderColor: (theme) => theme.palette.mode === 'dark' 
+//                         ? config.dark.border 
+//                         : config.light.border,
+//                 },
+//                 bgcolor: (theme) => theme.palette.mode === 'dark' 
+//                     ? config.dark.bg 
+//                     : config.light.bg,
+//                 borderColor: (theme) => theme.palette.mode === 'dark' 
+//                     ? config.dark.border 
+//                     : config.light.border,
+//                 borderLeft: '4px solid',
+//                 borderLeftColor: (theme) => theme.palette.mode === 'dark' 
+//                     ? config.dark.color 
+//                     : config.light.color,
+//             }}
+//         >
+//             <CardContent sx={{ p: 2.5 }}>
+//                 <Box
+//                     display="flex"
+//                     justifyContent="space-between"
+//                     alignItems="center"
+//                     mb={1.5}
+//                 >
+//                     <Typography 
+//                         fontWeight={700}
+//                         sx={{ 
+//                             fontSize: '1rem',
+//                             color: (theme) => theme.palette.mode === 'dark' 
+//                                 ? theme.palette.text.primary 
+//                                 : 'inherit',
+//                         }}
+//                     >
+//                         {title}
+//                     </Typography>
+//                     <Chip
+//                         label={config.label}
+//                         variant="outlined"
+//                         size="small"
+//                         sx={{
+//                             fontWeight: 700,
+//                             bgcolor: (theme) => theme.palette.mode === 'dark' 
+//                                 ? config.dark.bg 
+//                                 : config.light.bg,
+//                             borderColor: (theme) => theme.palette.mode === 'dark' 
+//                                 ? config.dark.border 
+//                                 : config.light.border,
+//                             color: (theme) => theme.palette.mode === 'dark' 
+//                                 ? config.dark.color 
+//                                 : config.light.color,
+//                             '&:hover': {
+//                                 bgcolor: (theme) => theme.palette.mode === 'dark' 
+//                                     ? config.dark.bg 
+//                                     : config.light.bg,
+//                                 opacity: 0.8,
+//                             },
+//                         }}
+//                     />
+//                 </Box>
 
-                <Typography 
-                    variant="body2" 
-                    color="text.secondary"
-                    sx={{ 
-                        lineHeight: 1.5,
-                        fontSize: '0.875rem',
-                    }}
-                >
-                    {description}
-                </Typography>
-            </CardContent>
-        </Card>
-    );
-}
+//                 <Typography 
+//                     variant="body2" 
+//                     color="text.secondary"
+//                     sx={{ 
+//                         lineHeight: 1.5,
+//                         fontSize: '0.875rem',
+//                     }}
+//                 >
+//                     {description}
+//                 </Typography>
+//             </CardContent>
+//         </Card>
+//     );
+// }
 

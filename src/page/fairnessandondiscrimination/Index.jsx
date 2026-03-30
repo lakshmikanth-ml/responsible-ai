@@ -21,6 +21,7 @@ import TabE from './TabE';
 import TabF from './TabF';
 import TabG from './TabG';
 import TabH from './TabH';
+import {StatusChip,chips} from '../../components/card/StatusChip';
 
 const Index = () => {
     const [activeTab, setActiveTab] = useState('A');
@@ -216,75 +217,14 @@ const Index = () => {
                             measurements, managing mitigations, and producing audit-ready
                             evidence.
                         </Typography>
-
+<Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+  {chips.map((chip, index) => (
+    <StatusChip key={index} label={chip.label} value={chip.value} />
+  ))}
+</Box>
                        
    {/* Status Chips */}
-                         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                        <Chip
-                            label="HIGH RISK"
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                fontWeight: 600,
-                                bgcolor: 'rgba(25, 118, 210, 0.12)',
-                                borderColor: 'rgba(25, 118, 210, 0.35)',
-                                color: 'primary.dark',
-                            }}
-                        />
-
-
-                        <Chip
-                            label="Blocks Training"
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                fontWeight: 600,
-                                bgcolor: '#fffbeb',
-                                borderColor: '#fcd34d',
-                                color: '#b45309',
-                            }}
-                        />
-
-
-                        <Chip
-                            label="Completeness: 22%"
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                fontWeight: 600,
-                                bgcolor: '#fff7ed',
-                                borderColor: '#fdba74',
-                                color: '#c2410c',
-                            }}
-                        />
-
-
-                        <Chip
-                            label="Last saved: -"
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                fontWeight: 600,
-                                bgcolor: '#fef2f2',
-                                borderColor: '#fca5a5',
-                                color: '#b91c1c',
-                            }}
-                        />
-                         <Chip
-                            label="Version: v1"
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                fontWeight: 600,
-                               
-                              
-                                backgroundColor: "#2a44da36",
-    borderColor:'#5e5484',
-    color: 'rgb(30, 72, 199)',
-
-                            }}
-                        />
-                   </Box>
+                        
                     </Box>
 
                     {/* Right Callout Box */}

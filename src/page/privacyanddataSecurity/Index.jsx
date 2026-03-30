@@ -24,6 +24,36 @@ import TabE from './TabE';
 import TabF from './TabF';
 import TabG from './TabG';
 import TabH from './TabH';
+import { GateCard } from '../../components/card/GateCards';
+
+
+
+const gateCards = [
+  {
+    title: "Pre-Training Gate",
+    status: "BLOCKED",
+    description:
+      "Regulated data tier: Security Owner and Privacy Owner must be assigned in section A.",
+  },
+  {
+    title: "Release Gate",
+    status: "BLOCKED",
+    description:
+      "Evaluation has FAIL tests. All privacy/security tests must PASS before release.",
+  },
+  {
+    title: "Production Gate",
+    status: "BLOCKED",
+    description:
+      "Production blocked because release gate is blocked.",
+  },
+  {
+    title: "Guardian Health",
+    status: "UNKNOWN",
+    description:
+      "Derived from runtime signals ingested in section H.",
+  },
+];
 
 const DECISION_ROLE_OPTIONS = [
     { value: 'advisory', label: 'Advisory only' },
@@ -280,49 +310,18 @@ const Index = () => {
 
 
                 {/* Main Content Grid: Project Context (Left) + Tab Content (Right) */}
-                <Box sx={{
-                    display: 'grid',
-                    gridTemplateColumns: {
-                        xs: '1fr', sm: '1fr 1fr',
-                        md: '1fr 1fr 1fr 1fr'
-                    }, gap: 2,
-                }}>
-                    {[
-                        { name: 'Pre-Training Gate', status: 'BLOCKED', color: '#d32f2f', msg: 'Regulated data tier: Security Owner and Privacy Owner must be assigned in section A.' },
-                        { name: 'Release Gate', status: 'BLOCKED', color: '#d32f2f', msg: 'Evaluation has FAIL tests. All privacy/security tests must PASS before release.' },
-                        { name: 'Production Gate', status: 'BLOCKED', color: '#d32f2f', msg: 'Production blocked because release gate is blocked.' },
-                        { name: 'Guardian Health', status: '—', color: '#f57c00', msg: 'Derived from runtime signals ingested in section H.' },
-                    ].map((gate, idx) => (
-                        <Card key={idx} variant="outlined" sx={{ p: 2 }}>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                                {gate.name}
-                            </Typography>
-                            <Box sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 1,
-                                mb: 1.5,
-                                p: 1,
-                                bgcolor: gate.color + '15',
-                                borderRadius: '4px',
-                                width: 'fit-content',
-                            }}>
-                                <Box sx={{
-                                    width: 10,
-                                    height: 10,
-                                    borderRadius: '50%',
-                                    bgcolor: gate.color,
-                                }} />
-                                <Typography variant="caption" sx={{ fontWeight: 700, color: gate.color }}>
-                                    {gate.status}
-                                </Typography>
-                            </Box>
-                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.5 }}>
-                                {gate.msg}
-                            </Typography>
-                        </Card>
-                    ))}
-                </Box>
+            
+                    <Grid container spacing={2} mb={2}>
+                  {gateCards.map((gate, index) => (
+                    <Grid key={index} size={{ xs: 12, sm: 6, md: 6, lg: 3 }}>
+                      <GateCard
+                        title={gate?.title}
+                        status={gate?.status}
+                        description={gate?.description}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
                 <Grid container mt={2}>
                     {/* Gate Status Cards */}
 

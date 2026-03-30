@@ -26,6 +26,33 @@ import TabEGapsRisks from './TabE';
 import TabFGapsRisks from './TabF';
 import TabGEvidence from './TabG';
 import TabHGatesMonitoring from './TabH';
+import { GateCard } from '../../components/card/GateCards';
+
+
+
+const gateCards =[
+                        {
+                            name: 'Pre-Training Gate',
+                            status: 'BLOCKED',
+                            color: '#d32f2f',
+                            msg: 'DFA not ingested (Tab C). Critical safety risks are still open (Tab E).'
+                        },
+                        {
+                            name: 'Release Gate', status: 'BLOCKED',
+                            color: '#d32f2f',
+                            msg: 'Pre-training gate not passed. Missing required testing (stress + edge cases + UAT) in Tab D. Failover / fallback evidence not approved (Tab G). Incident response playbook not approved (Tab G). Critical risks still open (Tab E).'
+                        },
+                        {
+                            name: 'Production Gate', status: 'BLOCKED',
+                            color: '#d32f2f',
+                            msg: 'Release gate is blocked.'
+                        },
+                        {
+                            name: 'Guardian Health', status: '—',
+                            color: '#f57c00',
+                            msg: 'No Guardian runtime signals loaded yet.'
+                        },
+                    ]
 
 const DECISION_ROLE_OPTIONS = [
     { value: "advisory", label: "Advisory only" },
@@ -291,7 +318,7 @@ const Index = () => {
 
 
                 {/* Gate Status Cards */}
-                <Box sx={{
+                {/* <Box sx={{
                     display: 'grid',
                     gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' },
                     gap: 2, mb: 2
@@ -404,7 +431,20 @@ const Index = () => {
                             </Typography>
                         </Card>
                     ))}
-                </Box>
+                </Box> */}
+
+ <Grid container spacing={2} mb={2}>
+  {gateCards.map((gate, index) => (
+    <Grid key={index} size={{ xs: 12, sm: 6, md: 6, lg: 3 }}>
+      <GateCard
+        title={gate?.name}
+        status={gate?.status}
+        description={gate?.msg}
+      />
+    </Grid>
+  ))}
+</Grid>
+
                 {/* Main Content Grid: Project Context (Left) + Tab Content (Right) */}
                 <Grid container>
 

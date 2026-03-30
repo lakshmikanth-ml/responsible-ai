@@ -36,6 +36,36 @@ import PartE from './PartE';
 import PartF from './PartF';
 import PartG from './PartG';
 import PartH from './PartH';
+import { GateCard } from '../../components/card/GateCards';
+
+
+
+const gateCards = [
+  {
+    title: "Pre-Training Gate",
+    status: "BLOCKED",
+    description:
+      "Project Context incomplete (Project/Model Version/Endpoint/Decision Role required).",
+  },
+  {
+    title: "Release Gate",
+    status: "BLOCKED",
+    description:
+      "Pre-Training Gate is not passing.",
+  },
+  {
+    title: "Production Gate",
+    status: "BLOCKED",
+    description:
+      " Release Gate is not passing.",
+  },
+  {
+    title: "Guardian Health",
+    status: "UNKNOWN",
+    description:
+      "No runtime signals loaded (sample or pasted).",
+  },
+];
 
 const DECISION_ROLE_OPTIONS = [
     { value: 'advisory', label: 'Advisory only' },
@@ -513,128 +543,19 @@ const Index = () => {
 
                 </Box>
 
-                {/* Gate Cards Row */}
-                <Box
-                    sx={{
-                        display: 'grid',
-                        gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' },
-                        gap: 2,
-                    }}
-                >
-                    {[
-                        {
-                            title: 'Pre-Training Gate',
-                            status: gateStatuses.preTraining,
-                            hint: 'Project Context incomplete (Project/Model Version/Endpoint/Decision Role required).',
-                            color: gateStatuses.preTraining === 'BLOCKED' ? '#d32f2f' : '#2e7d32',
-                        },
-                        {
-                            title: 'Release Gate',
-                            status: gateStatuses.release,
-                            hint: 'Pre-Training Gate is not passing.',
-                            color: gateStatuses.release === 'BLOCKED' ? '#d32f2f' : '#2e7d32',
-                        },
-                        {
-                            title: 'Production Gate',
-                            status: gateStatuses.production,
-                            hint: 'Release Gate is not passing.',
-                            color: gateStatuses.production === 'BLOCKED' ? '#d32f2f' : '#2e7d32',
-                        },
-                        {
-                            title: 'Guardian Health',
-                            status: gateStatuses.guardianHealth,
-                            hint: 'No runtime signals loaded (sample or pasted).',
-                            color: gateStatuses.guardianHealth === 'UNKNOWN' ? '#f57c00' : '#2e7d32',
-                        },
-                    ].map((gate, idx) => (
-                        <Card 
-                            key={idx} 
-                            variant="outlined" 
-                            sx={{ 
-                                p: 2,
-                                border: '1px solid',
-                                borderColor: (theme) => theme.palette.mode === 'dark' 
-                                    ? 'rgba(171, 171, 171, 0.15)' 
-                                    : 'rgba(117, 117, 117, 0.2)',
-                                background: (theme) => theme.palette.mode === 'dark' 
-                                    ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.01) 100%)' 
-                                    : 'linear-gradient(180deg, #ffffff 0%, #fafafa 100%)',
-                                transition: 'all 0.2s ease-in-out',
-                                '&:hover': {
-                                    borderColor: (theme) => theme.palette.mode === 'dark' 
-                                        ? 'rgba(171, 171, 171, 0.25)' 
-                                        : 'rgba(117, 117, 117, 0.3)',
-                                    transform: 'translateY(-2px)',
-                                    boxShadow: (theme) => theme.palette.mode === 'dark' 
-                                        ? '0 4px 12px rgba(0, 0, 0, 0.3)' 
-                                        : '0 4px 12px rgba(0, 0, 0, 0.1)',
-                                },
-                            }}
-                        >
-                            <Typography 
-                                variant="subtitle2"
-                                sx={{ 
-                                    fontWeight: 600, 
-                                    mb: 1,
-                                    color: (theme) => theme.palette.mode === 'dark' 
-                                        ? 'rgba(255, 255, 255, 0.95)' 
-                                        : 'rgba(0, 0, 0, 0.87)',
-                                }}
-                            >
-                                {gate.title}
-                            </Typography>
-                            <Box sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 1,
-                                mb: 1.5,
-                                p: "6px",
-                                bgcolor: (theme) => theme.palette.mode === 'dark' 
-                                    ? gate.color + '25' 
-                                    : gate.color + '15',
-                                borderRadius: '4px',
-                                width: 'fit-content',
-                                border: '1px solid',
-                                borderColor: (theme) => theme.palette.mode === 'dark' 
-                                    ? gate.color + '40' 
-                                    : gate.color + '30',
-                            }}>
-                                <Box sx={{
-                                    width: 10,
-                                    height: 10,
-                                    borderRadius: '50%',
-                                    bgcolor: gate.color,
-                                    boxShadow: (theme) => theme.palette.mode === 'dark' 
-                                        ? `0 0 8px ${gate.color}40` 
-                                        : `0 0 8px ${gate.color}20`,
-                                }} />
-                                <Typography 
-                                    variant="caption" 
-                                    sx={{ 
-                                        fontWeight: 700, 
-                                        color: gate.color,
-                                        textShadow: (theme) => theme.palette.mode === 'dark' 
-                                            ? `0 0 4px ${gate.color}20` 
-                                            : 'none',
-                                    }}
-                                >
-                                    {gate.status}
-                                </Typography>
-                            </Box>
-                            <Typography 
-                                variant="caption" 
-                              
-                                sx={{ 
-                                    display: 'block', 
-                                    lineHeight: 1.5,
-                                   
-                                }}
-                            >
-                                {gate.hint}
-                            </Typography>
-                        </Card>
-                    ))}
-                </Box>
+               
+     <Grid container spacing={2} mb={2}>
+  {gateCards.map((gate, index) => (
+    <Grid key={index} size={{ xs: 12, sm: 6, md: 6, lg: 3 }}>
+      <GateCard
+        title={gate?.title}
+        status={gate?.status}
+        description={gate?.description}
+      />
+    </Grid>
+  ))}
+</Grid>
+                
 
                 {/* Main Content Grid: Left Sidebar + Right Tab Content */}
                 <Grid container mt={2}>

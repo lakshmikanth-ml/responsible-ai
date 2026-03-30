@@ -94,7 +94,7 @@ const GATES = [
     },
     {
         id: "release",
-        title: "Release Gate",
+        title: "Release Gate  ",
         status: "BLOCKED",
         description: "Explainability Owner is missing in section A.",
         grid: { xs: 12, sm: 6, md: 4, lg: 3 },
